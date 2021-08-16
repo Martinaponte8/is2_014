@@ -269,6 +269,111 @@ try:</p>
 </dd>
 </dl>
 </section>
+<section id="test-py-16-08-2021">
+<h2>Test.py 16/08/2021<a class="headerlink" href="#test-py-16-08-2021" title="Permalink to this headline">¶</a></h2>
+<p>from django.test import TestCase
+import unittest</p>
+<p>#test basico para entender como funciona test.py</p>
+<dl>
+<dt>class TestBasic(unittest.TestCase):</dt><dd><p>“Basic tests”</p>
+<dl class="simple">
+<dt>def test_basic(self):</dt><dd><p>a = 1
+self.assertEqual(1, a)</p>
+</dd>
+<dt>def test_basic_2(self):</dt><dd><p>a = 1
+assert a == 1</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>#test para comprobar el inicio de sesion, pasandole el username password</p>
+<dl>
+<dt>try:</dt><dd><p>from unittest.mock import Mock, patch</p>
+</dd>
+<dt>except ImportError:</dt><dd><p>from mock import Mock, patch  # noqa</p>
+</dd>
+<dt>class MockedResponse(object):</dt><dd><dl>
+<dt>def _init_(self, status_code, content, headers=None):</dt><dd><dl class="simple">
+<dt>if headers is None:</dt><dd><p>headers = {}</p>
+</dd>
+</dl>
+<p>self.status_code = status_code
+self.content = content.encode(“utf8”)
+self.headers = headers</p>
+</dd>
+<dt>def json(self):</dt><dd><p>return json.loads(self.text)</p>
+</dd>
+<dt>def raise_for_status(self):</dt><dd><p>pass</p>
+</dd>
+</dl>
+<p>&#64;property
+def text(self):</p>
+<blockquote>
+<div><p>return self.content.decode(“utf8”)</p>
+</div></blockquote>
+<dl>
+<dt>class mocked_response:</dt><dd><dl>
+<dt>def _init_(self, <a href="#id1"><span class="problematic" id="id2">*</span></a>responses):</dt><dd><p>self.responses = list(responses)</p>
+</dd>
+<dt>def _enter_(self):</dt><dd><p>self.orig_get = requests.get
+self.orig_post = requests.post
+self.orig_request = requests.request</p>
+<dl>
+<dt>def mockable_request(f):</dt><dd><dl>
+<dt>def new_f(<a href="#id3"><span class="problematic" id="id4">*</span></a>args, <a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs):</dt><dd><dl class="simple">
+<dt>if self.responses:</dt><dd><p>return self.responses.pop(0)</p>
+</dd>
+</dl>
+<p>return f(<a href="#id7"><span class="problematic" id="id8">*</span></a>args, <a href="#id9"><span class="problematic" id="id10">**</span></a>kwargs)</p>
+</dd>
+</dl>
+<p>return new_f</p>
+</dd>
+</dl>
+<p>requests.get = mockable_request(requests.get)
+requests.post = mockable_request(requests.post)
+requests.request = mockable_request(requests.request)</p>
+</dd>
+<dt>def _exit_(self, type, value, traceback):</dt><dd><p>requests.get = self.orig_get
+requests.post = self.orig_post
+requests.request = self.orig_request</p>
+<dl>
+<dt>class BasicTests(TestCase):</dt><dd><dl>
+<dt>def setUp(self):</dt><dd><p>self.factory = RequestFactory()</p>
+</dd>
+<dt>def test_generate_unique_username(self):</dt><dd><dl class="simple">
+<dt>examples = [</dt><dd><p>(”<a class="reference external" href="mailto:a&#46;b-c&#37;&#52;&#48;example&#46;com">a<span>&#46;</span>b-c<span>&#64;</span>example<span>&#46;</span>com</a>”, “a.b-c”),
+(“Üsêrnamê”, “username”),
+(“User Name”, “user_name”),
+(“”, “user”),</p>
+</dd>
+</dl>
+<p>]
+for input, username in examples:</p>
+<blockquote>
+<div><p>self.assertEqual(utils.generate_unique_username([input]), username)</p>
+</div></blockquote>
+</dd>
+<dt>def test_email_validation(self):</dt><dd><p>s = “<a class="reference external" href="mailto:this&#46;email&#46;address&#46;is&#46;a&#46;bit&#46;too&#46;long&#46;but&#46;should&#46;still&#46;validate&#37;&#52;&#48;example&#46;com">this<span>&#46;</span>email<span>&#46;</span>address<span>&#46;</span>is<span>&#46;</span>a<span>&#46;</span>bit<span>&#46;</span>too<span>&#46;</span>long<span>&#46;</span>but<span>&#46;</span>should<span>&#46;</span>still<span>&#46;</span>validate<span>&#64;</span>example<span>&#46;</span>com</a>”  # noqa
+self.assertEqual(s, utils.valid_email_or_none(s))</p>
+</dd>
+<dt>def test_serializer(self):</dt><dd><dl class="simple">
+<dt>class SomeValue:</dt><dd><p>pass</p>
+</dd>
+</dl>
+<p>some_value = SomeValue()</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+</dl>
+<p># Create your tests here.</p>
+</section>
 </section>
 
 

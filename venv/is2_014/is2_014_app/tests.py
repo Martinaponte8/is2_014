@@ -1,7 +1,9 @@
 from django.test import TestCase
 import unittest
+
 #test basico para entender como funciona test.py
 #realizado el 16/08/2021
+
 class TestBasic(unittest.TestCase):
     "Basic tests"
 
@@ -15,7 +17,9 @@ class TestBasic(unittest.TestCase):
 
 
 #test para comprobar el inicio de sesion, pasandole el username password
+
 #realizado el 16/08/2021
+
 try:
     from unittest.mock import Mock, patch
 except ImportError:
@@ -90,4 +94,5 @@ class MockedResponse(object):
                         pass
 
                     some_value = SomeValue()
+
 # Create your tests here.
