@@ -10,25 +10,30 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+#se importa la libreria path
+
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# se indica la direccion base del path
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# ADVERTENCIA DE SEGURIDAD: mantenga la clave secreta utilizada en producción en secreto!
+
 SECRET_KEY = 'django-insecure-#%-!0%=56hnp7+4f1wy1ucxx**)-2-uvz)mb=tbf$#ga8==4+-'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# ADVERTENCIA DE SEGURIDAD: no ejecute con la depuración activada en producción!
+
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
 
-# Application definition
+# Definicion de las aplicaciones instaladas
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -57,6 +62,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'is2_014.urls'
 
+#Plantillas
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -85,6 +91,9 @@ WSGI_APPLICATION = 'is2_014.wsgi.application'
    #     'NAME': BASE_DIR / 'db.sqlite3',
     #}
 #}
+
+#definimos la base de datos y la configuramos
+
 DATABASES = {
     'default': {
        'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -96,7 +105,7 @@ DATABASES = {
     }
 }
 
-# Password validation
+# validacion de contraseñas
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -140,10 +149,13 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+#configuramos django como backend de autentificacion
+
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend'
 ]
+#para los proveedores de cuentas sociales configuramos a google
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -156,6 +168,8 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+#se agrega un sitio ID y se redirije a los usuarios a una ruta base despues del inicio de sesion
+
 SITE_ID = 2
 
 LOGIN_REDIRECT_URL = '/'
