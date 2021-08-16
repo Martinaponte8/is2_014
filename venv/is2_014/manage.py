@@ -4,6 +4,7 @@ import os
 import sys
 
 # corremos el servidor y lanzamos errores en caso de no poder conectarse
+
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'is2_014.settings')
