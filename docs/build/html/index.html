@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Welcome to Gestor de Proyectos’s documentation! &#8212; Gestor de Proyectos  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="welcome-to-gestor-de-proyectos-s-documentation">
+<h1>Welcome to Gestor de Proyectos’s documentation!<a class="headerlink" href="#welcome-to-gestor-de-proyectos-s-documentation" title="Permalink to this headline">¶</a></h1>
+<section id="my-functions">
+<h2>My Functions<a class="headerlink" href="#my-functions" title="Permalink to this headline">¶</a></h2>
+<p>Estas son las funciones que proporciona nuestro proyecto</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="settings-py-12-08-2021">
+<h2>Settings.py 12/08/2021<a class="headerlink" href="#settings-py-12-08-2021" title="Permalink to this headline">¶</a></h2>
+<p>#se importa la libreria path</p>
+<p>from pathlib import Path</p>
+<p># se indica la direccion base del path</p>
+<p>BASE_DIR = Path(__file__).resolve().parent.parent</p>
+<p># ADVERTENCIA DE SEGURIDAD: mantenga la clave secreta utilizada en producción en secreto!</p>
+<p>SECRET_KEY = ‘django-insecure-#%-!0%=56hnp7+4f1wy1ucxx**)-2-uvz)mb=tbf$#ga8==4+-’</p>
+<p># ADVERTENCIA DE SEGURIDAD: no ejecute con la depuración activada en producción!</p>
+<p>DEBUG = True</p>
+<p>ALLOWED_HOSTS = []</p>
+<p># Definicion de las aplicaciones instaladas</p>
+<dl class="simple">
+<dt>INSTALLED_APPS = [</dt><dd><p>‘django.contrib.admin’,
+‘django.contrib.sites’,
+‘is2_014_app’,
+‘allauth’,
+‘allauth.account’,
+‘allauth.socialaccount’,
+‘allauth.socialaccount.providers.google’,
+‘django.contrib.auth’,
+‘django.contrib.contenttypes’,
+‘django.contrib.sessions’,
+‘django.contrib.messages’,
+‘django.contrib.staticfiles’,</p>
+</dd>
+</dl>
+<p>]</p>
+<dl class="simple">
+<dt>MIDDLEWARE = [</dt><dd><p>‘django.middleware.security.SecurityMiddleware’,
+‘django.contrib.sessions.middleware.SessionMiddleware’,
+‘django.middleware.common.CommonMiddleware’,
+‘django.middleware.csrf.CsrfViewMiddleware’,
+‘django.contrib.auth.middleware.AuthenticationMiddleware’,
+‘django.contrib.messages.middleware.MessageMiddleware’,
+‘django.middleware.clickjacking.XFrameOptionsMiddleware’,</p>
+</dd>
+</dl>
+<p>]</p>
+<p>ROOT_URLCONF = ‘is2_014.urls’</p>
+<p>#Plantillas</p>
+<dl>
+<dt>TEMPLATES = [</dt><dd><dl>
+<dt>{</dt><dd><p>‘BACKEND’: ‘django.template.backends.django.DjangoTemplates’,
+‘DIRS’: [BASE_DIR / ‘templates’],
+‘APP_DIRS’: True,
+‘OPTIONS’: {</p>
+<blockquote>
+<div><dl class="simple">
+<dt>‘context_processors’: [</dt><dd><p>‘django.template.context_processors.debug’,
+‘django.template.context_processors.request’,
+‘django.contrib.auth.context_processors.auth’,
+‘django.contrib.messages.context_processors.messages’,</p>
+</dd>
+</dl>
+<p>],</p>
+</div></blockquote>
+<p>},</p>
+</dd>
+</dl>
+<p>},</p>
+</dd>
+</dl>
+<p>]</p>
+<p>WSGI_APPLICATION = ‘is2_014.wsgi.application’</p>
+<p>#definimos la base de datos y la configuramos</p>
+<dl>
+<dt>DATABASES = {</dt><dd><dl class="simple">
+<dt>‘default’: {</dt><dd><dl class="simple">
+<dt>‘ENGINE’: ‘django.db.backends.postgresql_psycopg2’,</dt><dd><p>‘NAME’: ‘sistemagestor’,
+‘USER’: ‘postgres’,
+‘PASSWORD’:’postgres’,
+‘HOST’:’localhost’,
+‘PORT’: ‘5432’,</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+</dl>
+<p>}</p>
+<p># validacion de contraseñas</p>
+<dl>
+<dt>AUTH_PASSWORD_VALIDATORS = [</dt><dd><dl class="simple">
+<dt>{</dt><dd><p>‘NAME’: ‘django.contrib.auth.password_validation.UserAttributeSimilarityValidator’,</p>
+</dd>
+</dl>
+<p>},
+{</p>
+<blockquote>
+<div><p>‘NAME’: ‘django.contrib.auth.password_validation.MinimumLengthValidator’,</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>‘NAME’: ‘django.contrib.auth.password_validation.CommonPasswordValidator’,</p>
+</div></blockquote>
+<p>},
+{</p>
+<blockquote>
+<div><p>‘NAME’: ‘django.contrib.auth.password_validation.NumericPasswordValidator’,</p>
+</div></blockquote>
+<p>},</p>
+</dd>
+</dl>
+<p>]</p>
+<p># Internationalization</p>
+<p>LANGUAGE_CODE = ‘en-us’</p>
+<p>TIME_ZONE = ‘UTC’</p>
+<p>USE_I18N = True</p>
+<p>USE_L10N = True</p>
+<p>USE_TZ = True</p>
+<p># Static files (CSS, JavaScript, Images)</p>
+<p>#para importar la imagen del inicio de sesion</p>
+<p>STATIC_URL = ‘/static/’</p>
+<p># Default primary key field type</p>
+<p>DEFAULT_AUTO_FIELD = ‘django.db.models.BigAutoField’</p>
+<p>#configuramos django como backend de autentificacion</p>
+<dl class="simple">
+<dt>AUTHENTICATION_BACKENDS = [</dt><dd><p>‘django.contrib.auth.backends.ModelBackend’,
+‘allauth.account.auth_backends.AuthenticationBackend’</p>
+</dd>
+</dl>
+<p>]</p>
+<p>#para los proveedores de cuentas sociales configuramos a google</p>
+<dl>
+<dt>SOCIALACCOUNT_PROVIDERS = {</dt><dd><dl>
+<dt>‘google’: {</dt><dd><dl class="simple">
+<dt>‘SCOPE’: [</dt><dd><p>‘profile’,
+‘email’,</p>
+</dd>
+</dl>
+<p>],
+‘AUTH_PARAMS’: {</p>
+<blockquote>
+<div><p>‘access_type’: ‘online’,</p>
+</div></blockquote>
+<p>}</p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+</dl>
+<p>}</p>
+<p>#se agrega un sitio ID y se redirije a los usuarios a una ruta base despues del inicio de sesion</p>
+<p>SITE_ID = 2</p>
+<p>LOGIN_REDIRECT_URL = ‘/’
+LOGOUT_REDIRECT_URL = ‘/’</p>
+</section>
+<section id="urls-py-13-08-2021">
+<h2>Urls.py 13/08/2021<a class="headerlink" href="#urls-py-13-08-2021" title="Permalink to this headline">¶</a></h2>
+<p>from django.contrib import admin
+from django.urls import path, include
+from django.views.generic import TemplateView
+from django.contrib.auth.views import LogoutView</p>
+<p># configuramos las rutas y vistas</p>
+<dl class="simple">
+<dt>urlpatterns = [</dt><dd><p>path(‘admin/’, admin.site.urls),
+path(‘’, TemplateView.as_view(template_name=”index.html”)),
+path(‘accounts/’, include(‘allauth.urls’)),
+path(‘logout’, LogoutView.as_view()),</p>
+</dd>
+</dl>
+<p>]</p>
+</section>
+<section id="wsgi-py-13-08-2021">
+<h2>Wsgi.py 13/08/2021<a class="headerlink" href="#wsgi-py-13-08-2021" title="Permalink to this headline">¶</a></h2>
+<p>import os</p>
+<p>from django.core.wsgi import get_wsgi_application
+# configuramos el runserver django para poder correr la aplicacion</p>
+<p>os.environ.setdefault(‘DJANGO_SETTINGS_MODULE’, ‘is2_014.settings’)</p>
+<p>application = get_wsgi_application()</p>
+</section>
+<section id="index-html-15-08-2021">
+<h2>Index.html 15/08/2021<a class="headerlink" href="#index-html-15-08-2021" title="Permalink to this headline">¶</a></h2>
+<p>{% load socialaccount %}
+{% load static %}
+&lt;html&gt;
+&lt;body&gt;</p>
+<p>&lt;!–Titulo de la pagina–&gt;</p>
+<p>&lt;h1&gt;&lt;center&gt;Gestor de proyectos &lt;/center&gt;&lt;/h1&gt;</p>
+<p>&lt;!–Codigo para agregar la imagen a la pagina, pasandole el directorio donde se encuentra la foto estatica –&gt;</p>
+<p>&lt;br&gt; &lt;center&gt;&lt;img alt=”My image” src=”{% static ‘is2_014_app/logo.png’ %}”&gt;&lt;/center&gt;</p>
+<p>&lt;!–Funcion de python para autenticar el inicio de sesion de un usuario –&gt;</p>
+<p>{% if user.is_authenticated %}</p>
+<blockquote>
+<div><p>&lt;center&gt; &lt;p&gt;Bienvenido, Te has logueado como {{ user.username }}&lt;/p&gt;&lt;/center&gt;</p>
+</div></blockquote>
+<p>&lt;br&gt; &lt;center&gt;&lt;a href=”logout”&gt;Cerrar sesion&lt;/a&gt;&lt;/center&gt;</p>
+<blockquote>
+<div><p>&lt;!–&lt;li&gt;&lt;a href=”../accounts/logout/”&gt;&lt;span class=”glyphicon glyphicon-log-out”&gt;&lt;/span&gt; Cerrar Sesión&lt;/a&gt;&lt;/li&gt;</p>
+</div></blockquote>
+<p>Si no esta logueado mostrarle la pagina de inicio con el link para loguearse con google –&gt;</p>
+<dl class="simple">
+<dt>{% else %}</dt><dd><p>&lt;br&gt; &lt;center&gt;&lt;a href=”{% provider_login_url ‘google’ %}”&gt;Logueate con Google&lt;/a&gt;&lt;/center&gt;</p>
+</dd>
+</dl>
+<p>{% endif %}
+&lt;/body&gt;
+&lt;/html&gt;</p>
+</section>
+<section id="manage-py-15-08-2021">
+<h2>Manage.py 15/08/2021<a class="headerlink" href="#manage-py-15-08-2021" title="Permalink to this headline">¶</a></h2>
+<p>import os
+import sys</p>
+<p># corremos el servidor y lanzamos errores en caso de no poder conectarse</p>
+<dl>
+<dt>def main():</dt><dd><p>“””Run administrative tasks.”””
+os.environ.setdefault(‘DJANGO_SETTINGS_MODULE’, ‘is2_014.settings’)
+try:</p>
+<blockquote>
+<div><p>from django.core.management import execute_from_command_line</p>
+</div></blockquote>
+<dl>
+<dt>except ImportError as exc:</dt><dd><dl class="simple">
+<dt>raise ImportError(</dt><dd><p>“Couldn’t import Django. Are you sure it’s installed and ”
+“available on your PYTHONPATH environment variable? Did you ”
+“forget to activate a virtual environment?”</p>
+</dd>
+</dl>
+<p>) from exc</p>
+</dd>
+</dl>
+<p>execute_from_command_line(sys.argv)</p>
+</dd>
+<dt>if __name__ == ‘__main__’:</dt><dd><p>main()</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="#">Gestor de Proyectos</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Emanuel.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
