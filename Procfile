@@ -1,1 +1,1 @@
-web: gunicorn GestorDeProyectos.wsgi --log-file -
+web: gunicorn is2_014.wsgi --log-file -

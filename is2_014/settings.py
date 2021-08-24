@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 #se importa la libreria path
 
 from pathlib import Path
+import dj_database_url
+from decouple import config
 
 # se indica la direccion base del path
 
@@ -28,9 +30,9 @@ SECRET_KEY = 'django-insecure-#%-!0%=56hnp7+4f1wy1ucxx**)-2-uvz)mb=tbf$#ga8==4+-
 
 # ADVERTENCIA DE SEGURIDAD: no ejecute con la depuración activada en producción!
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Definicion de las aplicaciones instaladas
@@ -58,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'is2_014.urls'
@@ -95,14 +98,17 @@ WSGI_APPLICATION = 'is2_014.wsgi.application'
 #definimos la base de datos y la configuramos
 
 DATABASES = {
-    'default': {
-       'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sistemagestor',
-        'USER': 'postgres',
-        'PASSWORD':'postgres',
-        'HOST':'localhost',
-        'PORT': '5432',
-    }
+    #'default': {
+    #   'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #    'NAME': 'sistemagestor',
+    #    'USER': 'postgres',
+    #    'PASSWORD':'postgres',
+    #    'HOST':'localhost',
+    #    'PORT': '5432',
+    #}
+    'default': dj_database_url.config(
+        default=config('DATABASE_URL')
+    )
 }
 
 # validacion de contraseñas
@@ -141,7 +147,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
 
 
 # Default primary key field type
@@ -174,3 +185,5 @@ SITE_ID = 2
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
