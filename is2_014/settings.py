@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 import dj_database_url
+import os
 from decouple import config
 
 # se indica la direccion base del path
@@ -106,9 +107,10 @@ DATABASES = {
     #    'HOST':'localhost',
     #    'PORT': '5432',
     #}
-    'default': dj_database_url.config(
+'default': dj_database_url.config(
         default=config('DATABASE_URL')
     )
+
 }
 
 # validacion de contraseñas
