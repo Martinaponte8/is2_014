@@ -35,9 +35,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['app014is2.herokuapp.com','localhost']
 
+ALLOWED_HOSTS = ['app014is2.herokuapp.com', '127.0.0.1']
 SECRET_KEY = os.environ.get('SECRET_KEY')
+
 
 # Definicion de las aplicaciones instaladas
 
