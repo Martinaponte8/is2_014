@@ -27,14 +27,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ADVERTENCIA DE SEGURIDAD: mantenga la clave secreta utilizada en producción en secreto!
 
-SECRET_KEY = 'django-insecure-#%-!0%=56hnp7+4f1wy1ucxx**)-2-uvz)mb=tbf$#ga8==4+-'
+#SECRET_KEY = 'django-insecure-#%-!0%=56hnp7+4f1wy1ucxx**)-2-uvz)mb=tbf$#ga8==4+-'
+
+
 
 # ADVERTENCIA DE SEGURIDAD: no ejecute con la depuración activada en producción!
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['app014is2.herokuapp.com','localhost']
 
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # Definicion de las aplicaciones instaladas
 
@@ -108,7 +111,7 @@ DATABASES = {
     #    'PORT': '5432',
     #}
 'default': dj_database_url.config(
-        default=config('DATABASE_URL')
+        default=config(conn_max_age=600)
     )
 
 }
