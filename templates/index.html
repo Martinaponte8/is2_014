@@ -58,14 +58,14 @@
 
 <div class="container">
     <center><div class="h1-poli">Gestor de proyectos</div></center>
-    <div br> <center><img alt="My image"src="{% static 'is2_014_app/logo.png' %}"></center></div>
+    <div br> <center><img alt="My image"src="{% static 'Inicio/logo.png' %}"></center></div>
 </div>
 
 
 
  <center> <p>Bienvenido, Te has logueado como {{ user.username }}</p></center>
  <center><div class="p2">¡Ha iniciado sesión! <a href="/proyecto/">Acceda a sus proyectos</a>.</div></center>
-<br> <center><a href="logout">Cerrar sesion</a></center>
+<br> <center><a href="index/logout">Cerrar sesion</a></center>
 
 
 
@@ -86,7 +86,7 @@ Si no esta logueado mostrarle la pagina de Inicio con el link para loguearse con
 
 <!--Codigo para agregar la imagen a la pagina, pasandole el directorio donde se encuentra la foto estatica -->
 
-<br> <center><img alt="My image"src="{% static 'is2_014_app/logo.png' %}"></center>
+<br> <center><img alt="My image"src="{% static 'Inicio/logo.png' %}"></center>
  <br> <center><a href="{% provider_login_url 'google' %}">Logueate con Google</a></center>
 {% endif %}
 </body>
