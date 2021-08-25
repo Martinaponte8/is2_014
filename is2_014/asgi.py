@@ -1,5 +1,5 @@
 """
-ASGI config for GestordeProyectos project.
+ASGI config for is2_014 project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'GestordeProyectos.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'is2_014.settings')
 
 application = get_asgi_application()
