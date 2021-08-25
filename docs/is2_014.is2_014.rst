@@ -1,0 +1,45 @@
+is2\_014.is2\_014 package
+=========================
+
+Submodules
+----------
+
+is2\_014.is2\_014.asgi module
+-----------------------------
+
+.. automodule:: is2_014.is2_014.asgi
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+is2\_014.is2\_014.settings module
+---------------------------------
+
+.. automodule:: is2_014.is2_014.settings
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+is2\_014.is2\_014.urls module
+-----------------------------
+
+.. automodule:: is2_014.is2_014.urls
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+is2\_014.is2\_014.wsgi module
+-----------------------------
+
+.. automodule:: is2_014.is2_014.wsgi
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: is2_014.is2_014
+   :members:
+   :undoc-members:
+   :show-inheritance:
