@@ -137,7 +137,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 
-#para importar la imagen del inicio de sesion
+#para importar la imagen del Inicio de sesion
 
 STATIC_URL = '/static/'
 
@@ -167,7 +167,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-#se agrega un sitio ID y se redirije a los usuarios a una ruta base despues del inicio de sesion
+#se agrega un sitio ID y se redirije a los usuarios a una ruta base despues del Inicio de sesion
 
 SITE_ID = 2
 
@@ -289,7 +289,7 @@ class TestBasic(unittest.TestCase):
         assert a == 1
 
 
-#test para comprobar el inicio de sesion, pasandole el username password
+#test para comprobar el Inicio de sesion, pasandole el username password
 
 try:
     from unittest.mock import Mock, patch

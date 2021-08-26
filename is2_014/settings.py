@@ -45,7 +45,7 @@
 # INSTALLED_APPS = [
 #     'django.contrib.admin',
 #     'django.contrib.sites',
-#     'is2_014_app',
+#     'Inicio',
 #     'allauth',
 #     'allauth.account',
 #     'allauth.socialaccount',
@@ -185,7 +185,7 @@
 #         }
 #     }
 # }
-# #se agrega un sitio ID y se redirije a los usuarios a una ruta base despues del inicio de sesion
+# #se agrega un sitio ID y se redirije a los usuarios a una ruta base despues del Inicio de sesion
 #
 # SITE_ID = 2
 #
@@ -226,7 +226,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.sites',
-    'is2_014_app',
+    'Inicio',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -356,7 +356,7 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
-#se agrega un sitio ID y se redirije a los usuarios a una ruta base despues del inicio de sesion
+#se agrega un sitio ID y se redirije a los usuarios a una ruta base despues del Inicio de sesion
 
 SITE_ID = 2
 
