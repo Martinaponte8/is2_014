@@ -16,7 +16,7 @@ class TestBasic(unittest.TestCase):
         assert a == 1
 
 
-#test para comprobar el inicio de sesion, pasandole el username password
+#test para comprobar el Inicio de sesion, pasandole el username password
 
 #realizado el 16/08/2021
 
