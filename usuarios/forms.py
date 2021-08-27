@@ -1,3 +1,4 @@
+
 from django import forms
 from django.contrib.auth.forms import SetPasswordForm
 
@@ -8,7 +9,7 @@ class CreateUserForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CreateUserForm, self).__init__(*args, **kwargs)
-       permisos_all = Permiso.objects.filter(tipo=1)
+        permisos_all = Permiso.objects.filter(tipo=1)
         p = self.fields['permisos'].widget
         permisos = []
         for permiso in permisos_all:
@@ -73,17 +74,17 @@ class UpdateUserForm(forms.ModelForm):
         instance = getattr(self, 'instance', None)
         if instance and instance.pk:
             self.fields['username'].widget.attrs['readonly'] = True
-         permisos_all = Permiso.objects.filter(tipo=1)
+        permisos_all = Permiso.objects.filter(tipo=1)
         p = self.fields['permisos'].widget
         permisos = []
-         for permiso in permisos_all:
+        for permiso in permisos_all:
             permisos.append((permiso.id, permiso.nombre))
-         p.choices = permisos
+        p.choices = permisos
 
     def clean_username(self):
         instance = getattr(self, 'instance', None)
         if instance and instance.pk:
             return instance.sku
         else:
-            return self.cleaned_data['username']
+             return self.cleaned_data['username']
 
