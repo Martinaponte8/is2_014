@@ -8,10 +8,44 @@ html,body{
     height: 100%;
     font-family: "Hind Vadodara", indian type foundry;
 }
+.table-bordered-formset th{
+    background-color: gray;
+}
+.table-bordered-formset{
+    margin-top: 0px ;
+}
+
+.adddetail-btn{
+    margin-left: 700px;
+    margin-top: 20px;
+}
+
+.scrolltable-head{
+    border: 1px solid black;
+    width:800px;
+    overflow-x:hidden;
+    overflow-y:hidden;
+}
+
+.scrolltable{
+    border: 1px solid black;
+    width:800px;
+    overflow-x:hidden;
+    overflow-y:scroll;
+    height:400px;
+}
+
+.cabecera{
+    margin-left: 350px;
+}
+
+.detalle{
+    margin-left: 190px;
+}
 
 .head{
     font-family: "Hind Vadodara", indian type foundry;
-    background-color: #335757 !important;;
+    background-color: mediumturquoise !important;;
     text-decoration-color: aliceblue;
     text-align: center;
     font-size: 30px;
@@ -81,6 +115,8 @@ html,body{
 }
 
 .submit-btn{
+    margin-left: 500px;
+    margin-top: 70px;
     color: aliceblue;
     background-color: mediumpurple !important;
     width: 115px;
