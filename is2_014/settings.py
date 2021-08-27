@@ -228,6 +228,8 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'Inicio',
     'proyecto',
+    'usuarios',
+    'rol',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -269,6 +271,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'is2_014.wsgi.application'
+
+
 
 
 # Database
@@ -316,7 +320,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 
@@ -332,7 +336,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
+AUTH_USER_MODEL = 'usuarios.Usuario'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
