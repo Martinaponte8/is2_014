@@ -272,7 +272,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'is2_014.wsgi.application'
 
 
-AUTH_USER_MODEL = 'usuarios.Usuario'
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -335,7 +335,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
+AUTH_USER_MODEL = 'usuarios.Usuario'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
