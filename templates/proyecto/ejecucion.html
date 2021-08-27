@@ -1,0 +1,16 @@
+{%include 'header_admin.html'%}
+    <div class="container">
+        <h1 class="jumbotron head"> {{ title }}</h1>
+        <hr>
+    </div>
+    <div class="container">
+        <li>
+            <a href="{% url 'sprint_list' object.pk %}">Sprints</a>
+        </li>
+        <li>
+            <a href="{% url 'user_story_list' object.pk %}">Administrar User Stories</a>
+        </li>
+        <li>
+            <a href="{% url 'product_backlog' object.pk%}">Product Backlog</a>
+        </li>
+    </div>
