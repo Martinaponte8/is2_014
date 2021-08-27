@@ -34,5 +34,6 @@ urlpatterns = [
     url(r'^roles/', include('rol.urls')),
     path('logout', LogoutView.as_view()),
     url(r'^proyecto/', include('proyecto.urls')),
+    url(r'^proyectos/', include('proyecto.urls')),
     url(r'^usuarios/', include('usuarios.urls')),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
