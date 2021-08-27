@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
 from django.conf.urls import url
 from django.views.generic import TemplateView
 from django.contrib.auth.views import LogoutView
@@ -30,6 +29,7 @@ urlpatterns = [
     path('index/', TemplateView.as_view(template_name="index.html")),
     path('accounts/', include('allauth.urls')),
     path('index/logout', LogoutView.as_view()),
+    url(r'^roles/', include('rol.urls')),
     path('logout', LogoutView.as_view()),
     url(r'^usuarios/', include('usuarios.urls')),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
