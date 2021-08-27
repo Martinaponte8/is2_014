@@ -1,0 +1,16 @@
+{%include 'header_admin.html'%}
+    <div class="container">
+        <h1 class="jumbotron head"> {{ title }}</h1>
+        <hr>
+    </div>
+    <div class="container">
+        <li>
+            <a href="{% url 'update_options_flujo_list' object.pk %}">Flujos</a>
+        </li>
+        <li>
+            <a href="{% url 'user_story_type_list' object.pk %}">Tipos de User Story</a>
+        </li>
+        <li>
+            <a href="{% url 'update_roles_proyecto' object.pk %}">Asignacion de Roles</a>
+        </li>
+    </div>
