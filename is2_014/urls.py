@@ -31,4 +31,5 @@ urlpatterns = [
     path('index/logout', LogoutView.as_view()),
     url(r'^roles/', include('rol.urls')),
     path('logout', LogoutView.as_view()),
+    url(r'^usuarios/', include('usuarios.urls')),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

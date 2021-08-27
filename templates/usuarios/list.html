@@ -1,0 +1,49 @@
+{%include 'index.html'%}
+<div class="container">
+    <h1 class="jumbotron head" align="center"> Administracion de Usuarios </h1>
+    <hr>
+</div>
+<div class="container">
+    {% if object_list %}
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th width="8%">ID</th>
+                    <th width="20%">Código</th>
+                    <th width="20%">Nombre</th>
+                    <th width="10%">Apellido</th>
+                    <th width="7%">Estado</th>
+                    <th width="27%">Descripcion</th>
+                    <th width="8%">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-1">
+                            <a href="/usuarios/create/">
+                                <div class="btn new-btn-list">
+                                    <span class="glyphicon glyphicon-plus glyphicon-new"></span>
+                                </div>
+                            </a>
+                        </div>
+                    </th>
+                </tr>
+
+            </thead>
+            {% for usuario in object_list %}
+                <tr class="table-row" data-href="{% url 'update_user' usuario.pk %}">
+                    <td>{{ usuario.pk }}</td>
+                    <td>{{ usuario.username }}</td>
+                    <td>{{ usuario.first_name }}</td>
+                    <td>{{ usuario.last_name }}</td>
+                    <td>{{ usuario.estado }}</td>
+                    <td colspan="2">{{ usuario.descripcion }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+</div>
+<script type="text/javascript">
+    $(document).ready(function($) {
+        $(".table-row").click(function() {
+            window.document.location = $(this).data("href");
+        });
+    });
+</script>
