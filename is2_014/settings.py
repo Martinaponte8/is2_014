@@ -227,6 +227,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.sites',
     'Inicio',
+    'usuarios',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -269,6 +270,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'is2_014.wsgi.application'
 
+
+AUTH_USER_MODEL = 'usuarios.Usuario'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -315,7 +318,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
 TIME_ZONE = 'UTC'
 
