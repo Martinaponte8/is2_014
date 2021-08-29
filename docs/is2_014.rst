@@ -1,0 +1,30 @@
+is2\_014 package
+================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   is2_014.is2_014
+   is2_014.is2_014_app
+
+Submodules
+----------
+
+is2\_014.manage module
+----------------------
+
+.. automodule:: is2_014.manage
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: is2_014
+   :members:
+   :undoc-members:
+   :show-inheritance:
