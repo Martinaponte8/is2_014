@@ -1,4 +1,7 @@
 
+
+from django.conf import settings
+
 from django.db import migrations, models
 import django.db.models.deletion
 
@@ -9,6 +12,8 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('rol', '0001_initial'),
+
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
 
     ]
 
@@ -51,6 +56,7 @@ class Migration(migrations.Migration):
                 ('estado', models.CharField(choices=[('To Do', 'To Do'), ('Doing', 'Doing'), ('Do', 'Do')], default='To Do', max_length=25)),
                 ('flujo', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='proyecto.flujo')),
 
+
             name='Fase',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -83,6 +89,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('proyecto', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='proyecto.proyecto')),
                 ('rol', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='rol.rol')),
+
 
             ],
         ),
