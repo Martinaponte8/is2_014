@@ -1,0 +1,61 @@
+is2\_014.is2\_014\_app package
+==============================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   is2_014.is2_014_app.migrations
+
+Submodules
+----------
+
+is2\_014.is2\_014\_app.admin module
+-----------------------------------
+
+.. automodule:: is2_014.is2_014_app.admin
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+is2\_014.is2\_014\_app.apps module
+----------------------------------
+
+.. automodule:: is2_014.is2_014_app.apps
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+is2\_014.is2\_014\_app.models module
+------------------------------------
+
+.. automodule:: is2_014.is2_014_app.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+is2\_014.is2\_014\_app.tests module
+-----------------------------------
+
+.. automodule:: is2_014.is2_014_app.tests
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+is2\_014.is2\_014\_app.views module
+-----------------------------------
+
+.. automodule:: is2_014.is2_014_app.views
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: is2_014.is2_014_app
+   :members:
+   :undoc-members:
+   :show-inheritance:
