@@ -56,3 +56,5 @@ class UpdateUserView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
     def get_absolute_url(self):
         return reverse('update_user', kwargs={'pk': self.kwargs['pk']})
+
+#dlfgihjsduog
