@@ -1,0 +1,153 @@
+@import url("https://fonts.googleapis.com/css?family=Hind+Vadodara");
+@import url("https://fonts.googleapis.com/css?family=Fredericka+the+Great");
+
+html,body{
+    background-color: white;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+    font-family: "Hind Vadodara", indian type foundry;
+}
+.table-bordered-formset th{
+    background-color: gray;
+}
+.table-bordered-formset{
+    margin-top: 0px ;
+}
+
+.adddetail-btn{
+    margin-left: 700px;
+    margin-top: 20px;
+}
+
+.scrolltable-head{
+    border: 1px solid black;
+    width:800px;
+    overflow-x:hidden;
+    overflow-y:hidden;
+}
+
+.scrolltable{
+    border: 1px solid black;
+    width:800px;
+    overflow-x:hidden;
+    overflow-y:scroll;
+    height:400px;
+}
+
+.cabecera{
+    margin-left: 350px;
+}
+
+.detalle{
+    margin-left: 190px;
+}
+
+.head{
+    font-family: "Hind Vadodara", indian type foundry;
+    background-color: mediumturquoise !important;;
+    text-decoration-color: aliceblue;
+    text-align: center;
+    font-size: 30px;
+    margin-top: 0px;
+    height: 30px;
+}
+
+.container .jumbotron{
+    padding-top: 15px;
+}
+
+.navbar-polip {
+    background-color: aliceblue;
+    text-decoration-color: aliceblue;
+    border-color:aliceblue;
+}
+
+.navbar-right li{
+    color: black;
+    background-color: mediumturquoise;
+    border-color: mediumturquoise;
+}
+
+.navbar-polip a{
+    color: black;
+    border-color: mediumturquoise;
+}
+
+.navbar-right a:hover{
+    background-color: mediumpurple !important;;
+    border-color: mediumpurple !important;;
+    color: aliceblue;
+}
+
+.navbar-header a{
+    font-family: "Fredericka the Great", tart workshop;
+    font-size: 25px;
+}
+.navbar-header a:hover{
+    color: purple;
+}
+
+.h1-poli{
+    color: purple !important;;
+    font-family: "Fredericka the Great", tart workshop;
+    font-size: 100px;
+    margin-top: 35px;
+    text-align: center;
+}
+
+.p1{
+    color: black;
+    margin-top: 30px;
+    font-size: 30px;
+    text-align: center;
+}
+
+.p2 {
+    color: black;
+    margin-top: 30px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.p1-create{
+    margin-left: 60px !important;;
+}
+
+.submit-btn{
+    margin-left: 500px;
+    margin-top: 70px;
+    color: aliceblue;
+    background-color: mediumpurple !important;
+    width: 115px;
+}
+
+.submit-btn:hover{
+    color: black;
+    background-color: white;
+}
+
+.new-btn-list{
+    color: black;
+    background-color: green !important;
+    width: 37px !important;
+}
+
+.new-btn-list:hover{
+    color: aliceblue !important;
+    background-color: mediumpurple !important;;
+}
+
+.form-container{
+    margin-top: 30px;
+}
+
+.alert-success-foot{
+    margin-left: 150px;
+    text-align: center;
+    width: 1000px;
+}
+
+.table-row:hover{
+    cursor: pointer !important;;
+}

@@ -1,0 +1,26 @@
+<html>
+{%include 'header_admin.html'%}}
+<body>
+<div class="container">
+    <h1 class="jumbotron head"> {{ title }}</h1>
+    <hr>
+</div>
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-3">
+        <div class="container form-container">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p}}
+                <div class="col-sm-2"></div>
+                <div class="col-sm-1">
+
+                    <input type="submit" value="Guardar" class="btn submit-btn">
+                </div>
+            </form>
+        </div>
+        <br><br><br>
+    </div>
+</div>
+</body>
+</html>

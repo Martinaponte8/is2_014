@@ -1,0 +1,41 @@
+{%include 'header_admin.html' %}
+<html>
+<div class="container">
+    <h1 class="jumbotron head" align="center"> {{ title }} </h1>
+    <hr>
+</div>
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th width="8%">ID</th>
+                <th width="25%">Nombre</th>
+                <th width="15%">Fecha Inicio</th>
+                <th width="15%">Fecha Fin</th>
+                <th width="9%">Estado</th>
+                <th width="20%">Descripcion</th>
+                <th width="8%">
+                </th>
+            </tr>
+        </thead>
+        {% for project in object_list %}
+            <tr class="table-row" data-href="{% url 'update_ejecucion' project.pk %}">
+                <td>{{ project.id }}</td>
+                <td>{{ project.nombre }}</td>
+                <td>{{ project.fecha_inicio }}</td>
+                <td>{{ project.fecha_fin}}</td>
+                <td>{{ project.estado }}</td>
+                <td colspan="2">{{ project.descripcion }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+</body>
+<script type="text/javascript">
+    $(document).ready(function($) {
+        $(".table-row").click(function() {
+            window.document.location = $(this).data("href");
+        });
+    });
+</script>
+</html>

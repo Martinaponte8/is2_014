@@ -1,0 +1,86 @@
+{%include 'header_admin.html'%}
+    <div class="container">
+        <h1 class="jumbotron head"> {{ title }}</h1>
+        <hr>
+    </div>
+    <div class="container">
+        <div class="container form-container">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="cabecera" style="display: none">
+                    {{ form.as_p}}
+                </div>
+                <div class="detalle">
+                    <div class="scrolltable" id="formset">
+                        <table id="tabla_detalle" class="table-bordered table-bordered-formset">
+                            {{ proyectodetalles.management_form }}
+
+                                <thead>
+                                <tr>
+                                    <th width="10%">Usuario</th>
+                                    <th width="10%">Rol</th>
+                                    <th width="10%">Eliminar</th>
+                                </tr>
+                                </thead>
+
+                                <tbody id="tbody">
+                                    {% for form in proyectodetalles %}
+                                        <tr>
+                                            {% for field in form.visible_fields %}
+                                                <td width="10%">
+                                                    {# Include the hidden fields in the form #}
+                                                    {% if forloop.first %}
+                                                        {% for hidden in form.hidden_fields %}
+                                                            {{ hidden }}
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                    {{ field.errors.as_ul }}
+                                                    {{ field }}
+                                                </td>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="empty_form" style="display:none">
+                    <table class="table-bordered table-bordered-formset">
+                        <tbody>
+                            <tr>
+                                {% for field in proyectodetalles.empty_form.visible_fields %}
+                                    <td width="10%">
+                                        {# Include the hidden fields in the form #}
+                                        {% if forloop.first %}
+                                            {% for hidden in form.hidden_fields %}
+                                                {{ hidden }}
+                                            {% endfor %}
+                                        {% endif %}
+                                        {{ field.errors.as_ul }}
+                                        {{ field }}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <input type="button" value="Agregar nuevo usuario" class="adddetail-btn" id="add_more">
+                </div>
+                <div class="row">
+                    <input type="submit" value="Guardar" class="btn submit-btn">
+                </div>
+            </form>
+            <script type="text/javascript">
+                $(document).ready(function($) {
+                    $('#add_more').click(function() {
+                    var form_idx = $('#id_proyectodetalle_set-TOTAL_FORMS').val();
+                    $('#formset').append($('#empty_form').html().replace(/__prefix__/g, form_idx));
+                    $('#id_proyectodetalle_set-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+                    });
+                });
+            </script>
+            <br><br><br>
+        </div>
+    </div>

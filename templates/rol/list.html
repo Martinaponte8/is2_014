@@ -1,0 +1,50 @@
+
+{%include 'header_admin.html'%}
+
+<div class="container">
+    <h1 class="jumbotron head" align="center"> Administracion de Roles </h1>
+    <hr>
+</div>
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th width="10%">ID</th>
+                <th width="20%">Nombre</th>
+                <th width="62%">Descripcion</th>
+                <th width="8%">
+                    <div class="col-sm-2" align="center"></div>
+                    <div class="col-sm-1" align="center">
+                        <a href="/roles/create/">
+                            <div class="btn new-btn-list">
+                                <span class="glyphicon glyphicon-plus glyphicon-new"></span>
+                            </div>
+                        </a>
+                    </div>
+                </th>
+            </tr>
+
+        </thead>
+        {% for rol in object_list %}
+            <tr class="table-row" data-href="{% url 'update_rol' rol.pk %}">
+                <td>{{ rol.pk }}</td>
+                <td>{{ rol.nombre }}</td>
+                <td colspan="2">{{ rol.descripcion }}</td>
+                <td button type="button" class="btn btn-danger"
+                                onclick="location.href='{% url 'eliminar3' rol.pk %}'">Borrar
+                        </button> </td>
+                <td button type="button" class="btn btn-info"
+                                onclick="location.href='{% url 'update_rol' rol.pk %}'">Modificar
+                        </button> </td>
+
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+<!--<script type="text/javascript">-->
+<!--    $(document).ready(function($) {-->
+<!--        $(".table-row").click(function() {-->
+<!--            window.document.location = $(this).data("href");-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
