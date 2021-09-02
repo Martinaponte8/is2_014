@@ -11,8 +11,12 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Proyecto
 
-
+def eliminar2(request, project_id):
+    project = Proyecto.objects.get(id=project_id)
+    project.delete()
+    return redirect("index")
 
 @method_decorator(login_required, name='dispatch')
 class UpdateOptionsView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):

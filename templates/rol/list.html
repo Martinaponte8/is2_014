@@ -30,14 +30,21 @@
                 <td>{{ rol.pk }}</td>
                 <td>{{ rol.nombre }}</td>
                 <td colspan="2">{{ rol.descripcion }}</td>
+                <td button type="button" class="btn btn-danger"
+                                onclick="location.href='{% url 'eliminar3' rol.pk %}'">Borrar
+                        </button> </td>
+                <td button type="button" class="btn btn-info"
+                                onclick="location.href='{% url 'update_rol' rol.pk %}'">Modificar
+                        </button> </td>
+
             </tr>
         {% endfor %}
     </table>
 </div>
-<script type="text/javascript">
-    $(document).ready(function($) {
-        $(".table-row").click(function() {
-            window.document.location = $(this).data("href");
-        });
-    });
-</script>
+<!--<script type="text/javascript">-->
+<!--    $(document).ready(function($) {-->
+<!--        $(".table-row").click(function() {-->
+<!--            window.document.location = $(this).data("href");-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
