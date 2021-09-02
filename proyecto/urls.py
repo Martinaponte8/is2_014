@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.urls import path
 from . import views
+from .views import eliminar2
 #from tipoUserStory.views import *
 #from userstory.views import *
 #from sprint.views import *
@@ -12,7 +13,7 @@ urlpatterns = [
     url(r'^$', views.ProjectListView.as_view(),name='project_list'),
 	url(r'^create/$', views.CreateProjectView.as_view(), name='create_project'),
     path(route='update_project/<int:pk_proyecto>/', view=views.UpdateProjectView.as_view(), name='update_project'),
-
+    path("eliminar/<int:project_id>/", eliminar2, name="eliminar2"),
     #definicion
 
     url(r'^opciones/$', views.OptionsListView.as_view(), name='options_project'),

@@ -35,15 +35,22 @@
                     <td>{{ usuario.last_name }}</td>
                     <td>{{ usuario.estado }}</td>
                     <td colspan="2">{{ usuario.descripcion }}</td>
+                    <td button type="button" class="btn btn-danger"
+                                onclick="location.href='{% url 'eliminar' usuario.pk %}'">Borrar
+                        </button> </td>
+                    <td button type="button" class="btn btn-info"
+                                onclick="location.href='{% url 'update_user' usuario.pk %}'">Modificar
+                        </button> </td>
+
                 </tr>
             {% endfor %}
         </table>
     {% endif %}
 </div>
-<script type="text/javascript">
-    $(document).ready(function($) {
-        $(".table-row").click(function() {
-            window.document.location = $(this).data("href");
-        });
-    });
-</script>
+<!--<script type="text/javascript">-->
+<!--    $(document).ready(function($) {-->
+<!--        $(".table-row").click(function() {-->
+<!--            window.document.location = $(this).data("href");-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
