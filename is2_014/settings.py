@@ -42,10 +42,13 @@
 #
 # # Definicion de las aplicaciones instaladas
 #
-# INSTALLED_APPS = [
+#INSTALLED_APPS = [
 #     'django.contrib.admin',
 #     'django.contrib.sites',
 #     'Inicio',
+#     'proyecto',
+#     'usuarios',
+#     'rol',
 #     'allauth',
 #     'allauth.account',
 #     'allauth.socialaccount',
@@ -155,6 +158,8 @@
 #
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # STATIC_URL = '/static/'
+#
+#AUTH_USER_MODEL = 'usuarios.Usuario'
 #
 # STATICFILES_DIRS = (
 #     os.path.join(BASE_DIR, 'static'),
