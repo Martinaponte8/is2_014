@@ -31,13 +31,13 @@ html,body{
 
 .navbar-right li{
     color: black;
-    background-color: mediumturquoise;
-    border-color: mediumturquoise;
+    background-color: #0f3d66;
+    border-color: #0f3d66;
 }
 
 .navbar-polip a{
     color: black;
-    border-color: mediumturquoise;
+    border-color: #0f3d66;
 }
 
 .navbar-right a:hover{
