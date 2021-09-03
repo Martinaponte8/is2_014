@@ -3,6 +3,10 @@ from django.forms import inlineformset_factory
 from .models import *
 
 class CreateProjectForm(forms.ModelForm):
+    """
+        Formulario para la creacion de un nuevo Proyecto
+        """
+
     class Meta:
         model = Proyecto
         fields = ('nombre', 'fecha_inicio', 'fecha_fin', 'estado', 'descripcion')
@@ -23,6 +27,9 @@ class CreateProjectForm(forms.ModelForm):
 
 
 class UpdateProjectForm(forms.ModelForm):
+    """
+        Formulario para la modificacion de un Proyecto
+        """
     class Meta:
         model = Proyecto
         fields = ('nombre', 'fecha_inicio', 'fecha_fin', 'estado', 'descripcion')

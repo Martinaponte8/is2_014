@@ -6,6 +6,9 @@ from .models import Usuario
 from rol.models import Permiso
 
 class CreateUserForm(forms.ModelForm):
+    """
+    Formulario para la creacion de un  Usuario
+    """
 
     def _init_(self, *args, **kwargs):
         super(CreateUserForm, self)._init_(*args, **kwargs)
@@ -43,6 +46,9 @@ class CreateUserForm(forms.ModelForm):
         return user
 
 class UpdateUserForm(forms.ModelForm):
+    """
+    Formulario para la modificacion de un Usuario
+    """
 
     class Meta:
         model = Usuario
