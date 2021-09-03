@@ -12,6 +12,9 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 
+"""
+Funcion eliminar Usuario
+"""
 def eliminar(request, user_id):
     user = Usuario.objects.get(id=user_id)
     user.delete()
@@ -21,6 +24,10 @@ def eliminar(request, user_id):
 
 @method_decorator(login_required, name='dispatch')
 class UserListView(LoginRequiredMixin, ListView):
+    """
+       Vista de la lista de Usuarios
+    """
+
     template_name = 'usuarios/list.html'
     model = Usuario
     queryset = Usuario.objects.all()
@@ -45,6 +52,10 @@ class UserListView(LoginRequiredMixin, ListView):
 
 @method_decorator(login_required, name='dispatch')
 class CreateUserView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+    """
+    Vista para la creacion de un Usuario
+    """
+
     template_name = 'usuarios/user.html'
     model = Usuario
     success_url = '/index'
@@ -59,6 +70,10 @@ class CreateUserView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 
 @method_decorator(login_required, name='dispatch')
 class UpdateUserView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    """
+    Vista para la modificacion de un Usuario
+    """
+
     template_name = 'usuarios/user.html'
     model = Usuario
     form_class = UpdateUserForm

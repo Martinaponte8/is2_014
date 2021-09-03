@@ -2,6 +2,9 @@
 from django.db import models
 
 # Create your models here.
+"""
+Definicion de los modelos de Permiso y Rol
+"""
 
 class Permiso(models.Model):
     '''Define la clase de permisos'''
@@ -16,6 +19,10 @@ class Permiso(models.Model):
 
 
 class Rol(models.Model):
+    """
+    Se definen los campos necesarios para el modelo Rol
+    """
+
     id = models.AutoField
     nombre = models.CharField(max_length=50, unique=True,blank=False, null=False)
     descripcion = models.CharField(max_length=300)

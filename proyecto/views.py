@@ -12,7 +12,13 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Proyecto
+"""
+Vistas del Proyecto
+"""
 
+"""
+Funcion eliminar Proyecto
+"""
 def eliminar2(request, project_id):
     project = Proyecto.objects.get(id=project_id)
     project.delete()
@@ -20,6 +26,10 @@ def eliminar2(request, project_id):
 
 @method_decorator(login_required, name='dispatch')
 class UpdateOptionsView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    """
+    Vista de modificar Proyectos
+    """
+
     template_name = 'proyecto/options.html'
     model = Proyecto
     form_class = UpdateProjectForm
@@ -91,6 +101,10 @@ class FlujoListView(LoginRequiredMixin, ListView):
 
 @method_decorator(login_required, name='dispatch')
 class UpdateOptionsView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    """
+       Vistas para modificacion de las opciones de proyecto
+    """
+
     template_name = 'proyecto/options.html'
     model = Proyecto
     form_class = UpdateProjectForm
@@ -180,6 +194,10 @@ class OptionsListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = "Opciones de Proyectos"
         return context
+
+"""
+Vistas de Ejecucion
+"""
 
 @method_decorator(login_required, name='dispatch')
 class EjecucionListView(LoginRequiredMixin, ListView):

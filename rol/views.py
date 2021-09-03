@@ -14,7 +14,9 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 
-
+"""
+Funcion eliminar Rol
+"""
 def eliminar3(request, rol_id):
     rol = Rol.objects.get(id=rol_id)
     rol.delete()
@@ -22,6 +24,10 @@ def eliminar3(request, rol_id):
 
 @method_decorator(login_required, name='dispatch')
 class RolListView(LoginRequiredMixin, ListView):
+    """
+    Vista de la lista de Roles
+    """
+
     template_name = 'rol/list.html'
     model = Rol
     queryset = Rol.objects.all()
@@ -34,6 +40,10 @@ class RolListView(LoginRequiredMixin, ListView):
 
 @method_decorator(login_required, name='dispatch')
 class CreateRolView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+    """
+    Vista para la creacion de un nuevo Rol
+    """
+
     template_name = 'rol/rol.html'
     model = Rol
     success_url = '/index'
@@ -50,6 +60,10 @@ class CreateRolView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
 @method_decorator(login_required, name='dispatch')
 
 class UpdateRolView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    """
+    Vista para la modificacion de un Rol
+    """
+
     template_name = 'rol/rol.html'
     model = Rol
     # permission_required= 

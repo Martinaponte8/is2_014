@@ -4,6 +4,9 @@ from rol.models import Rol
 from usuarios.models import Usuario
 
 # Create your models here.
+"""
+Definimos los estados de un Proyecto
+"""
 
 ESTADOS_PROYECTO = (
     ('Pendiente', 'Pendiente'), # cuando se crea

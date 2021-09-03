@@ -6,6 +6,10 @@ from .views import eliminar2
 #from userstory.views import *
 #from sprint.views import *
 
+"""
+Definicion de URLs contenidas en proyectos
+"""
+
 urlpatterns = [
 
     #administracion
