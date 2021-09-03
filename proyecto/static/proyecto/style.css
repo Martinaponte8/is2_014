@@ -45,7 +45,7 @@ html,body{
 
 .head{
     font-family: "Hind Vadodara", indian type foundry;
-    background-color: mediumturquoise !important;;
+    background-color: #0f3d66;
     text-decoration-color: aliceblue;
     text-align: center;
     font-size: 30px;
@@ -65,13 +65,13 @@ html,body{
 
 .navbar-right li{
     color: black;
-    background-color: mediumturquoise;
-    border-color: mediumturquoise;
+    background-color: #0f3d66;
+    border-color: #0f3d66;
 }
 
 .navbar-polip a{
     color: black;
-    border-color: mediumturquoise;
+    border-color: #0f3d66;
 }
 
 .navbar-right a:hover{
