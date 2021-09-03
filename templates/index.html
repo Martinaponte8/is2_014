@@ -1,140 +1,108 @@
-<!--{% load socialaccount %}-->
-<!--{% load static %}-->
-<!--<html>-->
-<!--&lt;!&ndash;{% if user.is_authenticated %}&ndash;&gt;-->
-<!--&lt;!&ndash;<head>&ndash;&gt;-->
-<!--&lt;!&ndash;    <title>Gestor de Proyectos</title>&ndash;&gt;-->
-<!--&lt;!&ndash;    <meta charset="utf-8">&ndash;&gt;-->
-<!--&lt;!&ndash;    &lt;!&ndash;Estilo Customizado&ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;	<link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">&ndash;&gt;-->
-<!--&lt;!&ndash;    <meta name="viewport" content="width=device-width, initial-scale=1">&ndash;&gt;-->
-<!--&lt;!&ndash;    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">&ndash;&gt;-->
-<!--&lt;!&ndash;    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>&ndash;&gt;-->
-<!--&lt;!&ndash;    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>&ndash;&gt;-->
-<!--&lt;!&ndash;</head>&ndash;&gt;-->
-<!--&lt;!&ndash;{% endif %}&ndash;&gt;-->
-<!--<body>-->
-
-<!--&lt;!&ndash;Titulo de la pagina&ndash;&gt;-->
-<!--&lt;!&ndash;<div class="container">&ndash;&gt;-->
-<!--&lt;!&ndash;<div class="h1">Gestor de proyectos</div>&ndash;&gt;-->
-<!--&lt;!&ndash;    <div class="p1"><b> Bienvenido/a {{ username }}!</b></div>&ndash;&gt;-->
-
-<!--&lt;!&ndash;    <h1><center>Gestor de proyectos </center></h1>&ndash;&gt;-->
-
-<!--&lt;!&ndash;&lt;!&ndash;Codigo para agregar la imagen a la pagina, pasandole el directorio donde se encuentra la foto estatica &ndash;&gt;&ndash;&gt;-->
-
-<!--&lt;!&ndash;<br> <center><img alt="My image"src="{% static 'Inicio/logo.png' %}"></center>&ndash;&gt;-->
-
-
-
-<!--&lt;!&ndash;Funcion de python para autenticar el Inicio de sesion de un usuario &ndash;&gt;-->
-
+{% load socialaccount %}
+{% load static %}
+<html>
 <!--{% if user.is_authenticated %}-->
-<!--<html lang="es">-->
-<!--&lt;!&ndash;este body abria que meter en cada una de las otras paginas asi tienen tambien la barra de arriba&ndash;&gt;-->
-<!--<body>-->
+<!--<head>-->
+<!--    <title>Gestor de Proyectos</title>-->
+<!--    <meta charset="utf-8">-->
+<!--    &lt;!&ndash;Estilo Customizado&ndash;&gt;-->
+<!--	<link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">-->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+<!--</head>-->
+<!--{% endif %}-->
+<body>
 
-<!--<nav class="navbar navbar-polip">-->
-<!--  <div class="container-fluid">-->
-<!--    <div class="navbar-header">-->
-<!--      <a class="navbar-brand" href="/index/">Inicio</a>-->
-<!--    </div>-->
-
-<!--&lt;!&ndash;     aca deberia de ir el permiso para que solo el admin/scrum master pueda acceder a el sector adminitracion&ndash;&gt;-->
-<!--&lt;!&ndash;     {% if request.user.groups.all %}&ndash;&gt;-->
-<!--      <ul class="nav navbar-nav">-->
-<!--        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Administración<span class="caret"></span></a>-->
-<!--        <ul class="dropdown-menu">-->
-<!--                <li><a href="/usuarios/">Usuarios</a></li>-->
-<!--                <li><a href="/roles/">Roles</a></li>-->
-<!--                <li><a href="/proyecto/">Proyectos</a></li>-->
-<!--            </ul>-->
-<!--        </li>-->
-<!--        <li><a href="/proyecto/">Proyectos</a></li>-->
-<!--    </ul>-->
-<!--&lt;!&ndash;      {% endif %}&ndash;&gt;-->
-<!--    <ul class="nav navbar-nav navbar-right">-->
-<!--      <li><a href="../accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>-->
-<!--    </ul>-->
-<!--  </div>-->
-<!--</nav>-->
-
+<!--Titulo de la pagina-->
 <!--<div class="container">-->
-<!--    <center><div class="h1">Gestor de proyectos</div></center>-->
-<!--    <div br> <center><img alt="My image"src="{% static 'Inicio/logo.png' %}"></center></div>-->
-<!--</div>-->
+<!--<div class="h1">Gestor de proyectos</div>-->
+<!--    <div class="p1"><b> Bienvenido/a {{ username }}!</b></div>-->
 
-
-
-<!-- <center><br p>Bienvenido, Te has logueado como {{ user.username }}</p></center>-->
-<!-- <center><div class="p2">¡Ha iniciado sesión! <a href="/proyecto/">Acceda a sus proyectos</a>.</div></center>-->
-<!--<br> <center><a href="logout">Cerrar sesion</a></center>-->
-
-
-
-
-
-
-
-
-
-<!--&lt;!&ndash;##########################################################################################################&ndash;&gt;-->
-
-<!-- &lt;!&ndash;<li><a href="../accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>-->
-<!--Si no esta logueado mostrarle la pagina de Inicio con el link para loguearse con google &ndash;&gt;-->
-
-<!--{% else %}-->
 <!--    <h1><center>Gestor de proyectos </center></h1>-->
 
 <!--&lt;!&ndash;Codigo para agregar la imagen a la pagina, pasandole el directorio donde se encuentra la foto estatica &ndash;&gt;-->
 
 <!--<br> <center><img alt="My image"src="{% static 'Inicio/logo.png' %}"></center>-->
-<!-- <br> <center><a href="{% provider_login_url 'google' %}">Logueate con Google</a></center>-->
-<!--{% endif %}-->
-<!--</body>-->
-<!--</html>-->
 
 
 
+<!--Funcion de python para autenticar el Inicio de sesion de un usuario -->
 
-<!--&lt;!&ndash;    menu anterior&ndash;&gt;-->
-<!--&lt;!&ndash;    <h1><center>Gestor de proyectos </center></h1>&ndash;&gt;-->
-
-<!--&lt;!&ndash;&lt;!&ndash;Codigo para agregar la imagen a la pagina, pasandole el directorio donde se encuentra la foto estatica &ndash;&gt;&ndash;&gt;-->
-
-<!--&lt;!&ndash;<br> <center><img alt="My image"src="{% static 'Inicio/logo.png' %}"></center>&ndash;&gt;-->
-
-
-
-{% load socialaccount %}
-{% load static %}
-<html>
+{% if user.is_authenticated %}
+<html lang="es">
+<!--este body abria que meter en cada una de las otras paginas asi tienen tambien la barra de arriba-->
 <body>
 
-<!--Titulo de la pagina-->
+<nav class="navbar navbar-polip">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/index/">Inicio</a>
+    </div>
 
-<h1><center>Gestor de proyectos </center></h1>
+<!--     aca deberia de ir el permiso para que solo el admin/scrum master pueda acceder a el sector adminitracion-->
+<!--     {% if request.user.groups.all %}-->
+      <ul class="nav navbar-nav">
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Administración<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+                <li><a href="/usuarios/">Usuarios</a></li>
+                <li><a href="/roles/">Roles</a></li>
+                <li><a href="/proyecto/">Proyectos</a></li>
+            </ul>
+        </li>
+        <li><a href="/proyecto/">Proyectos</a></li>
+    </ul>
+<!--      {% endif %}-->
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="../accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+    <center><div class="h1">Gestor de proyectos</div></center>
+    <div br> <center><img alt="My image"src="{% static 'Inicio/logo.png' %}"></center></div>
+</div>
+
+
+
+ <center><br p>Bienvenido, Te has logueado como {{ user.username }}</p></center>
+ <center><div class="p2">¡Ha iniciado sesión! <a href="/proyecto/">Acceda a sus proyectos</a>.</div></center>
+<br> <center><a href="logout">Cerrar sesion</a></center>
+
+
+
+
+
+
+
+
+
+<!--##########################################################################################################-->
+
+ <!--<li><a href="../accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>
+Si no esta logueado mostrarle la pagina de Inicio con el link para loguearse con google -->
+
+{% else %}
+    <h1><center>Gestor de proyectos </center></h1>
 
 <!--Codigo para agregar la imagen a la pagina, pasandole el directorio donde se encuentra la foto estatica -->
 
 <br> <center><img alt="My image"src="{% static 'Inicio/logo.png' %}"></center>
-
-<!--Funcion de python para autenticar el inicio de sesion de un usuario -->
-
-{% if user.is_authenticated %}
-
-{%include 'header_admin.html'%}
-
- <center> <p>Bienvenido, Te has logueado como {{ user.username }}</p></center>
-<br> <center><a href="logout">Cerrar sesion</a></center>
-
-
- <!--<li><a href="../accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>
-Si no esta logueado mostrarle la pagina de inicio con el link para loguearse con google -->
-
-{% else %}
  <br> <center><a href="{% provider_login_url 'google' %}">Logueate con Google</a></center>
 {% endif %}
 </body>
 </html>
+
+
+
+
+<!--    menu anterior-->
+<!--    <h1><center>Gestor de proyectos </center></h1>-->
+
+<!--&lt;!&ndash;Codigo para agregar la imagen a la pagina, pasandole el directorio donde se encuentra la foto estatica &ndash;&gt;-->
+
+<!--<br> <center><img alt="My image"src="{% static 'Inicio/logo.png' %}"></center>-->
+
+
