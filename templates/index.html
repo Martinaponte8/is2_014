@@ -1,18 +1,18 @@
 {% load socialaccount %}
 {% load static %}
 <html>
-{% if user.is_authenticated %}
-<head>
-    <title>Gestor de Proyectos</title>
-    <meta charset="utf-8">
-    <!--Estilo Customizado-->
-	<link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-</head>
-{% endif %}
+<!--{% if user.is_authenticated %}-->
+<!--<head>-->
+<!--    <title>Gestor de Proyectos</title>-->
+<!--    <meta charset="utf-8">-->
+<!--    &lt;!&ndash;Estilo Customizado&ndash;&gt;-->
+<!--	<link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">-->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+<!--</head>-->
+<!--{% endif %}-->
 <body>
 
 <!--Titulo de la pagina-->
@@ -59,7 +59,7 @@
     </ul>
   </div>
 </nav>
-{% endif %}
+
 <div class="container">
     <center><div class="h1">Gestor de proyectos</div></center>
     <div br> <center><img alt="My image"src="{% static 'Inicio/logo.png' %}"></center></div>
@@ -82,7 +82,6 @@
 <!--##########################################################################################################-->
 
  <!--<li><a href="../accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>
-
 Si no esta logueado mostrarle la pagina de Inicio con el link para loguearse con google -->
 
 {% else %}
