@@ -1,0 +1,21 @@
+is2\_014.usuarios.migrations package
+====================================
+
+Submodules
+----------
+
+is2\_014.usuarios.migrations.0001\_initial module
+-------------------------------------------------
+
+.. automodule:: is2_014.usuarios.migrations.0001_initial
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: is2_014.usuarios.migrations
+   :members:
+   :undoc-members:
+   :show-inheritance:

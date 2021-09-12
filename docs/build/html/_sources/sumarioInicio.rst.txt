@@ -1,0 +1,21 @@
+Glosario
+==================
+
+Apps
+~~~~~~~~~~
+
+..  automodule:: Inicio.apps
+    :members:
+
+Admin
+~~~~~~~~~~
+
+..  automodule:: Inicio.admin
+    :members:
+
+
+Tests
+~~~~~~~~~~
+
+..  automodule:: Inicio.tests
+    :members:

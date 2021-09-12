@@ -1,0 +1,6 @@
+Inicio
+=============
+
+.. toctree::
+
+    sumarioInicio
