@@ -1,0 +1,69 @@
+is2\_014.Inicio package
+=======================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   is2_014.Inicio.migrations
+
+Submodules
+----------
+
+is2\_014.Inicio.admin module
+----------------------------
+
+.. automodule:: is2_014.Inicio.admin
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+is2\_014.Inicio.apps module
+---------------------------
+
+.. automodule:: is2_014.Inicio.apps
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+is2\_014.Inicio.forms module
+----------------------------
+
+.. automodule:: is2_014.Inicio.forms
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+is2\_014.Inicio.models module
+-----------------------------
+
+.. automodule:: is2_014.Inicio.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+is2\_014.Inicio.tests module
+----------------------------
+
+.. automodule:: is2_014.Inicio.tests
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+is2\_014.Inicio.views module
+----------------------------
+
+.. automodule:: is2_014.Inicio.views
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: is2_014.Inicio
+   :members:
+   :undoc-members:
+   :show-inheritance:

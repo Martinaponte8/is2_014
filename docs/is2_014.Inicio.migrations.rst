@@ -1,0 +1,10 @@
+is2\_014.Inicio.migrations package
+==================================
+
+Module contents
+---------------
+
+.. automodule:: is2_014.Inicio.migrations
+   :members:
+   :undoc-members:
+   :show-inheritance:
