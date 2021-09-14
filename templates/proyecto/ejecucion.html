@@ -1,16 +1,190 @@
-{%include 'header_admin.html'%}
-    <div class="container">
-        <h1 class="jumbotron head"> {{ title }}</h1>
+{% if 'Ver Ejecucion de Proyectos' in permisos %}
+{%include 'base.html'%}
+<div class="container">
+    <div class="head">
+        <h1 align="center"> Ejecucion {{ object.nombre }} </h1>
         <hr>
     </div>
-    <div class="container">
-        <li>
-            <a href="{% url 'sprint_list' object.pk %}">Sprints</a>
-        </li>
-        <li>
-            <a href="{% url 'user_story_list' object.pk %}">Administrar User Stories</a>
-        </li>
-        <li>
-            <a href="{% url 'product_backlog' object.pk%}">Product Backlog</a>
-        </li>
+    <div class="body" style="">
+        <div class="options" style="font-size: 1.5em; padding-top: 0em!important;;">
+            {% if object.estado == "Activo" %}
+                {% if 'Ver Sprint' in permisos %}
+                <li>
+                    <a href="{% url 'sprint_list' object.pk %}">Sprints</a>
+                </li>
+                {% endif %}
+                {% if 'Ver User Stories' in permisos %}
+                <li>
+                    <a href="{% url 'user_story_list' object.pk %}">Administrar User Stories</a>
+                </li>
+                {% endif %}
+                {% if 'Ver Product Backlog' in permisos %}
+                <li>
+                    <a href="{% url 'product_backlog' object.pk%}">Product Backlog</a>
+                </li>
+                {% endif %}
+                {% if 'Asignar User Stories' in permisos %}
+                <li>
+                    {% if sprint_pendiente %}
+                    <a href="{% url 'asignar_us' object.pk sprint_pendiente.pk %}">Asignar User Stories</a>
+                    {% else %}
+                    <a href="#sinSprintPendiente" role="button" data-toggle="modal">Asignar User Stories</a>
+                    {% endif %}
+                </li>
+                {% endif %}
+                {% if 'Ver Tablero' in permisos %}
+                <li>
+                    {% if sprint_actual %}
+                    <a href="#tiposTablero" role="button" data-toggle="modal">Sprint actual</a>
+                    {% else %}
+                    <a href="#sinSprintActual" role="button" data-toggle="modal">Sprint actual</a>
+                    {% endif %}
+                </li>
+                {% endif %}
+                <br>
+                <div class="container" align="right">
+                    <form method="POST" style="display: inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="terminar">
+                        {% if 'Terminar Proyecto' in permisos %}
+                        <button type="submit" class="btn btn-success">
+                            <i class="far fa-stop-circle"></i> Terminar Proyecto
+                        </button>
+                        {% endif %}
+                    </form>
+                    <form method="POST" style="display: inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="cancelar">
+                        {% if 'Cancelar Proyecto' in permisos %}
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-ban"></i> Cancelar Proyecto
+                        </button>
+                        {% endif %}
+                    </form>
+                    <form method="POST" style="display: inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="suspender">
+                        {% if 'Suspender Proyecto' in permisos %}
+                        <button type="submit" class="btn btn-success">
+                            <i class="far fa-pause-circle"></i> Suspender Proyecto
+                        </button>
+                        {% endif %}
+                    </form>
+                </div>
+            {% elif object.estado == "Pendiente" %}
+                <h3>El proyecto aun no ha sido iniciado, favor inicie el proyecto.</h3>
+                <br><br>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="iniciar" >
+                    <div class="container" align="right">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-play-circle"></i> Iniciar Proyecto
+                        </button>
+                    </div>
+                </form>
+            {% elif object.estado == "Suspendido" %}
+                <li>
+                    <a href="{% url 'product_backlog' object.pk%}">Product Backlog</a>
+                </li>
+                <br>
+                <h4>El proyecto se encuentra suspendido, puede reiniciar el proyecto.</h4>
+                <br><br>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="reiniciar" >
+                    <div class="container" align="right">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-play-circle"></i> Reiniciar Proyecto
+                        </button>
+                    </div>
+                </form>
+            {% elif object.estado == "Terminado" %}
+                <li>
+                    <a href="{% url 'product_backlog' object.pk%}">Product Backlog</a>
+                </li>
+                <br>
+                <h4>El proyecto se encuentra suspendido, puede reiniciar el proyecto.</h4>
+                <br><br>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="reiniciar" >
+                    <div class="container" align="right">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-play-circle"></i>Reiniciar Proyecto
+                        </button>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+        <br><br><br>
+        <hr>
+        <br>
     </div>
+</div>
+<div id="sinSprintPendiente" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">No existe sprint pendiente</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Debe crear un nuevo sprint para asignar User Stories</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn submit-btn" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="sinSprintActual" class="modal fade modal-centrado">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">No existe sprint en proceso</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Debe iniciar un nuevo sprint</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn submit-btn" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="tiposTablero" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-flujos">
+            <div class="modal-header" style="display: inline; text-align: center">
+                <h4 style="display: inline;" class="modal-title">Sprint: {{ sprint_actual.nombre }}</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h5 style="margin-left: 10em">Tableros:</h5>
+                <div class="options-flujos" style="margin-left: 14em">
+                    {% for flujo in flujos %}
+                        {% if sprint_actual %}
+                            <li>
+                                <a href="{% url 'tablero' project.pk sprint_actual.pk flujo.pk %}">{{ flujo.nombre }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="terminar_sprint" value="{{ sprint_actual.pk }}">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-stop-circle"></i> Terminar Sprint
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+Permiso denegado
+{% endif %}

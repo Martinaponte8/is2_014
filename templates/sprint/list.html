@@ -1,0 +1,65 @@
+{% if 'Ver Sprint' in permisos %}
+{%include 'base.html'%}
+<div class="container">
+    <div class="head">
+        <h1 align="center">Sprints {{ project.nombre }}</h1>
+        <hr>
+    </div>
+    <div class="body">
+        <table class="table table-sm scrolltable" width="100%">
+            <thead class="thead-dark thead">
+                <tr>
+                    <th width="10%">ID</th>
+                    <th width="45%">Nombre</th>
+                    <th width="34%">Estado</th>
+                    <th width="8%">Acciones</th>
+                    <th width="3%">
+                        {% if 'Crear Sprint' in permisos %}
+                            {% if sprint_pendiente %}
+                            <a href="#SprintPendiente" data-toggle="modal"><i class="fas fa-plus-square"></i> </a>
+                            {% else %}
+                            <a href="./create/"><i class="fas fa-plus-square"></i> </a>
+                            {% endif %}
+                        {% endif %}
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                {% for sprint in object_list %}
+                    <tr>
+                        <td width="10%">{{ sprint.pk }}</td>
+                        <td width="45%">{{ sprint.nombre }}</td>
+                        <td width="34">{{ sprint.estado }}</td>
+                        <td id="acciones" width="8%">
+                            <a href="{% url 'ver_sprint' project.pk sprint.pk %}"><i class="fas fa-eye"></i></a>
+                            {% if 'Modificar Sprint' in permisos %}
+                                <a href="{% url 'update_sprint' project.pk sprint.pk %}"><i class="fas fa-edit"></i></a>
+                            {% endif %}
+                        </td>
+                        <td width="3%"></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="SprintPendiente" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Ya existe un sprint pendiente</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>No se puede crear un nuevo sprint si ya existe un sprint pendiente</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn submit-btn" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+Permiso Denegado
+{% endif %}

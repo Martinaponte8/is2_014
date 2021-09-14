@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+# from .models import Nota
 
 class CreateUserStoryForm(forms.ModelForm):
     """
@@ -54,14 +55,14 @@ class ArchivoForm(forms.ModelForm):
         fields = ('titulo', 'archivo', )
 
 
-class NotaForm(forms.ModelForm):
-    """
-    Formulario para subir notas al User Story
-    """
-    class Meta:
-        model = Nota
-        """Campos a ingresar"""
-        fields = ('nota',)
+# class NotaForm(forms.ModelForm):
+#     """
+#     Formulario para subir notas al User Story
+#     """
+#     class Meta:
+#         model = Nota
+#         """Campos a ingresar"""
+#         fields = ('nota',)
 
 
 class ActividadForm(forms.ModelForm):
@@ -74,14 +75,14 @@ class ActividadForm(forms.ModelForm):
         fields = ('nombre','descripcion','duracion')
 
 
-class GuardarNotaForm(forms.ModelForm):
-    """
-    Formulario para guardar notas en el user story
-    """
-    class Meta:
-        model = Nota
-        """Campos a ingresar"""
-        fields = ('us', 'usuario', 'nota','sprint')
+# class GuardarNotaForm(forms.ModelForm):
+#     """
+#     Formulario para guardar notas en el user story
+#     """
+#     class Meta:
+#         model = Nota
+#         """Campos a ingresar"""
+#         fields = ('us', 'usuario', 'nota','sprint')
 
 
 class GuardarArchivoForm(forms.ModelForm):

@@ -1,0 +1,26 @@
+{% if 'Modificar Tipos de User Story' in permisos or 'Crear Tipos de User Story' in permisos %}
+{%include 'base.html'%}
+<html>
+<body>
+<div class="container">
+    <div class="head">
+        <h1 align="center"> {{ title }} </h1>
+        <hr>
+        <h3 style="text-align: center">Proyecto: {{ project.nombre }}</h3>
+    </div>
+    <div class="register">
+        <div class="container form-container">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p}}
+                <button type="submit" class="btn submit-btn">Guardar</button>
+            </form>
+        </div>
+        <hr>
+    </div>
+</div>
+</body>
+</html>
+{% else %}
+Permiso denegado
+{% endif %}

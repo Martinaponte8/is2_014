@@ -1,13 +1,6 @@
-from django import forms
 from rol.models import *
 from django import forms
-from django.forms import CharField, Form
 
-#class BuscarRol(Form):
-#    """
-#    Formulario para buscar un Rol por nombre
-#    """
-#    Nombre = CharField()
 
 class CreateRolForm(forms.ModelForm):
     """
@@ -32,8 +25,7 @@ class CreateRolForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CreateRolForm, self).__init__(*args, **kwargs)
-        # permisos_all = Permiso.objects.filter(tipo=2)
-        permisos_all = Permiso.objects.filter()
+        permisos_all = Permiso.objects.filter(tipo=2)
         p = self.fields['permisos'].widget
         permisos = []
         for permiso in permisos_all:
@@ -43,7 +35,7 @@ class CreateRolForm(forms.ModelForm):
     def clean_permiso(self):
         permisos = self.cleaned_data['permisos']
         try:
-            pr = Permiso.objects.get(permisos = permisos)
+            pr = Permiso.objects.get(permisos=permisos)
         except:
             return self.cleaned_data['permisos']
         raise forms.ValidationError('Debe seleccionar al menos uno')
@@ -72,8 +64,7 @@ class UpdateRolForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(UpdateRolForm, self).__init__(*args, **kwargs)
-        #permisos_all = Permiso.objects.filter(tipo=2)
-        permisos_all = Permiso.objects.filter()
+        permisos_all = Permiso.objects.filter(tipo=2)
         p = self.fields['permisos'].widget
         permisos = []
         for permiso in permisos_all:
@@ -83,7 +74,8 @@ class UpdateRolForm(forms.ModelForm):
     def clean_permiso(self):
         permisos = self.cleaned_data['permisos']
         try:
-            pr = Permiso.objects.get(permisos = permisos)
+            pr = Permiso.objects.get(permisos=permisos)
         except:
             return self.cleaned_data['permisos']
         raise forms.ValidationError('Debe seleccionar al menos uno')
+

@@ -1,0 +1,69 @@
+{%include 'base.html'%}
+<html>
+<body>
+<div class="container">
+    <div class="head">
+        <h1 align="center"> {{ title }} </h1>
+        <hr>
+        <h3 style="text-align: center">Proyecto: {{ project.nombre }}</h3>
+    </div>
+    <div class="register">
+        <div class="container form-container">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p}}
+                <button type="submit" class="btn submit-btn">Guardar</button>
+            </form>
+        </div>
+        <hr>
+    </div>
+</div>
+
+{% for tipo_us in tipos_us %}
+    <select name="flujo" required id="flujos_{{ tipo_us.pk }}" style="display: none">
+        <option value="" selected>-----------------------------</option>
+        {% for key, flujos in flujos.items %}
+            {% if key == tipo_us.pk %}
+                {% for flujo in flujos %}
+                    <option value="{{ flujo.pk }}">{{ flujo.nombre }}</option>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </select>
+{% endfor %}
+
+<select name="tipo_us" required id="tipos_us" style="display: none">
+    <option value="">-----------------------------</option>
+    {% for tipo_us in tipos_us %}
+        <option value="{{ tipo_us.pk }}">{{ tipo_us.nombre }}</option>
+    {% endfor %}
+</select>
+
+</body>
+</html>
+<script type="text/javascript">
+    $(document).ready(function($) {
+        var tipo_selected = document.getElementById('id_tipo_us').value;
+        document.getElementById('id_tipo_us').innerHTML = $('#tipos_us').html();
+        $('#id_tipo_us').val(tipo_selected);
+
+        if (tipo_selected){
+            var flujo_selected = document.getElementById('id_flujo').value;
+            var flujos_inicial = $('#flujos_'.concat(tipo_selected)).html();
+            document.getElementById('id_flujo').innerHTML = flujos_inicial;
+            $('#id_flujo').val(flujo_selected);
+        }else {
+            document.getElementById('id_flujo').innerHTML = '<option value="">-----------------------------</option>';
+        }
+
+
+        $('#id_tipo_us').change(function() {
+            if (this.value){
+                var flujos = $('#flujos_'.concat(this.value)).html();
+                document.getElementById('id_flujo').innerHTML = flujos;
+            }else{
+                document.getElementById('id_flujo').innerHTML = '<option value="">-----------------------------</option>';
+            }
+        });
+    });
+</script>

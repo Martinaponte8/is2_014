@@ -1,0 +1,31 @@
+{% if 'Ver Proyectos' in permisos %}
+{%include 'base.html'%}
+<html>
+<body>
+<div class="container">
+    <div class="head">
+        <h1 align="center"> {{ title }} </h1>
+        <hr>
+    </div>
+    <div class="register">
+        <div class="container detalle" style="font-size: 25px">
+            <li>Nombre: {{ object.nombre }}</li>
+            <li>Fecha de Inicio:{{ object.fecha_inicio }}</li>
+            <li>Fecha de Finalización:{{ object.fecha_fin }}</li>
+            <li>Estado:{{ object.estado }}</li>
+            <li>Descripcion:{{ object.descripcion }}</li>
+            <li>F. De Inicio (Estimada): {{ object.fecha_ini_estimada }}</li>
+            <li>F. De Finalización (Estimada): {{ object.fecha_fin_estimada }}</li>
+        </div>
+        <br>
+        <div class="row">
+            <a href="../../"><button type="button" class="btn submit-btn">Atras</button></a>
+        </div>
+        <hr>
+    </div>
+</div>
+</body>
+</html>
+{% else %}
+Permiso denegado
+{% endif %}

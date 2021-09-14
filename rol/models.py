@@ -1,13 +1,14 @@
 
 from django.db import models
 
-# Create your models here.
 """
 Definicion de los modelos de Permiso y Rol
 """
 
 class Permiso(models.Model):
-    '''Define la clase de permisos'''
+    """
+    Se definen los campos necesarios para el modelo Permiso
+    """
     nombre = models.CharField(max_length=70, blank=False, null=False)
     ''' tipo 1 = Permisos de administracion
         tipo 2 = Permisos de Proyecto'''
@@ -17,15 +18,12 @@ class Permiso(models.Model):
         return self.nombre
 
 
-
 class Rol(models.Model):
     """
     Se definen los campos necesarios para el modelo Rol
     """
-
-    id = models.AutoField
-    nombre = models.CharField(max_length=50, unique=True,blank=False, null=False)
-    descripcion = models.CharField(max_length=300)
+    nombre = models.CharField(max_length=50, unique=True, blank=False, null=False)
+    descripcion = models.TextField(blank=True, null=True)
     permisos = models.ManyToManyField('Permiso', blank=False)
 
     def __str__(self):

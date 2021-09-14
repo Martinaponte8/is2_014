@@ -1,0 +1,35 @@
+{%include 'base.html'%}
+<html>
+<body>
+<div class="container">
+    <div class="head">
+        <h1 align="center"> {{ title }} </h1>
+        <hr>
+    </div>
+    <div class="register">
+        <div class="container detalle" style="font-size: 25px">
+            <li>Nombre de usuario: {{ object.username }}</li>
+            <li>Email: {{ object.email }}</li>
+            <li>Nombre/s: {{ object.first_name }}</li>
+            <li>Apellido/s: {{ object.last_name }}</li>
+            <li>Estado: {{ object.estado }}</li>
+            <li>CI: {{ object.ci }}</li>
+            <li>Teléfono: {{ object.telefono }}</li>
+            <li>Direccion: {{ object.direccion }}</li>
+            <li>Descripcion: {{ object.descripcion }}</li>
+            <li>Permisos:</li>
+            <div class="container" style="margin-left: 50px">
+                {% for permiso in object.permisos.all %}
+                    <li>{{ permiso }}</li>
+                {% endfor %}
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <a href="../../"><button type="button" class="btn submit-btn">Atras</button></a>
+        </div>
+        <hr>
+    </div>
+</div>
+</body>
+</html>

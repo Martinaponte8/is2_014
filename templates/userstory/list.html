@@ -1,0 +1,46 @@
+{% if 'Ver User Stories' in permisos %}
+{% include 'base.html' %}
+<div class="container">
+    <div class="head">
+        <h1 align="center">User Stories {{ project.nombre }}</h1>
+        <hr>
+    </div>
+    <div class="body">
+        <table class="table table-sm scrolltable" width="100%">
+            <thead class="thead-dark thead">
+                <tr>
+                    <th width="10%">ID</th>
+                    <th width="45%">Nombre</th>
+                    <th width="24%">Duracion Estimada</th>
+                    <th width="12%">Priorizacion</th>
+                    <th width="8%">Acciones</th>
+                    <th width="3%">
+                        {% if 'Crear User Stories' in permisos %}
+                            <a href="./create/"><i class="fas fa-plus-square"></i> </a>
+                        {% endif %}
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                {% for us in object_list %}
+                    <tr>
+                        <td width="10%">{{ us.pk }}</td>
+                        <td width="45%">{{ us.nombre }}</td>
+                        <td width="24%">{{ us.duracion_estimada }}</td>
+                        <td width="10%">{{ us.priorizacion }}</td>
+                        <td id="acciones" width="8%">
+                            <a href="{% url 'ver_userstory' project.pk us.pk %}"><i class="fas fa-eye"></i></a>
+                            {% if 'Modificar User Stories' in permisos %}
+                                <a href="{% url 'update_userstory' project.pk us.pk %}"><i class="fas fa-edit"></i></a>
+                            {% endif %}
+                        </td>
+                        <td width="3%"></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+Permiso Deneagado
+{% endif %}

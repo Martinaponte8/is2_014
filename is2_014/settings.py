@@ -49,6 +49,10 @@
 #     'proyecto',
 #     'usuarios',
 #     'rol',
+#     'flujo',
+#     'tipoUserStory',
+#     'userstory',
+#     'sprint',
 #     'allauth',
 #     'allauth.account',
 #     'allauth.socialaccount',
@@ -142,9 +146,9 @@
 # # Internationalization
 # # https://docs.djangoproject.com/en/3.2/topics/i18n/
 #
-# LANGUAGE_CODE = 'en-us'
+# LANGUAGE_CODE = 'es'
 #
-# TIME_ZONE = 'UTC'
+# TIME_ZONE = 'America/Asuncion'
 #
 # USE_I18N = True
 #
@@ -159,6 +163,14 @@
 # STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # STATIC_URL = '/static/'
 #
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR,'static'),
+# ]
+#
+# STATICFILES_FINDERS =[
+#     'django.contrib.staticfiles.finders.FileSystemFinder',
+#     'django.contrib.staticfiles.finders.AppDirectoriesFinder'
+# ]
 #AUTH_USER_MODEL = 'usuarios.Usuario'
 #
 # STATICFILES_DIRS = (
@@ -204,7 +216,7 @@
 
 ###############################################################################################################################3
 #se importa la libreria path
-
+import os
 from pathlib import Path
 
 # se indica la direccion base del path
@@ -235,6 +247,10 @@ INSTALLED_APPS = [
     'proyecto',
     'usuarios',
     'rol',
+    'flujo',
+    'tipoUserStory',
+    'userstory',
+    'sprint',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -327,7 +343,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'es'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Asuncion'
 
 USE_I18N = True
 
@@ -341,7 +357,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL = 'usuarios.Usuario'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,'static'),
+]
+
+STATICFILES_FINDERS =[
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
+]
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -372,3 +397,5 @@ SITE_ID = 2
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+AUTH_USER_MODEL = 'usuarios.Usuario'

@@ -1,16 +1,33 @@
-{%include 'header_admin.html'%}
-    <div class="container">
-        <h1 class="jumbotron head"> {{ title }}</h1>
+{% if 'Ver Opciones de Proyecto' in permisos %}
+{%include 'base.html'%}
+<div class="container">
+    <div class="head">
+        <h1 align="center"> {{ title }} {{ object.nombre }} </h1>
         <hr>
     </div>
-    <div class="container">
-        <li>
-            <a href="{% url 'update_options_flujo_list' object.pk %}">Flujos</a>
-        </li>
-        <li>
-           <!-- <a href="{% url 'user_story_type_list' object.pk %}">Tipos de User Story</a> --->
-        </li>
-        <li>
-            <a href="{% url 'update_roles_proyecto' object.pk %}">Asignacion de Roles</a>
-        </li>
+    <div class="body">
+        <div class="options">
+            {% if 'Ver Flujos' in permisos %}
+            <li>
+                <a href="{% url 'update_options_flujo_list' object.pk %}">Flujos</a>
+            </li>
+            {% endif %}
+            {% if 'Ver Tipos de User Story' in permisos %}
+            <li>
+                <a href="{% url 'user_story_type_list' object.pk %}">Tipos de User Story</a>
+            </li>
+            {% endif %}
+            {% if 'Asignar Roles' in permisos %}
+            <li>
+                <a href="{% url 'update_roles_proyecto' object.pk %}">Asignacion de Roles</a>
+            </li>
+            {% endif %}
+        </div>
+        <br><br><br>
+        <hr>
+        <br>
     </div>
+</div>
+{% else %}
+Permiso denegado
+{% endif %}

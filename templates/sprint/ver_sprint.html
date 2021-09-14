@@ -1,0 +1,27 @@
+{%include 'base.html'%}
+<html>
+<body>
+<div class="container">
+    <div class="head">
+        <h1 align="center"> {{ title }} </h1>
+        <hr>
+    </div>
+    <div class="register">
+        <div class="container detalle" style="font-size: 25px">
+            <li>Nombre: {{ object.nombre }}</li>
+            <li>Fecha de Inicio: {{ object.fecha_inicio }}</li>
+            <li>Fecha de Finalizacion: {{ object.fecha_fin }}</li>
+            <li>Duración: {{ object.duracion }}</li>
+            <li>Estado: {{ object.estado }}</li>
+            <li>F. de Inicio (Estimado): {{ object.fecha_ini_estimada }}</li>
+            <li>F. de Finalización (Estimado): {{ object.fecha_fin_estimada }}</li>
+        </div>
+        <br>
+        <div class="row">
+            <a href="../../"><button type="button" class="btn submit-btn">Atras</button></a>
+        </div>
+        <hr>
+    </div>
+</div>
+</body>
+</html>

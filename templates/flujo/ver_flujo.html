@@ -1,0 +1,27 @@
+{% if 'Ver Flujos' in permisos %}
+{%include 'base.html'%}
+<html>
+<body>
+<div class="container">
+    <div class="head">
+        <h1 align="center"> {{ title }} </h1>
+        <hr>
+    </div>
+    <div class="register">
+        <div class="container detalle" style="font-size: 25px">
+            <li>Proyecto: {{ object.proyecto }}</li>
+            <li>Nombre: {{ object.nombre }}</li>
+            <li>Descripcion: {{ object.descripcion }}</li>
+        </div>
+        <br>
+        <div class="row">
+            <a href="../../"><button type="button" class="btn submit-btn">Atras</button></a>
+        </div>
+        <hr>
+    </div>
+</div>
+</body>
+</html>
+{% else %}
+Permiso denegado
+{% endif %}

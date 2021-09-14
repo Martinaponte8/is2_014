@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.urls import path
-from .views import *
+from .views import UpdateUserStoryView, VerUserStoryDetailView, CreateUserStoryView, UserStoryListView
 
 """
 URL para el tipo de User Story, crear, listar y modificar

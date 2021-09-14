@@ -1,0 +1,34 @@
+{%include 'base.html'%}
+<html>
+<body>
+<div class="container">
+    <div class="head">
+        <h1 align="center"> {{ title }} </h1>
+        <hr>
+    </div>
+    <div class="register">
+        <div class="container detalle" style="font-size: 25px">
+            <li>Nombre: {{ object.nombre }}</li>
+            <li>Descripción {{ object.descripcion }}</li>
+            <li>Fecha de Inicio: {{ object.fecha_inicio }}</li>
+            <li>Duración estimada: {{ object.duracion_estimada }}</li>
+            <li>Valor de negocio: {{ object.valor_negocio }}</li>
+            <li>Prioridad: {{ object.prioridad }}</li>
+            <li>Valor Técnico: {{ object.valor_tecnico }}</li>
+            <li>Estado: {{ object.estado }}</li>
+            <li>Team Member Asignado: {{ object.team_member }}</li>
+            <li>Tipo de User Story: {{ object.tipo_us.nombre }}</li>
+            <li>Sprint: {{ object.descripcion }}</li>
+            <li>Flujo: {{ object.flujo.nombre }}</li>
+            <li>Fase: {{ object.fase.nombre }}</li>
+            <li>Estado de la Fase: {{ object.estado_fase }}</li>
+        </div>
+        <br>
+        <div class="row">
+            <a href="../../"><button type="button" class="btn submit-btn">Atras</button></a>
+        </div>
+        <hr>
+    </div>
+</div>
+</body>
+</html>

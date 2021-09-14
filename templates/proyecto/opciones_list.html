@@ -1,40 +1,35 @@
-{%include 'header_admin.html' %}
-<html>
+{% if 'Ver Proyectos' in permisos %}
+{%include 'base.html'%}
 <div class="container">
-    <h1 class="jumbotron head" align="center"> {{ title }} </h1>
-    <hr>
+    <div class="head">
+        <h1 align="center">Opciones de proyectos</h1>
+        <hr>
+    </div>
+    <div class="body">
+        <table class="table table-sm scrolltable" width="100%">
+            <thead class="thead-dark thead">
+                <tr>
+                    <th width="10%">ID</th>
+                    <th width="45%">Nombre</th>
+                    <th width="34%">Estado</th>
+                    <th width="11%">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="tbody">
+                {% for project in object_list %}
+                    <tr>
+                        <td width="10%">{{ project.pk }}</td>
+                        <td width="45%">{{ project.nombre }}</td>
+                        <td width="34">{{ project.estado }}</td>
+                        <td id="acciones" width="11%">
+                            <a href="{% url 'update_options' project.pk %}"><i class="fas fa-cog"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
-<div class="container">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th width="8%">ID</th>
-                <th width="25%">Nombre</th>
-                <th width="15%">Fecha Inicio</th>
-                <th width="15%">Fecha Fin</th>
-                <th width="9%">Estado</th>
-                <th width="20%">Descripcion</th>
-                <th width="8%">
-                </th>
-            </tr>
-
-        </thead>
-        {% for project in object_list %}
-            <tr class="table-row" data-href="{% url 'update_options' project.pk %}">
-                <td>{{ project.id }}</td>
-                <td>{{ project.nombre }}</td>
-                <td>{{ project.fecha_inicio }}</td>
-                <td>{{ project.fecha_fin}}</td>
-                <td>{{ project.estado }}</td>
-                <td colspan="2">{{ project.descripcion }}</td>
-            </tr>
-        {% endfor %}
-    </table>
-</div>
-<script type="text/javascript">
-    $(document).ready(function($) {
-        $(".table-row").click(function() {
-            window.document.location = $(this).data("href");
-        });
-    });
-</script>
+{% else %}
+Permiso denegado
+{% endif %}

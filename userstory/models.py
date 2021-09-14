@@ -69,15 +69,15 @@ class UserStory(models.Model):
     priorizacion = property(set_priorizacion)
 
 
-class Nota(models.Model):
-    """
-        Clase para adjuntar una nota a un US
-    """
-    """Campos:"""
-    nota = models.TextField()
-    us = models.ForeignKey('UserStory', on_delete=models.CASCADE, null=True)
-    usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT, null=True)
-    fecha = models.DateTimeField(auto_now_add=True)
+# class Nota(models.Model):
+#     """
+#         Clase para adjuntar una nota a un US
+#     """
+#     """Campos:"""
+#     nota = models.TextField()
+#     us = models.ForeignKey('UserStory', on_delete=models.CASCADE, null=True)
+#     usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT, null=True)
+#     fecha = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.nota
