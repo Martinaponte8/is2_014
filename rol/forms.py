@@ -10,6 +10,7 @@ class CreateRolForm(forms.ModelForm):
         model = Rol
         fields = [
             'nombre',
+            'is_unique',
             'descripcion',
             'permisos'
         ]
@@ -49,6 +50,7 @@ class UpdateRolForm(forms.ModelForm):
         model = Rol
         fields = [
             'nombre',
+            'is_unique',
             'descripcion',
             'permisos'
         ]

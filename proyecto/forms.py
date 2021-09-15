@@ -1,5 +1,7 @@
 from django import forms
 from django.forms import inlineformset_factory
+
+from usuarios.models import Usuario
 from .models import *
 
 class CreateProjectForm(forms.ModelForm):
@@ -59,7 +61,17 @@ class TeamMemberFormSet(BaseTeamMemberFormSet):
             return False
         all_delete = True
         usuarios = []
+        roles = []
         for form in self.forms:
+            # verificacion de roles unicos
+            if form['rol'].value():
+                rol = Rol.objects.get(pk=form['rol'].value())
+                if rol.is_unique and form['rol'].value() in roles:
+                    self.rol_doble = rol
+                    return False
+                if not form['rol'].value() in roles:
+                    roles.append(form['rol'].value())
+
             # un usuario solo puede asignarse una vez
             if form['usuario'].value() and not form['usuario'].value() in usuarios:
                 usuarios.append(form['usuario'].value())

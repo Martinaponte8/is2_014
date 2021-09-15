@@ -22,6 +22,7 @@ class Rol(models.Model):
     """
     Se definen los campos necesarios para el modelo Rol
     """
+    is_unique = models.BooleanField(verbose_name='Es único en el proyecto', default=False)
     nombre = models.CharField(max_length=50, unique=True, blank=False, null=False)
     descripcion = models.TextField(blank=True, null=True)
     permisos = models.ManyToManyField('Permiso', blank=False)
