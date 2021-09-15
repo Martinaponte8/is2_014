@@ -42,7 +42,7 @@
     </div>
 
 <!--     aca deberia de ir el permiso para que solo el admin/scrum master pueda acceder a el sector adminitracion-->
-     {% if request.user.groups.all %}
+<!--     {% if request.user.groups.all %}-->
       <ul class="nav navbar-nav">
         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Administración<span class="caret"></span></a>
         <ul class="dropdown-menu">
@@ -53,7 +53,7 @@
         </li>
         <li><a href="/proyecto/">Proyectos</a></li>
     </ul>
-      {% endif %}
+<!--      {% endif %}-->
     <ul class="nav navbar-nav navbar-right">
       <li><a href="../accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>
     </ul>

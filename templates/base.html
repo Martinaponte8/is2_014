@@ -1,3 +1,58 @@
+<!--{% load static %}-->
+
+<!--<html lang="es">-->
+<!--<head>-->
+<!--    <title>{{ title }}</title>-->
+<!--    <meta charset="utf-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
+<!--    &lt;!&ndash;Hojas de estilo&ndash;&gt;-->
+<!--	<link rel="stylesheet" type="text/css" href="{% static 'proyecto/style.css' %}">-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">-->
+<!--    &lt;!&ndash; js bootstrap y ajax &ndash;&gt;-->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<nav class="navbar navbar-polip">-->
+<!--        <div class="container-fluid">-->
+<!--            <div class="navbar-header">-->
+<!--                <a class="navbar-brand" href="/index/">Gestor de Proyectos</a>-->
+<!--            </div>-->
+<!--            {% if request.user.groups.all %}-->
+<!--            <ul class="nav navbar-nav">-->
+<!--                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Administración<span class="caret"></span></a>-->
+<!--                    <ul class="dropdown-menu">-->
+<!--                        <li><a href="/usuarios">Usuarios</a></li>-->
+<!--                        <li><a href="/roles/">Roles</a></li>-->
+<!--                        <li><a href="/proyecto/">Proyectos</a></li>-->
+<!--                    </ul>-->
+<!--                </li>-->
+<!--                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Definicion<span class="caret"></span></a>-->
+<!--                    <ul class="dropdown-menu">-->
+<!--                       &lt;!&ndash; <li><a href="/clientes">Clientes</a></li> –&ndash;&gt;-->
+<!--                        <li><a href="/proyecto/opciones/">Opciones de Proyectos</a></li>-->
+<!--                    </ul>-->
+<!--                </li>-->
+<!--             &lt;!&ndash; <li><a href="/proyectos/ejecuciones/">Ejecucion</a></li> –&ndash;&gt;-->
+<!--{% endif %}-->
+<!--            </ul>-->
+<!--            <ul class="nav navbar-nav navbar-right">-->
+<!--                <li><a href="/accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </nav>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+
+
 {% load static %}
 
 <html lang="es">
@@ -5,44 +60,61 @@
     <title>{{ title }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--Hojas de estilo-->
-	<link rel="stylesheet" type="text/css" href="{% static 'proyecto/style.css' %}">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <!-- js bootstrap y ajax -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <!--css -->
+	<link rel="stylesheet" type="text/css" href="{% static '/css/base.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/component.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/normalize.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/home.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/lista.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/registro.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/tablero.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/bootstrap.min.css' %}">
+    <!-- js-->
+    <script src="{% static '/js/classie.js' %}"></script>
+    <script src="{% static '/js/gnmenu.js' %}"></script>
+    <script src="{% static '/js/jquery.min.js' %}"></script>
+    <script src="{% static '/js/fontawesome.js' %}"></script>
+    <script src="{% static '/js/brands.js' %}"></script>
+    <script src="{% static '/js/solid.js' %}"></script>
+    <script src="{% static '/js/regular.js' %}"></script>
+    <script src="{% static '/js/bootstrap.min.js' %}"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-
-<nav class="navbar navbar-polip">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/index/">Gestor de Proyectos</a>
-            </div>
-            {% if request.user.groups.all %}
-            <ul class="nav navbar-nav">
-                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Administración<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/usuarios">Usuarios</a></li>
-                        <li><a href="/roles/">Roles</a></li>
-                        <li><a href="/proyecto/">Proyectos</a></li>
-                    </ul>
-                </li>
-                <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Definicion<span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                       <!-- <li><a href="/clientes">Clientes</a></li> –-->
-                        <li><a href="/proyecto/opciones/">Opciones de Proyectos</a></li>
-                    </ul>
-                </li>
-             <!-- <li><a href="/proyectos/ejecuciones/">Ejecucion</a></li> –-->
-{% endif %}
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>
-            </ul>
-        </div>
-    </nav>
+    <div class="container">
+        <ul id="gn-menu" class="gn-menu-main">
+            <li class="gn-trigger">
+                <a class="gn-icon gn-icon-menu"><span>Menu</span></a>
+                <nav class="gn-menu-wrapper">
+                    <div class="gn-scroller">
+                        <ul class="gn-menu">
+                            <li>
+                                <i class="far fa-address-card" style="width: 60px"></i>Administracion
+                                <ul class="gn-submenu">
+                                    <li><a href="/usuarios/"><i class="fas fa-arrow-right" style="width: 60px"></i>Usuarios</a></li>
+                                    <li><a href="/roles/"><i class="fas fa-arrow-right" style="width: 60px"></i>Roles</a></li>
+                                    <li><a href="/proyectos/"><i class="fas fa-arrow-right" style="width: 60px"></i>Proyectos</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <i class="fas fa-cogs" style="width: 60px"></i>Definicion
+                                <ul class="gn-submenu">
+<!--                                    <li><a href="/clientes/"><i class="fas fa-arrow-right" style="width: 60px"></i>Clientes</a></li>-->
+                                    <li><a href="/proyectos/opciones/"><i class="fas fa-arrow-right" style="width: 60px"></i>Opciones de Proyecto</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="/proyectos/ejecuciones/"><i class="far fa-play-circle" style="width: 60px"></i>Ejecucion</a></li>
+                        </ul>
+                    </div><!-- /gn-scroller -->
+                </nav>
+            </li>
+            <li id="polip"><a href="/">Gestor de Proyectos</a></li>
+            <li id="log-out"><a href="/accounts/logout/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+        </ul>
+    </div><!-- /container -->
+    <script>
+        new gnMenu( document.getElementById( 'gn-menu' ) );
+    </script>
 </body>
 </html>

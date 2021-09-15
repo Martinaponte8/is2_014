@@ -45,14 +45,14 @@ class UpdateUserStoryForm(forms.ModelForm):
         }
 
 
-class ArchivoForm(forms.ModelForm):
-    """
-    Formulario para subir archivos al User Story
-    """
-    class Meta:
-        model = Archivo
-        """Campos a ingresar"""
-        fields = ('titulo', 'archivo', )
+# class ArchivoForm(forms.ModelForm):
+#     """
+#     Formulario para subir archivos al User Story
+#     """
+#     class Meta:
+#         model = Archivo
+#         """Campos a ingresar"""
+#         fields = ('titulo', 'archivo', )
 
 
 # class NotaForm(forms.ModelForm):
@@ -65,14 +65,14 @@ class ArchivoForm(forms.ModelForm):
 #         fields = ('nota',)
 
 
-class ActividadForm(forms.ModelForm):
-    """
-    Formulario para agregar actividades al User Story
-    """
-    class Meta:
-        model = Actividad
-        """Campos a ingresar"""
-        fields = ('nombre','descripcion','duracion')
+# class ActividadForm(forms.ModelForm):
+#     """
+#     Formulario para agregar actividades al User Story
+#     """
+#     class Meta:
+#         model = Actividad
+#         """Campos a ingresar"""
+#         fields = ('nombre','descripcion','duracion')
 
 
 # class GuardarNotaForm(forms.ModelForm):
@@ -85,21 +85,21 @@ class ActividadForm(forms.ModelForm):
 #         fields = ('us', 'usuario', 'nota','sprint')
 
 
-class GuardarArchivoForm(forms.ModelForm):
-    """
-    Formulario para guardar archivos en el User Story
-    """
-    class Meta:
-        model = Archivo
-        """Campos a ingresar"""
-        fields = ('titulo', 'archivo','us','usuario','sprint')
-
-
-class GuardarActividadForm(forms.ModelForm):
-    """
-    Formulario para guardar actividades en el User Story
-    """
-    class Meta:
-        model = Actividad
-        """Campos a ingresar"""
-        fields = ('nombre','descripcion','duracion','us','usuario','sprint','fase_us','estado_fase')
+# class GuardarArchivoForm(forms.ModelForm):
+#     """
+#     Formulario para guardar archivos en el User Story
+#     """
+#     class Meta:
+#         model = Archivo
+#         """Campos a ingresar"""
+#         fields = ('titulo', 'archivo','us','usuario','sprint')
+#
+#
+# class GuardarActividadForm(forms.ModelForm):
+#     """
+#     Formulario para guardar actividades en el User Story
+#     """
+#     class Meta:
+#         model = Actividad
+#         """Campos a ingresar"""
+#         fields = ('nombre','descripcion','duracion','us','usuario','sprint','fase_us','estado_fase')
