@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from .models import UserStory
 from userstory.forms import CreateUserStoryForm, UpdateUserStoryForm
@@ -7,6 +8,16 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from tipoUserStory.models import *
+
+
+"""
+Funcion eliminar UserStory
+"""
+def eliminar4(request,pk_proyecto,us_id):
+    payload = {'project.pk': pk_proyecto, 'us_id': us_id}
+    Us = UserStory.objects.get(id=payload['us_id'])
+    Us.delete()
+    return redirect("index")
 
 
 @method_decorator(login_required, name='dispatch')
@@ -69,7 +80,7 @@ class UpdateUserStoryView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     template_name = 'userstory/userstory.html'
     model = UserStory
     form_class = UpdateUserStoryForm
-    success_url = '../'
+    success_url = '/proyectos/ejecuciones/'
     success_message = 'Los cambios se guardaron correctamente'
 
     def get_context_data(self, **kwargs):

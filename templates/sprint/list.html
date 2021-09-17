@@ -32,9 +32,7 @@
                         <td width="34">{{ sprint.estado }}</td>
                         <td id="acciones" width="8%">
                             <a href="{% url 'ver_sprint' project.pk sprint.pk %}"><i class="fas fa-eye"></i></a>
-                            {% if 'Modificar Sprint' in permisos %}
-                                <a href="{% url 'update_sprint' project.pk sprint.pk %}"><i class="fas fa-edit"></i></a>
-                            {% endif %}
+                            <a href="{% url 'update_sprint' project.pk sprint.pk %}"><i class="fas fa-edit"></i></a>
                         </td>
                         <td width="3%"></td>
                     </tr>

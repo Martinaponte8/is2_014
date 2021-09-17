@@ -92,8 +92,8 @@
                             <li>
                                 <i class="far fa-address-card" style="width: 60px"></i>Administracion
                                 <ul class="gn-submenu">
-                                    {% if 'Ver Usuarios' in  permisos %}
-                                    <li><a href="/usuarios/"><i class="fas fa-arrow-right" style="width: 60px"></i>Usuarios</a></li>
+                                    {% if request.user.groups.all %}
+                                        <li><a href="/usuarios/"><i class="fas fa-arrow-right" style="width: 60px"></i>Usuarios</a></li>
                                     {% endif %}
                                     <li><a href="/roles/"><i class="fas fa-arrow-right" style="width: 60px"></i>Roles</a></li>
                                     <li><a href="/proyectos/"><i class="fas fa-arrow-right" style="width: 60px"></i>Proyectos</a></li>
