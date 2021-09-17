@@ -27,8 +27,9 @@ from userstory.views import eliminar4
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name="index.html")),
-    path('index/', TemplateView.as_view(template_name="index.html"), name="index"),
+    path('', TemplateView.as_view(template_name="index.html"), name="index"),
+    #path('index/', TemplateView.as_view(template_name="index.html")),
+    #path('index/', TemplateView.as_view(template_name="index.html"), name="index"),
     path('accounts/', include('allauth.urls')),
     path('index/logout', LogoutView.as_view()),
     url(r'^roles/', include('rol.urls')),
@@ -36,4 +37,4 @@ urlpatterns = [
     url(r'^proyecto/', include('proyecto.urls')),
     url(r'^proyectos/', include('proyecto.urls')),
     url(r'^usuarios/', include('usuarios.urls')),
-]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,18 +1,18 @@
 {% load socialaccount %}
 {% load static %}
 <html>
-{% if user.is_authenticated %}
-<head>
-    <title>Gestor de Proyectos</title>
-    <meta charset="utf-8">
-    <!--Estilo Customizado-->
-	<link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-</head>
-{% endif %}
+<!--{% if user.is_authenticated %}-->
+<!--<head>-->
+<!--    <title>Gestor de Proyectos</title>-->
+<!--    <meta charset="utf-8">-->
+<!--    &lt;!&ndash;Estilo Customizado&ndash;&gt;-->
+<!--	<link rel="stylesheet" type="text/css" href="{% static 'home/style.css' %}">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
+<!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">-->
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>-->
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
+<!--</head>-->
+<!--{% endif %}-->
 <body>
 
 <!--Titulo de la pagina-->
@@ -34,45 +34,42 @@
 <html lang="es">
 <!--este body abria que meter en cada una de las otras paginas asi tienen tambien la barra de arriba-->
 <body>
-{%include 'base.html'%}
 
-<!--<nav class="navbar navbar-polip">-->
-<!--  <div class="container-fluid">-->
-<!--    <div class="navbar-header">-->
-<!--      <a class="navbar-brand" href="/index/">Inicio</a>-->
-<!--    </div>-->
+<nav class="navbar navbar-polip">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/index/">Inicio</a>
+    </div>
 
-<!--&lt;!&ndash;     aca deberia de ir el permiso para que solo el admin/scrum master pueda acceder a el sector adminitracion&ndash;&gt;-->
-<!--&lt;!&ndash;     {% if request.user.groups.all %}&ndash;&gt;-->
-<!--      <ul class="nav navbar-nav">-->
-<!--        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Administración<span class="caret"></span></a>-->
-<!--        <ul class="dropdown-menu">-->
-<!--                <li><a href="/usuarios/">Usuarios</a></li>-->
-<!--                <li><a href="/roles/">Roles</a></li>-->
-<!--                <li><a href="/proyecto/">Proyectos</a></li>-->
-<!--            </ul>-->
-<!--        </li>-->
-<!--        <li><a href="/proyecto/">Proyectos</a></li>-->
-<!--    </ul>-->
-<!--&lt;!&ndash;      {% endif %}&ndash;&gt;-->
-<!--    <ul class="nav navbar-nav navbar-right">-->
-<!--      <li><a href="../accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>-->
-<!--    </ul>-->
-<!--  </div>-->
-<!--</nav>-->
+<!--     aca deberia de ir el permiso para que solo el admin/scrum master pueda acceder a el sector adminitracion-->
+<!--     {% if request.user.groups.all %}-->
+      <ul class="nav navbar-nav">
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Administración<span class="caret"></span></a>
+        <ul class="dropdown-menu">
+                <li><a href="/usuarios/">Usuarios</a></li>
+                <li><a href="/roles/">Roles</a></li>
+                <li><a href="/proyecto/">Proyectos</a></li>
+            </ul>
+        </li>
+        <li><a href="/proyecto/">Proyectos</a></li>
+    </ul>
+<!--      {% endif %}-->
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="../accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>
+    </ul>
+  </div>
+</nav>
 
 <div class="container">
-    <center> <div class="h1">.</div></center>
-    <center> <div class="h1">.</div></center>
-    <div br p> <center><img alt="My image"src="{% static 'Inicio/logo.png' %}"></p></center></div>
+    <center><div class="h1">Gestor de proyectos</div></center>
+    <div br> <center><img alt="My image"src="{% static 'Inicio/logo.png' %}"></center></div>
 </div>
 
 
 
- <center> <br p>
-<font COLOR="white"><H1>Bienvenido, Te has logueado como {{ user.username }}</H1></center>
- <div style="text-align: center;"><div class="p1"><H2>¡Ha iniciado sesión! <a href="/proyecto/">Acceda a sus proyectos.</H2></a></div></div>
-<br> <center><a href="logout"><H3>Cerrar sesion</H3></a></center></font>
+ <center><br p>Bienvenido, Te has logueado como {{ user.username }}</p></center>
+ <center><div class="p2">¡Ha iniciado sesión! <a href="/proyecto/">Acceda a sus proyectos</a>.</div></center>
+<br> <center><a href="logout">Cerrar sesion</a></center>
 
 
 
@@ -85,7 +82,6 @@
 <!--##########################################################################################################-->
 
  <!--<li><a href="../accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>
-
 Si no esta logueado mostrarle la pagina de Inicio con el link para loguearse con google -->
 
 {% else %}
