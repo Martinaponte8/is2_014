@@ -227,7 +227,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 ###############################################################################################################################3
-# #se importa la libreria path
+#se importa la libreria path
 # import os
 # from pathlib import Path
 #
