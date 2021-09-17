@@ -174,20 +174,20 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static'),
 ]
 
-STATICFILES_FINDERS =[
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
-]
+# STATICFILES_FINDERS =[
+#     'django.contrib.staticfiles.finders.FileSystemFinder',
+#     'django.contrib.staticfiles.finders.AppDirectoriesFinder'
+# ]
 AUTH_USER_MODEL = 'usuarios.Usuario'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#
+# MEDIA_URL = '/media/'
 
-MEDIA_URL = '/media/'
 
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static'),
+# )
 
 
 # Default primary key field type
