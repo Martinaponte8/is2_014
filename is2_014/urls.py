@@ -23,7 +23,7 @@ from django.conf.urls import url
 
 
 # configuramos las rutas y vistas
-from userstory.views import eliminar4
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
