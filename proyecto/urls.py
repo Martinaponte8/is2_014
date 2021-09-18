@@ -13,13 +13,13 @@ Definicion de URLs contenidas en proyectos
 
 urlpatterns = [
 
-    #administracion
+    #URLS de administracion
 
     url(r'^$', views.ProjectListView.as_view(), name='project_list'),
     url(r'^create/$', views.CreateProjectView.as_view(), name='create_project'),
     path(route='update_project/<int:pk_proyecto>/', view=views.UpdateProjectView.as_view(), name='update_project'),
     path("eliminar/<int:project_id>/", eliminar2, name="eliminar2"),
-    #definicion
+    #URLS de definicion
 
     url(r'^opciones/$', views.OptionsListView.as_view(), name='options_project'),
     path(route='opciones/<int:pk_proyecto>/', view=views.UpdateOptionsView.as_view(), name='update_options'),
@@ -27,7 +27,7 @@ urlpatterns = [
     path('opciones/<int:pk_proyecto>/tipoUserStory/', include('tipoUserStory.urls'), name='user_story_type_list'),
     path(route='opciones/<int:pk_proyecto>/asignarRoles/', view=views.UpdateTeamMemberView.as_view(), name='update_roles_proyecto'),
 
-    #ejecucion
+    #URLS de ejecucion
 
     url(r'^ejecuciones/$', views.EjecucionListView.as_view(), name='options_project'),
     path(route='ejecuciones/<int:pk_proyecto>/', view=views.UpdateEjecucionView.as_view(), name='update_ejecucion'),

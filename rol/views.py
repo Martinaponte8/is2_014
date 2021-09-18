@@ -61,7 +61,9 @@ class CreateRolView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         context['title'] = "Crear Rol"
         return context
 
-
+"""
+Actualiza la vista del rol
+"""
 @method_decorator(login_required, name='dispatch')
 class UpdateRolView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
@@ -91,6 +93,10 @@ class UpdateRolView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
     def get_absolute_url(self):
         return reverse('update_rol', kwargs={'pk': self.kwargs['pk']})
+
+"""
+    Ver el rol
+"""
 
 @method_decorator(login_required, name='dispatch')
 class VerRolDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):

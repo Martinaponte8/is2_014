@@ -202,7 +202,9 @@ class OptionsListView(LoginRequiredMixin, ListView):
         context['title'] = "Opciones de Proyectos"
         return context
 
-
+"""
+Actualizar la opciones de vista
+"""
 @method_decorator(login_required, name='dispatch')
 class UpdateOptionsView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
@@ -285,7 +287,9 @@ class EjecucionListView(LoginRequiredMixin, ListView):
         context['title'] = "Ejecuciones de Proyectos"
         return context
 
-
+"""
+Actualiza la vista de ejecucion
+"""
 @method_decorator(login_required, name='dispatch')
 class UpdateEjecucionView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     """
@@ -305,6 +309,10 @@ class UpdateEjecucionView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         print(str(permisos))
         return self.render_to_response(self.get_context_data(form=form, permisos=permisos))
 
+    """
+    Cambiar el estado de un proyecto
+    Opciones = Iniciar - Terminar -Suspender - Cancelar - Reiniciar
+    """
     def post(self, request, *args, **kwargs):
         #se debe iniciar el proyecto
         proyecto = self.get_object()
@@ -358,6 +366,9 @@ class UpdateEjecucionView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     def get_object(self, queryset=None):
         return Proyecto.objects.get(pk=self.kwargs['pk_proyecto'])
 
+"""
+Actualiza el team Member 
+"""
 
 @method_decorator(login_required, name='dispatch')
 class UpdateTeamMemberView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
