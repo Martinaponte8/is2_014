@@ -34,35 +34,36 @@
 <html lang="es">
 <!--este body abria que meter en cada una de las otras paginas asi tienen tambien la barra de arriba-->
 <body>
+{%include 'base.html'%}
+<!--<nav class="navbar navbar-polip">-->
+<!--  <div class="container-fluid">-->
+<!--    <div class="navbar-header">-->
+<!--      <a class="navbar-brand" href="/index/">Inicio</a>-->
+<!--    </div>-->
 
-<nav class="navbar navbar-polip">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/index/">Inicio</a>
-    </div>
-
-<!--     aca deberia de ir el permiso para que solo el admin/scrum master pueda acceder a el sector adminitracion-->
-<!--     {% if request.user.groups.all %}-->
-      <ul class="nav navbar-nav">
-        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Administración<span class="caret"></span></a>
-        <ul class="dropdown-menu">
-                <li><a href="/usuarios/">Usuarios</a></li>
-                <li><a href="/roles/">Roles</a></li>
-                <li><a href="/proyecto/">Proyectos</a></li>
-            </ul>
-        </li>
-        <li><a href="/proyecto/">Proyectos</a></li>
-    </ul>
-<!--      {% endif %}-->
-    <ul class="nav navbar-nav navbar-right">
-      <li><a href="../accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>
-    </ul>
-  </div>
-</nav>
+<!--&lt;!&ndash;     aca deberia de ir el permiso para que solo el admin/scrum master pueda acceder a el sector adminitracion&ndash;&gt;-->
+<!--&lt;!&ndash;     {% if request.user.groups.all %}&ndash;&gt;-->
+<!--      <ul class="nav navbar-nav">-->
+<!--        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Administración<span class="caret"></span></a>-->
+<!--        <ul class="dropdown-menu">-->
+<!--                <li><a href="/usuarios/">Usuarios</a></li>-->
+<!--                <li><a href="/roles/">Roles</a></li>-->
+<!--                <li><a href="/proyecto/">Proyectos</a></li>-->
+<!--            </ul>-->
+<!--        </li>-->
+<!--        <li><a href="/proyecto/">Proyectos</a></li>-->
+<!--    </ul>-->
+<!--&lt;!&ndash;      {% endif %}&ndash;&gt;-->
+<!--    <ul class="nav navbar-nav navbar-right">-->
+<!--      <li><a href="../accounts/logout/"><span class="glyphicon glyphicon-log-out"></span> Cerrar Sesión</a></li>-->
+<!--    </ul>-->
+<!--  </div>-->
+<!--</nav>-->
 
 <div class="container">
     <center><div class="h1">Gestor de proyectos</div></center>
     <!--aca va la foto-->
+    <br> <center><img alt="My image"src="{% static 'imagenes/logo.png' %}"></center>
 </div>
 
 
@@ -89,7 +90,7 @@ Si no esta logueado mostrarle la pagina de Inicio con el link para loguearse con
 
 <!--Codigo para agregar la imagen a la pagina, pasandole el directorio donde se encuentra la foto estatica -->
 <!--aca va la foto-->
-
+ <br> <center><img alt="My image"src="{% static 'imagenes/logo.png' %}"></center>
  <br> <center><a href="{% provider_login_url 'google' %}">Logueate con Google</a></center>
 {% endif %}
 </body>
