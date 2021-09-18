@@ -1,0 +1,10 @@
+is2\_014.is2\_014\_app.migrations package
+=========================================
+
+Module contents
+---------------
+
+.. automodule:: is2_014.is2_014_app.migrations
+   :members:
+   :undoc-members:
+   :show-inheritance:
