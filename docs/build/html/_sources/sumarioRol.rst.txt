@@ -1,9 +1,0 @@
-Glosario
-==================
-
-Seccion apps
--------------------
-
-..  automodule:: rol.apps
-    :members:
-

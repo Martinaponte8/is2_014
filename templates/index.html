@@ -13,7 +13,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </head>
 {% endif %}
-<body>
+<body background="{% static 'imagenes/fondo.jpg' %}">
+<br>
 
 <!--Titulo de la pagina-->
 <!--<div class="container">-->
@@ -33,7 +34,7 @@
 {% if user.is_authenticated %}
 <html lang="es">
 <!--este body abria que meter en cada una de las otras paginas asi tienen tambien la barra de arriba-->
-<body>
+<body style ="background-color: #ffdf7e;">
 {%include 'base.html'%}
 
 <!--<nav class="navbar navbar-polip">-->
@@ -71,7 +72,7 @@
 
  <center> <br p>
 <font COLOR="white"><H1>Bienvenido, Te has logueado como {{ user.username }}</H1></center>
- <div style="text-align: center;"><div class="p1"><H2>¡Ha iniciado sesión! <a href="/proyecto/">Acceda a sus proyectos.</H2></a></div></div>
+ <div style="text-align: center;"><div class="p1"><H2>¡Ha iniciado sesión! Puede <a href="/proyecto/">Acceder a sus proyectos aqui!</H2></a></div></div>
 <br> <center><a href="logout"><H3>Cerrar sesion</H3></a></center></font>
 
 

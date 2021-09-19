@@ -10,10 +10,15 @@ Bienvenido a la documentacion de Gestor de Proyectos!
    :maxdepth: 2
    :caption: Contents:
 
-   rol
-   proyecto
+   flujo
    inicio
+   proyecto
+   rol
+   sprint
+   tipoUserStory
+   userStory
    usuarios
+
 
 
 

@@ -21,10 +21,18 @@ import sys
 #SECRET_KEY = env['SECRET_KEY']
 
 
-sys.path.insert(0, os.path.abspath('../../'))
+sys.path.insert(0, os.path.abspath('../'))
+
 
 #sys.path.append('proyecto')
-#sys.path.insert(0, os.path.abspath('../../proyecto'))
+sys.path.insert(0, os.path.abspath('../flujo'))
+sys.path.insert(0, os.path.abspath('../inicio'))
+sys.path.insert(0, os.path.abspath('../proyecto'))
+sys.path.insert(0, os.path.abspath('../rol'))
+sys.path.insert(0, os.path.abspath('../sprint'))
+sys.path.insert(0, os.path.abspath('../tipoUserStory'))
+sys.path.insert(0, os.path.abspath('../userstory'))
+sys.path.insert(0, os.path.abspath('../usuarios'))
 
 #sys.path.insert(0, os.path.abspath('..'))
 

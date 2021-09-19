@@ -1,0 +1,17 @@
+Comentarios
+============
+
+from django.urls import path
+from django.conf.urls import url
+from .views import *
+
+"""
+Definicion de URLs contenidas en flujos de proyectos
+"""
+
+urlpatterns = [
+    url(r'^$', FlujoListView.as_view(), name='update_options_flujo_list'),
+    path(route='create/', view=CreateFlujoView.as_view(), name='create_options_flujo'),
+    path(route='<int:pk>/', view=UpdateFlujoView.as_view(), name='update_options_flujo'),
+    path(route='ver/<int:pk>/', view=VerFlujoDetailView.as_view(), name='ver_flujo')
+]
