@@ -90,20 +90,20 @@
                     <div class="gn-scroller">
                         <ul class="gn-menu">
                             <li>
-                                <i class="far fa-address-card" style="width: 60px"></i>Administracion
+                                <i class="fas fa-wrench" style="width: 60px"></i>Administracion
                                 <ul class="gn-submenu">
                                     {% if request.user.groups.all %}
-                                        <li><a href="/usuarios/"><i class="fas fa-arrow-right" style="width: 60px"></i>Usuarios</a></li>
+                                        <li><a href="/usuarios/"><i class="fas fa-child" style="width: 60px"></i>Usuarios</a></li>
                                     {% endif %}
                                     <li><a href="/roles/"><i class="fas fa-arrow-right" style="width: 60px"></i>Roles</a></li>
-                                    <li><a href="/proyectos/"><i class="fas fa-arrow-right" style="width: 60px"></i>Proyectos</a></li>
+                                    <li><a href="/proyectos/"><i class="fas fa-book" style="width: 60px"></i>Proyectos</a></li>
                                 </ul>
                             </li>
                             <li>
                                 <i class="fas fa-cogs" style="width: 60px"></i>Definicion
                                 <ul class="gn-submenu">
 <!--                                    <li><a href="/clientes/"><i class="fas fa-arrow-right" style="width: 60px"></i>Clientes</a></li>-->
-                                    <li><a href="/proyectos/opciones/"><i class="fas fa-arrow-right" style="width: 60px"></i>Opciones de Proyecto</a></li>
+                                    <li><a href="/proyectos/opciones/"><i class="fas fa-archive" style="width: 60px"></i>Opciones de Proyecto</a></li>
                                 </ul>
                             </li>
                             <li><a href="/proyectos/ejecuciones/"><i class="far fa-play-circle" style="width: 60px"></i>Ejecucion</a></li>

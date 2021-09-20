@@ -13,7 +13,7 @@
 <!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>-->
 <!--</head>-->
 <!--{% endif %}-->
-<body>
+<body background="{% static 'imagenes/fondo.jpg' %}">
 
 <!--Titulo de la pagina-->
 <!--<div class="container">-->
@@ -69,7 +69,7 @@
 
 
  <center><br p>Bienvenido, Te has logueado como {{ user.username }}</p></center>
- <center><div class="p2">¡Ha iniciado sesión! <a href="/proyecto/">Acceda a sus proyectos</a>.</div></center>
+ <center><div class="p2">¡Ha iniciado sesión! Puede <a href="/proyecto/">Acceder a sus proyectos aqui!</a>.</div></center>
 <br> <center><a href="logout">Cerrar sesion</a></center>
 
 
