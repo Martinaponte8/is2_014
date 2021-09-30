@@ -3,7 +3,6 @@ from .models import *
 from django.forms import inlineformset_factory
 from usuarios.models import *
 
-
 class CreateSprintForm(forms.ModelForm):
     """
     Formulario utilizado para la creacion de un nuevo Sprint

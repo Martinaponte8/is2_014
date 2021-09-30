@@ -1,3 +1,4 @@
+{% if 'Crear Sprints' in permisos and not object.nombre or 'Modificar Sprints' in permisos and object.nombre %}
 {%include 'base.html'%}
 <html>
 <body>
@@ -11,15 +12,326 @@
         <div class="container form-container">
             <form method="POST">
                 {% csrf_token %}
-                {{ form.as_p}}
+                {% if object.estado and object.estado != 'Pendiente' %}
+                <div class="container" style="padding-left: 4em;padding-top: 1em;"></div>
+                {% endif %}
+                <div style="{% if object.estado and object.estado != 'Pendiente' %}display:none{% endif %}">
+                    {{ form.as_p}}
+                </div>
+                <p style="color: red;">
+                    {{ form_error }}
+                </p>
+                <div style="{% if object.estado and object.estado != 'Pendiente' %}display:none{% endif %}">
+                    Dias hábiles de la semana:
+                </div>
+                <div class="container" style="padding-left: 4em;padding-top: 1em;
+                                              {% if object.estado and object.estado != 'Pendiente' %}display:none{% endif %}">
+                {% if 1 in dias_habiles %}
+                    <li><label for="lunes">
+                    <input type="checkbox" name="dias_habiles_check"
+                    value="1" id="lunes" class="dias_habiles_check" checked/> Lunes</label>
+                    </li>
+                {% else %}
+                    <li><label for="lunes">
+                    <input type="checkbox" name="dias_habiles_check"
+                    value="1" id="lunes" class="dias_habiles_check"/> Lunes</label>
+                    </li>
+                {% endif %}
+                {% if 2 in dias_habiles %}
+                    <li><label for="martes"><input type="checkbox" name="dias_habiles_check"
+                    value="2" id="martes" class="dias_habiles_check" checked/> Martes</label>
+                    </li>
+                {% else %}
+                    <li><label for="martes"><input type="checkbox" name="dias_habiles_check"
+                    value="2" id="martes" class="dias_habiles_check"/> Martes</label>
+                    </li>
+                {% endif %}
+                {% if 3 in dias_habiles %}
+                    <li><label for="miercoles"><input type="checkbox" name="dias_habiles_check"
+                    value="3" id="miercoles" class="dias_habiles_check" checked/> Miercoles</label>
+                    </li>
+                {% else %}
+                    <li><label for="miercoles"><input type="checkbox" name="dias_habiles_check"
+                    value="3" id="miercoles" class="dias_habiles_check"/> Miercoles</label>
+                    </li>
+                {% endif %}
+                {% if 4 in dias_habiles %}
+                    <li><label for="jueves"><input type="checkbox" name="dias_habiles_check"
+                    value="4" id="jueves" class="dias_habiles_check" checked/> Jueves</label>
+                    </li>
+                {% else %}
+                    <li><label for="jueves"><input type="checkbox" name="dias_habiles_check"
+                    value="4" id="jueves" class="dias_habiles_check"/> Jueves</label>
+                    </li>
+                {% endif %}
+                {% if 5 in dias_habiles %}
+                    <li><label for="viernes"><input type="checkbox" name="dias_habiles_check"
+                    value="5" id="viernes" class="dias_habiles_check" checked/> Viernes</label>
+                    </li>
+                {% else %}
+                    <li><label for="viernes"><input type="checkbox" name="dias_habiles_check"
+                    value="5" id="viernes" class="dias_habiles_check"/> Viernes</label>
+                    </li>
+                {% endif %}
+                {% if 6 in dias_habiles %}
+                    <li><label for=sabado><input type="checkbox" name="dias_habiles_check"
+                    value="6" id="sabado" class="dias_habiles_check" checked/> Sábado</label>
+                    </li>
+                {% else %}
+                    <li><label for=sabado><input type="checkbox" name="dias_habiles_check"
+                    value="6" id="sabado" class="dias_habiles_check"/> Sábado</label>
+                    </li>
+                {% endif %}
+                {% if 7 in dias_habiles %}
+                    <li><label for="domingo"><input type="checkbox" name="dias_habiles_check"
+                    value="7" id="domingo" class="dias_habiles_check" checked/> Domingo</label>
+                    </li>
+                {% else %}
+                    <li><label for="domingo"><input type="checkbox" name="dias_habiles_check"
+                    value="7" id="domingo" class="dias_habiles_check"/> Domingo</label>
+                    </li>
+                {% endif %}
+                </div>
+                <div class="detalle">
+                    {{ horas_formset.management_form }}
+                    <h4 style="text-align: center;">Asignacion de Horas<hr></h4>
+                    {% if sprint.estado == 'Pendiente' %}
+                    <div class="row" style="padding-left: 1em">
+                        <button type="button" class="btn btn-success"
+                                id="add_tm" data-toggle="modal" href="#NuevoTM">
+                            <i class="fas fa-plus"></i> Agregar Team Member</button>
+                    </div>
+                    {% endif %}
+                    {% if 'Reasignar Team Member' in permisos %}
+                        {% if sprint.estado == 'En Proceso' %}
+                            <div class="row" style="padding-left: 1em">
+                                <button type="button" id="add_tm" class="btn btn-success" href="#ReasignarTM" data-toggle="modal">
+                                Reasignar Team Member</button>
+                            </div>
+                    {% endif %}
+                {% endif %}
+                    <table id="tabla_detalle" class="table table-sm scrolltable">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th width="55%">Team member</th>
+                                <th width="35%">Horas por día</th>
+                                <th width="10%">Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key, formulario in formularios.items %}
+                                <tr>
+                                {% for key2, objeto in formulario.items %}
+                                    {% if key2 == 'usuario' %}
+                                    <td width="55%">
+                                        {{ objeto }}
+                                    </td>
+                                    {% endif %}
+                                    {% if key2 == 'formulario' %}
+                                    <td width="35%">
+                                        <div class="container" style="display: none">
+                                            {{ objeto.team_member }}
+                                        </div>
+                                        {{ objeto.horas_laborales }}
+                                    </td>
+                                    <td>
+                                        {% if sprint.estado == "Pendiente" or not sprint.estado %}
+                                            {{ objeto.DELETE }}
+                                        {% endif %}
+                                    </td>
+                                    {% endif %}
+                                {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
                 {% if obs %}
                     <p><li>{{ obs }}</li></p>
                 {% endif %}
-                <button type="submit" class="btn submit-btn">Guardar</button>
+                <div class="container" style="padding-left: 22em">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
             </form>
         </div>
         <hr>
     </div>
 </div>
+<div id="ReasignarTM" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Reasignar Team Member</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+                {% csrf_token %}
+                    <label for="id_viejo_tm">De Team Member:</label>
+                    <select name="viejo_tm" id="id_viejo_tm">
+                        {% for usuario in team_actual %}
+                            <option value="{{ usuario.pk }}">{{ usuario.username }}</option>
+                        {% endfor %}
+                    </select>
+                    <p id="select_new_tm_ra"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">
+                    Guardar</button></a>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="NuevoTM" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Agregar Nuevo Team Member</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="nuevo_tm_form">
+                    <p id="select_new_tm"></p>
+                    <div class="container" id="horas_err" style="color: red;"></div>
+                    <p><label for="nuevo_tm_horas">Horas por día:</label>
+                    <input type="number" name="horas" id="nuevo_tm_horas"
+                    min="1" max="24"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="agregar_btn">
+                    Agregar</button></a>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="SinNuevos" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">No existe un nuevo Team Member</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                Todos los team members del proyecto ya se encuentran asignados a este sprint
+            </div>
+        </div>
+    </div>
+</div>
+<table style="display:none">
+    <tbody id="empty_form">
+        <tr>
+            <td width="55%">
+                {{ horas_formset.empty_form.team_member }}
+            </td>
+            <td width="35%">
+                {{ horas_formset.empty_form.horas_laborales }}
+            </td>
+            <td>
+                {{ horas_formset.empty_form.DELETE }}
+            </td>
+         </tr>
+    </tbody>
+</table>
+<script type="text/javascript">
+    $(document).ready(function($) {
+        var nuevos_tm = {{ tm_disponibles|safe }};
+        function eliminarTMdisponible(user_pk){
+            nuevos_tm.forEach(function(currentValue, index, arr){
+                if(nuevos_tm[index].user_pk==user_pk){
+                    nuevos_tm.splice(index, 1);
+                }
+            })
+        }
+
+        function actualizar_nuevos_tm(){
+            var nuevo_tm, html, html2,add_btn;
+            if (nuevos_tm == ''){
+                add_btn = document.getElementById('add_tm');
+                if (add_btn){
+                    add_btn.setAttribute('href','#SinNuevos');
+                }
+            }else if (nuevos_tm){
+                html = "<label for='nuevo_tm'>Team Member: </label>";
+                html2 ="<label for='nuevo_tm'>A Team Member: </label>";
+                html += "<select name='tm_disponibles' id='nuevo_tm'>";
+                html2 += "<select name='tm_disponibles' id='nuevo_tm'>";
+                for(var i=0; i<nuevos_tm.length; i++){
+                    nuevo_tm = nuevos_tm[i];
+                    html += "<option value='"+nuevo_tm['user_pk']+"'>"+nuevo_tm['username']+"</option>";
+                    html2 += "<option value='"+nuevo_tm['user_pk']+"'>"+nuevo_tm['username']+"</option>";
+
+                }
+                html += "</select>"
+                html2 += "</select>"
+                document.getElementById('select_new_tm').innerHTML = html;
+                document.getElementById('select_new_tm_ra').innerHTML = html2;
+            }
+        }
+
+        actualizar_nuevos_tm();
+        function recalcular_string() {
+            var checked;
+            var dias = '';
+            var checkboxs = document.getElementsByClassName('dias_habiles_check');
+            for(var i=0; i<checkboxs.length; i++){
+                checked = checkboxs[i].checked;
+                if (checked){
+                    if (dias == ''){
+                        dias = checkboxs[i].value;
+                    }else{
+                        dias += ','.concat(checkboxs[i].value);
+                    }
+                }
+            }
+            document.getElementById('id_dias_habiles').value = dias;
+        }
+        recalcular_string();
+        $('.dias_habiles_check').change(function () {
+            recalcular_string();
+        });
+
+        $('#agregar_btn').click(function () {
+            var nuevo_tm, nuevo_tm_horas,username,user_pk,fila;
+            nuevo_tm = document.getElementById('nuevo_tm');
+            nuevo_tm_horas = document.getElementById('nuevo_tm_horas');
+            if (!nuevo_tm_horas.value){
+                document.getElementById('horas_err').innerHTML='Ingrese las horas por dia';
+                return;
+            }else if( nuevo_tm_horas && parseInt(nuevo_tm_horas.value) < parseInt(1)){
+                document.getElementById('horas_err').innerHTML = 'El team member debe trabajar al menos 1 hora por dia';
+                return;
+            }else if( nuevo_tm_horas && parseInt(nuevo_tm_horas.value) > parseInt(24)) {
+                document.getElementById('horas_err').innerHTML = 'No es posible trabajar mas de 24 horas por dia';
+                return;
+            }
+            var form_idx = $('#id_horas_set-TOTAL_FORMS').val();
+            document.getElementById('horas_err').innerHTML = '';
+            username = $("option:selected",nuevo_tm).text();
+            user_pk = nuevo_tm.value;
+            fila = "<tr><td width='55%'>"+username+"</td>";
+            fila += "<td width='35%'><div class='container' style='display: none'>";
+            fila += "<select name='horas_set-"+form_idx+"-team_member' id='id_horas_set-"+form_idx+"-team_member'>";
+            fila += "<option value="+user_pk+" selected>+username+</option></select></div>";
+            fila += "<input type='number' name='horas_set-"+form_idx;
+            fila += "-horas_laborales' value='"+nuevo_tm_horas.value+"' id='id_horas_set-"+form_idx+"-horas_laborales'/></td>";
+            fila += "<td><input type='checkbox' name='horas_set-"+form_idx+"-DELETE' id='id_horas_set-"+form_idx+"-DELETE'/>";
+            fila += "</td></tr>";
+            $('#tabla_detalle > tbody:last-child').append(fila);
+            $('#id_horas_set-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+            $('#NuevoTM').modal('hide');
+            eliminarTMdisponible(user_pk);
+            actualizar_nuevos_tm();
+        });
+    });
+</script>
 </body>
 </html>
+{% else %}
+    {% if object.nombre %}
+        Permiso denegado (Modificar Sprint)
+    {% else %}
+        Permiso denegado (Crear Sprint)
+    {% endif %}
+{% endif %}

@@ -1,42 +1,440 @@
-
+{% if 'Asignar User Stories' in permisos %}
 {%include 'base.html'%}
-<div class="container">
-    <div class="head">
-        <h1 align="center">{{ title }}</h1>
-        <hr>
-    </div>
-    <div class="body">
-        <form method="POST">
-            {% csrf_token %}
+<form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="capacidad_sprint" id="capacidad_sprint"
+           value="{{ capacidad_sprint }}">
+    <input type="hidden" name="all_us" id="capacidad_sprint"
+           value="{{ all_us }}">
+    {% for tm, horas in horas_tm.items %}
+        <input type="hidden" name="disponibilidad_{{ tm }}" id="disponibilidad_{{ tm }}"
+           value="{{ horas }}">
+    {% endfor %}
+    <div class="container">
+        <div class="head">
+            <h1 align="center">{{ title }}</h1>
+            <hr>
+            <h4 style="text-align: center">Sprint: {{ sprint.nombre }}</h4>
+        </div>
+        <div class="body">
+            <li>
+                <h5>Capacidad: {{ capacidad_sprint }} horas</h5>
+                <div class="container" id="capacidad_superada"></div>
+            </li>
+            <li>
+               <h5>Horas asignadas: <div id="horas_asignadas" style="display: inline">
+               </div> horas</h5>
+            </li>
+             <div class="container" style="color: red">{{ error_msg }}</div>
             <table class="table table-sm scrolltable" width="100%">
                 <thead class="thead-dark thead">
                     <tr>
-                        <th width="8%">Asignar</th>
-                        <th width="10%">ID</th>
-                        <th width="25%">Nombre</th>
-                        <th width="20%">Duracion Estimada</th>
+                        <th width="7%">Asignar</th>
+                        <th width="36%">Nombre</th>
                         <th width="19%">Estado</th>
-                        <th width="18%">Priorizacion</th>
+                        <th width="21%">Duracion Estimada (Horas)</th>
+                        <th width="13%">Priorizacion</th>
+                        <th width="15%">Asigar team member</th>
                     </tr>
                 </thead>
                 <tbody class="tbody">
-                    {% for us in object_list|dictsortreversed:"priorizacion"|dictsortreversed:"estado"  %}
+                    {% for us in first_list %}
+                        <tr style="background-color: khaki!important;;">
+                            {% if us.sprint == sprint %}
+                                <td width="7%"><input class="asignar" type="checkbox" name="user_stories" value="{{ us.pk }}" id="id_user_stories_{{ us.pk }}" checked></td>
+                            {% else %}
+                                <td width="7%"><input class="asignar" type="checkbox" name="user_stories" value="{{ us.pk }}" id="id_user_stories_{{ us.pk }}"></td>
+                            {% endif %}
+                            <td width="36%">
+                                <div class="enlace">
+                                    <a href="#UserStory_{{ us.pk }}" data-toggle="modal"
+                                    role="button" class="enlace">
+                                    {{ us.nombre }}</a>
+                                </div>
+                            </td>
+                            <td width="19%">No terminado</td>
+                            <td width="21%">
+                                <input style="width: 9em" type="number" name="duracion_estimada_{{ us.pk }}"
+                                       value="{{ us.duracion_estimada }}" class="horas" id="est_{{ us.pk }}">
+                            </td>
+                            <td width="13%">
+                                {{ us.priorizacion }}
+                            </td>
+                            <td width="15%"><button class="btn btn-success btn-sm" type="button" name="botones_asignacion"
+                                        data-toggle="modal" href="#Asignacion_{{ us.pk }}" value="{{ us.pk }}"
+                                        id="asignacion_{{ us.pk }}" style="display: none">
+                                    Asignar TM
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% for us in second_list %}
                         <tr>
                             {% if us.sprint == sprint %}
-                                <td width="8%"><input type="checkbox" name="user_stories" value="{{ us.pk }}" id="id_user_stories_{{ us.pk }}" checked></td>
+                                <td width="7%"><input class="asignar" type="checkbox" name="user_stories" value="{{ us.pk }}" id="id_user_stories_{{ us.pk }}" checked></td>
                             {% else %}
-                                <td width="8%"><input type="checkbox" name="user_stories" value="{{ us.pk }}" id="id_user_stories_{{ us.pk }}"></td>
+                                <td width="7%"><input class="asignar" type="checkbox" name="user_stories" value="{{ us.pk }}" id="id_user_stories_{{ us.pk }}"></td>
                             {% endif %}
-                            <td width="10%">{{ us.pk }}</td>
-                            <td width="25%">{{ us.nombre }}</td>
-                            <td width="20%" id="last-column">{{ us.duracion_estimada }}</td>
+                            <td width="36%">
+                                <div class="enlace">
+                                    <a href="#UserStory_{{ us.pk }}" data-toggle="modal"
+                                    role="button" class="enlace">
+                                    {{ us.nombre }}</a>
+                                </div>
+                            </td>
                             <td width="19%">{{ us.get_estado_display }}</td>
-                            <td width="18%" id="acciones">{{ us.priorizacion }}</td>
+                            <td width="21%">
+                                <input style="width: 9em" type="number" name="duracion_estimada_{{ us.pk }}"
+                                       value="{{ us.duracion_estimada }}" class="horas" id="est_{{ us.pk }}">
+                            </td>
+                            <td width="13%">
+                                {{ us.priorizacion }}
+                            </td>
+                            <td width="15%">
+                                <button class="btn btn-success btn-sm" type="button"
+                                        data-toggle="modal" href="#Asignacion_{{ us.pk }}" name="botones_asignacion"
+                                        id="asignacion_{{ us.pk }}" value="{{ us.pk }}">
+                                    Asignar TM
+                                </button>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            <button type="submit" class="btn submit-btn">Asignar</button>
-        </form>
+
+            <button type="submit" class="btn submit-btn" style="alignment: right">Asignar</button>
+        </div>
+        <br>
+    </div>
+    {% for us in first_list %}
+    <div id="Asignacion_{{ us.pk }}" class="modal fade modal-centrado">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ us.nombre }}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="container" style="margin-left: 3em">
+                        <p><label for="id_team_member_{{ us.pk }}">Asignar a:</label>
+                            <select name="team_member_{{ us.pk }}" id="id_team_member_{{ us.pk }}"
+                                    class="seleccionador_tm">
+                            {% if not us.team_member %}
+                                <option value="">----------------------</option>
+                            {% endif %}
+                            {% for usuario in team_members %}
+                                {% if usuario.pk == us.team_member.pk %}
+                                    <option value="{{ usuario.pk }}" selected>{{ usuario.username }}</option>
+                                {% else %}
+                                    <option value="{{ usuario.pk }}">{{ usuario.username }}</option>
+                                {% endif %}
+                            {% endfor %}
+                            </select>
+                        <ul>
+                            <li>
+                            Horas disponibles en sprint:
+                                <div id="disponibles_{{ us.pk }}" style="display: inline"></div>
+                            </li>
+                            <li>
+                            Horas asignadas:
+                                <div id="asignadas_{{ us.pk }}" style="display: inline"></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% for us in second_list %}
+    <div id="Asignacion_{{ us.pk }}" class="modal fade modal-centrado">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{{ us.nombre }}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="container" style="margin-left: 3em">
+                        <p><label for="id_team_member_{{ us.pk }}">Asignar a:</label>
+                            <select name="team_member_{{ us.pk }}" id="id_team_member_{{ us.pk }}"
+                                    class="seleccionador_tm">
+                            {% if not us.team_member %}
+                                <option value="">----------------------</option>
+                            {% endif %}
+                            {% for usuario in team_members %}
+                                {% if usuario.pk == us.team_member.pk %}
+                                    <option value="{{ usuario.pk }}" selected>{{ usuario.username }}</option>
+                                {% else %}
+                                    <option value="{{ usuario.pk }}">{{ usuario.username }}</option>
+                                {% endif %}
+                            {% endfor %}
+                            </select>
+                        <ul>
+                            <li>
+                            Horas disponibles en sprint:
+                                <div id="disponibles_{{ us.pk }}" style="display: inline"></div>
+                            </li>
+                            <li>
+                            Horas asignadas:
+                                <div id="asignadas_{{ us.pk }}" style="display: inline"></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</form>
+
+<!-- modales de user stories -->
+{% for us in object_list %}
+<div id="UserStory_{{ us.pk }}" class="modal fade">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content modal-us">
+            <div class="modal-header">
+                <h5 class="modal-title w-100 text-center">{{ us.nombre }} </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="texto">
+                    <li>
+                        Descripcion: {{ us.descripcion }}
+                    </li>
+                    <br>
+                </div>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="container" id="formulario-nuevo-{{ us.pk }}">
+                    </div>
+                    <button type="button" id="cancelar-{{ us.pk }}" value="{{ us.pk }}" class="btn btn-danger cancelar-form" style="margin-left: 200px;display: none;">Cancelar</button>
+                    <button type="submit" id="guardar-{{ us.pk }}" value="{{ us.pk }}" class="btn btn-success" style="display: none">Guardar</button>
+                    <input type='hidden' name='us' value="{{ us.pk }}">
+                    <input type='hidden' name='usuario' value="{{ usuario.pk }}">
+                </form>
+                <hr>
+                <h5 class="w-100 text-center">Historial de US:
+                <button type="button" id="notas-btn-{{ us.pk }}" value="{{ us.pk }}" class="btn btn-light notas-btn">Notas</button>
+                <button type="button" id="archivos-btn-{{ us.pk }}" value="{{ us.pk }}" class="btn btn-dark archivos-btn">Archivos</button>
+                <button type="button" id="actividades-btn-{{ us.pk }}" value="{{ us.pk }}" class="btn btn-dark actividades-btn">Actividades</button>
+                </h5><hr>
+                <div class="container" id="notas-us-{{ us.pk }}">
+                    {% for key, notas in notas.items %}
+                        {% if key == us.pk %}
+                            {% for nota in notas %}
+                                {{ nota.nota }}<br>
+                                Autor: {{ nota.usuario }}, {{ nota.fecha }}
+                                <div class="container" style="width: 600px;">
+                                    <hr>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="container" id="archivos-us-{{ us.pk }}" style="display: none">
+                    {% for key, archivos in archivos.items %}
+                        {% if key == us.pk %}
+                            {% for archivo in archivos %}
+                                {{ archivo.titulo }}: <a href="{% url 'ver_archivo' archivo.pk %}">{{ archivo.archivo }}</a><br>
+                                Sprint: {{ archivo.sprint }} <br>
+                                Autor: {{ archivo.usuario }}, {{ archivo.fecha }}
+                                <div class="container" style="width: 600px;">
+                                    <hr>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="container" id="actividades-us-{{ us.pk }}" style="display: none">
+                    {% for key, actividades in actividades.items %}
+                        {% if key == us.pk %}
+                            {% for actividad in actividades %}
+                                {% if actividad.tipo == 'actividad' %}
+                                    {{ actividad.nombre }}: {{ actividad.descripcion }}<br>
+                                    Duracion: {{ actividad.duracion }} horas<br>
+                                    Sprint: {{ actividad.sprint }} <br>
+                                    Fase: {% if actividad.fase_us %}
+                                                {{ actividad.fase_us.nombre }}
+                                          {% elif actividad.estado_fase == 'Control de Calidad'%}
+                                                Control de Calidad
+                                          {% endif %}
+                                    <br>
+                                    Autor: {{ actividad.usuario }}, {{ actividad.fecha }}
+                                    <div class="container" style="width: 600px;">
+                                        <hr>
+                                    </div>
+                                {% elif actividad.tipo == 'cambio' %}
+                                    <div style="color:darkblue">{{ actividad.descripcion }} <br>
+                                    Sprint: {{ actividad.sprint }} <br>
+                                    Autor: {{ actividad.usuario }}, {{ actividad.fecha }}
+                                    <div class="container" style="width: 600px;">
+                                        <hr>
+                                    </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            </div>
+        </div>
     </div>
 </div>
+{% endfor %}
+<script type="text/javascript">
+    $(document).ready(function($) {
+        function cambiar_botones(){
+            var boton,asignacion;
+            var botones = document.getElementsByName('botones_asignacion');
+            for (var i=0; i<botones.length; i++){
+                boton = botones[i];
+                asignacion = document.getElementById('id_team_member_'+boton.value);
+                if (asignacion.value == ''){
+                    boton.innerHTML = 'Asignar TM';
+                }else{
+                    boton.innerHTML = 'Reasignar TM';
+                }
+            }
+        }
+        cambiar_botones();
+        function calcular_horas() {
+            var duracion_us;
+            var tm;
+            var checked;
+            var horas_tm = {};
+            var horas_asignadas;
+            var horas_totales = parseInt(0);
+            var btn_asignacion;
+            var disponibilidad;
+            {% for us in first_list %}
+                btn_asignacion = document.getElementById('asignacion_{{ us.pk }}');
+                checked = document.getElementById('id_user_stories_{{ us.pk }}').checked;
+                if (checked){
+                    btn_asignacion.style.display = 'inline';
+                    duracion_us = document.getElementById('est_{{ us.pk }}').value;
+                    tm = document.getElementById('id_team_member_{{ us.pk }}').value;
+                    horas_totales += parseInt(duracion_us);
+                    if (tm){
+                        if (!(horas_tm.hasOwnProperty(tm))){
+                            horas_tm[tm] = 0;
+                        }
+                        horas_tm[tm] += parseInt(duracion_us);
+                    }
+                }else{
+                    btn_asignacion.style.display = 'none'
+                }
+            {% endfor %}
+            {% for us in second_list %}
+                btn_asignacion = document.getElementById('asignacion_{{ us.pk }}');
+                checked = document.getElementById('id_user_stories_{{ us.pk }}').checked;
+                if (checked){
+                    btn_asignacion.style.display = 'inline';
+                    duracion_us = document.getElementById('est_{{ us.pk }}').value;
+                    tm = document.getElementById('id_team_member_{{ us.pk }}').value;
+                    horas_totales += parseInt(duracion_us);
+                    if (tm){
+                        if (!(horas_tm.hasOwnProperty(tm))){
+                            horas_tm[tm] = 0;
+                        }
+                        horas_tm[tm] += parseInt(duracion_us);
+                    }
+                }else{
+                    btn_asignacion.style.display = 'none'
+                }
+            {% endfor %}
+            {% for us in first_list %}
+                tm = document.getElementById('id_team_member_{{ us.pk }}').value;
+                if(tm){
+                    disponibilidad = document.getElementById('disponibilidad_'.concat(tm)).value;
+                    document.getElementById('disponibles_{{ us.pk }}').innerHTML = disponibilidad;
+                }else{
+                    document.getElementById('disponibles_{{ us.pk }}').innerHTML = '0';
+                }
+                horas_asignadas = document.getElementById('asignadas_{{ us.pk }}');
+                if (tm){
+                    if (horas_tm.hasOwnProperty(tm)){
+                        horas_asignadas.innerHTML = horas_tm[tm];
+                    }else{
+                        horas_asignadas.innerHTML = '0';
+                    }
+                }else{
+                    horas_asignadas.innerHTML = '0';
+                }
+            {% endfor %}
+            {% for us in second_list %}
+                tm = document.getElementById('id_team_member_{{ us.pk }}').value;
+                if(tm){
+                    disponibilidad = document.getElementById('disponibilidad_'.concat(tm)).value;
+                    document.getElementById('disponibles_{{ us.pk }}').innerHTML = disponibilidad;
+                }else{
+                    document.getElementById('disponibles_{{ us.pk }}').innerHTML = '0';
+                }
+                horas_asignadas = document.getElementById('asignadas_{{ us.pk }}');
+                if (tm){
+                    if (horas_tm.hasOwnProperty(tm)){
+                        horas_asignadas.innerHTML = horas_tm[tm];
+                    }else{
+                        horas_asignadas.innerHTML = '0';
+                    }
+                }else{
+                    horas_asignadas.innerHTML = '0';
+                }
+            {% endfor %}
+            document.getElementById('horas_asignadas').innerHTML = horas_totales;
+        }
+
+        calcular_horas();
+
+        $('.asignar').change(function () {
+            calcular_horas();
+            cambiar_botones();
+        });
+        $('.horas').change(function () {
+            calcular_horas();
+        });
+        $('.seleccionador_tm').change(function () {
+            calcular_horas();
+        });
+        $('.notas-btn').click(function() {
+            document.getElementById('archivos-btn-'.concat(this.value)).setAttribute('class','btn btn-dark');
+            document.getElementById('notas-btn-'.concat(this.value)).setAttribute('class','btn btn-light');
+            document.getElementById('actividades-btn-'.concat(this.value)).setAttribute('class','btn btn-dark');
+            document.getElementById('notas-us-'.concat(this.value)).style.display = "block";
+            document.getElementById('archivos-us-'.concat(this.value)).style.display = "none";
+            document.getElementById('actividades-us-'.concat(this.value)).style.display = "none";
+        });
+
+        $('.archivos-btn').click(function() {
+            document.getElementById('notas-btn-'.concat(this.value)).setAttribute('class','btn btn-dark');
+            document.getElementById('actividades-btn-'.concat(this.value)).setAttribute('class','btn btn-dark');
+            document.getElementById('archivos-btn-'.concat(this.value)).setAttribute('class','btn btn-light');
+            document.getElementById('archivos-us-'.concat(this.value)).style.display = "block";
+            document.getElementById('notas-us-'.concat(this.value)).style.display = "none";
+            document.getElementById('actividades-us-'.concat(this.value)).style.display = "none";
+        });
+
+        $('.actividades-btn').click(function() {
+            document.getElementById('archivos-btn-'.concat(this.value)).setAttribute('class','btn btn-dark');
+            document.getElementById('notas-btn-'.concat(this.value)).setAttribute('class','btn btn-dark');
+            document.getElementById('actividades-btn-'.concat(this.value)).setAttribute('class','btn btn-light');
+            document.getElementById('notas-us-'.concat(this.value)).style.display = "none";
+            document.getElementById('archivos-us-'.concat(this.value)).style.display = "none";
+            document.getElementById('actividades-us-'.concat(this.value)).style.display = "block";
+        });
+    });
+</script>
+{% else %}
+Permiso Denegado (Asignar User Stories)
+{% endif %}

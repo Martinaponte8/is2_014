@@ -177,4 +177,3 @@ class Horas(models.Model):
         if not self.team_member:
             raise ValidationError("Debe especificar un team member")
         return True
-
