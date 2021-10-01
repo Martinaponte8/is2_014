@@ -1,8 +1,13 @@
+import json
+
+import requests
 from django.test import TestCase
 import unittest
 
 #test basico para entender como funciona test.py
 #realizado el 16/08/2021
+from pip._internal import utils
+
 
 class TestBasic(unittest.TestCase):
     "Basic tests"

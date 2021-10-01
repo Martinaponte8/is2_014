@@ -6,6 +6,7 @@ from proyecto.models import TeamMember
 
 """
 Se definen los estados de un Usuario
+    ACTIVO - INACTIVO
 """
 ESTADOS_USUARIO = (
     ('Activo', 'Activo'),
@@ -34,6 +35,9 @@ class Usuario(AbstractUser):
     def __str__(self):
         return self.username
 
+    """
+    Retorna los nombres de los permisos
+    """
     def get_nombres_permisos(self, proyecto=None):
         permisos = []
         for permiso in self.permisos.all():

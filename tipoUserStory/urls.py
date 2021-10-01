@@ -3,7 +3,7 @@ from django.urls import path
 from .views import *
 
 """
-URL para el tipo de User Story, crear, listar y modificar
+URLs para el tipo de User Story, crear, listar y modificar
 """
 urlpatterns = [
     url(r'^$', tipoUserStoryListView.as_view(), name='user_story_type_list'),

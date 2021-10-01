@@ -497,6 +497,9 @@ class AsignarUSUpdateView(LoginRequiredMixin, ListView):
                 us.save()
         return HttpResponseRedirect('../../../')
 
+"""
+    Vista para ver el sprint
+"""
 @method_decorator(login_required, name='dispatch')
 class VerSprintDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):
     """

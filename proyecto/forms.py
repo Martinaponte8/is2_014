@@ -34,7 +34,7 @@ class UpdateProjectForm(forms.ModelForm):
 
 class TeamMemberForm(forms.ModelForm):
     """
-    Formulario para la creacion del TeamMember
+    Formulario para la creacion de los "Miembros del equipo"
     """
     class Meta:
         model = TeamMember

@@ -11,7 +11,7 @@ from tipoUserStory.models import *
 
 
 """
-Funcion eliminar UserStory
+    Funcion eliminar UserStory
 """
 def eliminar4(request,pk_proyecto,us_id):
     payload = {'project.pk': pk_proyecto, 'us_id': us_id}

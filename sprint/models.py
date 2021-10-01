@@ -7,6 +7,7 @@ from userstory.models import UserStory
 
 """
 Estados posibles del sprint
+    PENDIENTE - EN PROCESO - TERMINADO (TO DO/DOING/DONE)
 """
 ESTADOS_SPRINT = (
     ('Pendiente', 'Pendiente'),

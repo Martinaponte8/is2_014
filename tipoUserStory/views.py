@@ -139,6 +139,9 @@ class UpdateUserStoryTypeView(LoginRequiredMixin, SuccessMessageMixin, UpdateVie
             return self.render_to_response(self.get_context_data(form=form))
         return HttpResponseRedirect('../')
 
+    """
+        Muestra el tipo de User Story
+    """
 @method_decorator(login_required, name='dispatch')
 class VerUserStoryTypeDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):
     model = TipoUserStory

@@ -7,7 +7,7 @@ from .views import eliminar3
 from .models import *
 
 """
-URL para el ver, crear y modificar roles
+URLs para el ver, crear y modificar roles
 """
 
 urlpatterns = [
