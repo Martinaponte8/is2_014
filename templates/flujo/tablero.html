@@ -10,14 +10,16 @@
                 <div class="fases-dinamicas" style="display: inline;">
                     {% for fase in fases %}
                         {% if fase.pk == fases.0.pk %}
-                        <button type="button" value="{{ fase.pk }}" id="btn_{{ fase.pk }}" class="btn btn-light fases-btn">{{ fase.nombre }}</button>
+                        <button type="button" value="{{ fase.pk }}" id="btn_{{ fase.pk }}" class="btn btn-light fases-btn btn-sm">{{ fase.nombre }}</button>
                         {% else %}
-                        <button type="button" value="{{ fase.pk }}" id="btn_{{ fase.pk }}" class="btn btn-dark fases-btn">{{ fase.nombre }}</button>
+                        <button type="button" value="{{ fase.pk }}" id="btn_{{ fase.pk }}" class="btn btn-dark fases-btn btn-sm">{{ fase.nombre }}</button>
                         {% endif %}
                     {% endfor %}
                 </div>
-                <button type="button" class="btn btn-dark fases-btn" id="cc-btn">Control de Calidad</button>
-                <button type="button" class="btn btn-dark fases-btn" id="finalizados-btn">Finalizados</button>
+                {% if 'Ver Control de Calidad' in permisos %}
+                <button type="button" class="btn btn-dark fases-btn btn-sm" id="cc-btn">Control de Calidad</button>
+                {% endif %}
+                <button type="button" class="btn btn-dark fases-btn btn-sm" id="finalizados-btn">Finalizados</button>
             </div>
             <div class="container tablero" id="tablero_actual">
                 <div class="row">
@@ -26,7 +28,38 @@
                             {% for us in user_stories %}
                                 {% if us.fase == fases.0 and us.estado_fase == 'To Do' %}
                                     <div class="panel user-story">
-                                        <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">{{ us.nombre }}</a>
+                                        <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">
+                                            <div class="container" style="height: 7em;">
+                                                {{ us.nombre }}
+                                            </div>
+                                        </a>
+                                        {% if us.team_member.pk == user.pk %}
+                                        <div class="container">
+                                            <form method="POST" style="display: inline">
+                                                {% csrf_token %}
+                                                {% if us.fase != fases.0 %}
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-arrow-left"></i>
+                                                    Anterior
+                                                </button>
+                                                {% elif  us.fase == fases.0 and us.estado_fase != 'To Do'%}
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-arrow-left"></i>
+                                                    Anterior
+                                                </button>
+                                                {% endif %}
+                                                <input type="hidden" name="anterior" value="{{ us.pk }}">
+                                            </form>
+                                            <form method="POST" style="display: inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    Siguiente
+                                                    <i class="fas fa-arrow-right"></i>
+                                                </button>
+                                                <input type="hidden" name="siguiente" value="{{ us.pk }}">
+                                            </form>
+                                        </div>
+                                        {% endif %}
                                     </div>
                                 {% endif %}
                             {% endfor %}
@@ -37,7 +70,38 @@
                              {% for us in user_stories %}
                                 {% if us.fase == fases.0 and us.estado_fase == 'Doing' %}
                                     <div class="panel user-story">
-                                        <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">{{ us.nombre }}</a>
+                                        <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">
+                                            <div class="container" style="height: 7em;">
+                                                {{ us.nombre }}
+                                            </div>
+                                        </a>
+                                        {% if us.team_member.pk == user.pk %}
+                                        <div class="container">
+                                            <form method="POST" style="display: inline">
+                                                {% csrf_token %}
+                                                {% if us.fase != fases.0 %}
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-arrow-left"></i>
+                                                    Anterior
+                                                </button>
+                                                {% elif  us.fase == fases.0 and us.estado_fase != 'To Do'%}
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-arrow-left"></i>
+                                                    Anterior
+                                                </button>
+                                                {% endif %}
+                                                <input type="hidden" name="anterior" value="{{ us.pk }}">
+                                            </form>
+                                            <form method="POST" style="display: inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    Siguiente
+                                                    <i class="fas fa-arrow-right"></i>
+                                                </button>
+                                                <input type="hidden" name="siguiente" value="{{ us.pk }}">
+                                            </form>
+                                        </div>
+                                        {% endif %}
                                     </div>
                                 {% endif %}
                             {% endfor %}
@@ -48,7 +112,38 @@
                              {% for us in user_stories %}
                                 {% if us.fase == fases.0 and us.estado_fase == 'Done' %}
                                     <div class="panel user-story">
-                                        <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">{{ us.nombre }}</a>
+                                        <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">
+                                            <div class="container" style="height: 7em;">
+                                                {{ us.nombre }}
+                                            </div>
+                                        </a>
+                                        <div class="container">
+                                            {% if us.team_member.pk == user.pk %}
+                                            <form method="POST" style="display: inline">
+                                                {% csrf_token %}
+                                                {% if us.fase != fases.0 %}
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-arrow-left"></i>
+                                                    Anterior
+                                                </button>
+                                                {% elif  us.fase == fases.0 and us.estado_fase != 'To Do'%}
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-arrow-left"></i>
+                                                    Anterior
+                                                </button>
+                                                {% endif %}
+                                                <input type="hidden" name="anterior" value="{{ us.pk }}">
+                                            </form>
+                                            <form method="POST" style="display: inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    Siguiente
+                                                    <i class="fas fa-arrow-right"></i>
+                                                </button>
+                                                <input type="hidden" name="siguiente" value="{{ us.pk }}">
+                                            </form>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 {% endif %}
                             {% endfor %}
@@ -69,7 +164,38 @@
                     {% for us in user_stories %}
                         {% if us.fase == fase and us.estado_fase == 'To Do' %}
                             <div class="panel user-story">
-                                <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">{{ us.nombre }}</a>
+                                <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">
+                                    <div class="container" style="height: 7em;">
+                                        {{ us.nombre }}
+                                    </div>
+                                </a>
+                                <div class="container">
+                                    {% if us.team_member.pk == user.pk %}
+                                    <form method="POST" style="display: inline">
+                                        {% csrf_token %}
+                                        {% if us.fase != fases.0 %}
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-arrow-left"></i>
+                                            Anterior
+                                        </button>
+                                        {% elif  us.fase == fases.0 and us.estado_fase != 'To Do'%}
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-arrow-left"></i>
+                                            Anterior
+                                        </button>
+                                        {% endif %}
+                                        <input type="hidden" name="anterior" value="{{ us.pk }}">
+                                    </form>
+                                    <form method="POST" style="display: inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            Siguiente
+                                            <i class="fas fa-arrow-right"></i>
+                                        </button>
+                                        <input type="hidden" name="siguiente" value="{{ us.pk }}">
+                                    </form>
+                                    {% endif %}
+                                </div>
                             </div>
                         {% endif %}
                     {% endfor %}
@@ -80,7 +206,38 @@
                      {% for us in user_stories %}
                         {% if us.fase == fase and us.estado_fase == 'Doing' %}
                             <div class="panel user-story">
-                                <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">{{ us.nombre }}</a>
+                                <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">
+                                    <div class="container" style="height: 7em;">
+                                        {{ us.nombre }}
+                                    </div>
+                                </a>
+                                <div class="container">
+                                    {% if us.team_member.pk == user.pk %}
+                                    <form method="POST" style="display: inline">
+                                        {% csrf_token %}
+                                        {% if us.fase != fases.0 %}
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-arrow-left"></i>
+                                            Anterior
+                                        </button>
+                                        {% elif  us.fase == fases.0 and us.estado_fase != 'To Do'%}
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-arrow-left"></i>
+                                            Anterior
+                                        </button>
+                                        {% endif %}
+                                        <input type="hidden" name="anterior" value="{{ us.pk }}">
+                                    </form>
+                                    <form method="POST" style="display: inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            Siguiente
+                                            <i class="fas fa-arrow-right"></i>
+                                        </button>
+                                        <input type="hidden" name="siguiente" value="{{ us.pk }}">
+                                    </form>
+                                    {% endif %}
+                                </div>
                             </div>
                         {% endif %}
                     {% endfor %}
@@ -91,7 +248,38 @@
                      {% for us in user_stories %}
                         {% if us.fase == fase and us.estado_fase == 'Done' %}
                             <div class="panel user-story">
-                                <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">{{ us.nombre }}</a>
+                                <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">
+                                    <div class="container" style="height: 7em;">
+                                        {{ us.nombre }}
+                                    </div>
+                                </a>
+                                <div class="container">
+                                    {% if us.team_member.pk == user.pk %}
+                                    <form method="POST" style="display: inline">
+                                        {% csrf_token %}
+                                        {% if us.fase != fases.0 %}
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-arrow-left"></i>
+                                            Anterior
+                                        </button>
+                                        {% elif  us.fase == fases.0 and us.estado_fase != 'To Do'%}
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-arrow-left"></i>
+                                            Anterior
+                                        </button>
+                                        {% endif %}
+                                        <input type="hidden" name="anterior" value="{{ us.pk }}">
+                                    </form>
+                                    <form method="POST" style="display: inline">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-success">
+                                            Siguiente
+                                            <i class="fas fa-arrow-right"></i>
+                                        </button>
+                                        <input type="hidden" name="siguiente" value="{{ us.pk }}">
+                                    </form>
+                                    {% endif %}
+                                </div>
                             </div>
                         {% endif %}
                     {% endfor %}
@@ -113,16 +301,17 @@
         <tbody>
             {% for us in user_stories %}
                 {% if us.estado_fase == 'Control de Calidad' %}
-                    <td width="30%">{{ us.nombre }}</td>
+                    <tr>
+                    <td width="30%">
+                        <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">
+                        {{ us.nombre }}</a>
+                    </td>
                     <td width="50%">{{ us.descripcion }}</td>
                     <td width="20%">
                         <button type="button" href="#Mover_{{ us.pk }}" data-toggle="modal" class="btn btn-danger">No OK</button>
-                        <form method="POST" style="display: inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-success">Finalizar</button>
-                            <input type="hidden" name="finalizar" value="{{ us.pk }}">
-                        </form>
+                        <button type="button" href="#Finalizar_{{ us.pk }}" data-toggle="modal" class="btn btn-success">Finalizar</button>
                     </td>
+                    </tr>
                 {% endif %}
             {% endfor %}
         </tbody>
@@ -134,7 +323,7 @@
 <div class="container tablero" id="finalizados" style="display: none">
     <table class="table table-sm scrolltable-cc" width="100%">
         <thead class="thead-dark">
-            <th width="30%">Nombre</th>
+            <th width="30%">User Story</th>
             <th width="40%">Descripcion</th>
             <th width="17%">Duracion Estimada</th>
             <th width="13%">Priorizacion</th>
@@ -143,7 +332,10 @@
             {% for us in user_stories %}
                 {% if us.estado == 0 %} <!-- Finalizado -->
                     <tr>
-                        <td width="30%">{{ us.nombre }}</td>
+                        <td width="30%">
+                            <a href="#UserStory_{{ us.pk }}" role="button" data-toggle="modal">
+                            {{ us.nombre }}</a>
+                        </td>
                         <td width="40%">{{ us.descripcion }}</td>
                         <td width="17%" style="padding-left: 13px;">{{ us.duracion_estimada}}</td>
                         <td width="13%" style="padding-left: 17px;">{{ us.priorizacion }}</td>
@@ -153,7 +345,7 @@
         </tbody>
     </table>
 </div>
-<!-- fin finalizados
+<!-- fin finalizados -->
 
 <!-- modales de los us -->
 {% for us in user_stories %}
@@ -170,15 +362,28 @@
                         Descripcion: {{ us.descripcion }}
                     </li>
                     <li>
-                        Estimacion: {{ us.duracion_estimada }}
+                        Estimacion: {{ us.duracion_estimada }} horas
+                    </li>
+                    <li>
+                        Horas trabajadas en el sprint: {{ us.horas_sprint }} horas
+                    </li>
+                    <li>
+                        Total de horas trabajadas: {{ us.horas_total }} horas
+                    </li>
+                    <li>
+                        Asignado: {{ us.team_member.username }}
                     </li>
                     <br>
                 </div>
-                <div class="botones-historial">
-                    <button type="button" value="{{ us.pk }}" class="btn btn-dark add-nota">Agregar Nota</button>
-                    <button type="button" value="{{ us.pk }}" class="btn btn-dark add-archivo">Agregar Archivo</button>
-                    <button type="button" value="{{ us.pk }}" class="btn btn-dark add-actividad">Agregar Actividad</button>
-                </div>
+                    <div class="botones-historial">
+                        {% if us.estado != 0 %}
+                        <button type="button" value="{{ us.pk }}" class="btn btn-dark add-nota">Agregar Nota</button>
+                        <button type="button" value="{{ us.pk }}" class="btn btn-dark add-archivo">Agregar Archivo</button>
+                        {% if us.team_member.pk == user.pk %}
+                        <button type="button" value="{{ us.pk }}" class="btn btn-dark add-actividad">Agregar Actividad</button>
+                        {% endif %}
+                        {% endif %}
+                    </div>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="container" id="formulario-nuevo-{{ us.pk }}">
@@ -187,6 +392,8 @@
                     <button type="submit" id="guardar-{{ us.pk }}" value="{{ us.pk }}" class="btn btn-success" style="display: none">Guardar</button>
                     <input type='hidden' name='us' value="{{ us.pk }}">
                     <input type='hidden' name='usuario' value="{{ usuario.pk }}">
+                    <input type='hidden' name='fase_us' value="{{ us.fase.pk }}">
+                    <input type='hidden' name='estado_fase' value="{{ us.estado_fase }}">
                 </form>
                 <hr>
                 <h5 class="w-100 text-center">Historial de US:
@@ -199,6 +406,7 @@
                         {% if key == us.pk %}
                             {% for nota in notas %}
                                 {{ nota.nota }}<br>
+                                Sprint: {{ nota.sprint }} <br>
                                 Autor: {{ nota.usuario }}, {{ nota.fecha }}
                                 <div class="container" style="width: 600px;">
                                     <hr>
@@ -208,10 +416,12 @@
                     {% endfor %}
                 </div>
                 <div class="container" id="archivos-us-{{ us.pk }}" style="display: none">
+                    <!-- AGREGAR EL ARCHIVO BINARIO -->
                     {% for key, archivos in archivos.items %}
                         {% if key == us.pk %}
                             {% for archivo in archivos %}
-                                {{ archivo.titulo }}: <a href="/media/{{ archivo.nombre }}">{{ archivo.archivo }}</a><br>
+                                {{ archivo.titulo }}: <a href="{% url 'ver_archivo' archivo.pk %}">{{ archivo.archivo }}</a><br>
+                                Sprint: {{ archivo.sprint }} <br>
                                 Autor: {{ archivo.usuario }}, {{ archivo.fecha }}
                                 <div class="container" style="width: 600px;">
                                     <hr>
@@ -224,42 +434,65 @@
                     {% for key, actividades in actividades.items %}
                         {% if key == us.pk %}
                             {% for actividad in actividades %}
-                                {{ actividad.nombre }}: {{ actividad.descripcion }}<br>
-                                Duracion: {{ actividad.duracion }}<br>
-                                Autor: {{ actividad.usuario }}, {{ actividad.fecha }}
-                                <div class="container" style="width: 600px;">
-                                    <hr>
-                                </div>
+                                {% if actividad.tipo == 'actividad' %}
+                                    {{ actividad.nombre }}: {{ actividad.descripcion }}<br>
+                                    Duracion: {{ actividad.duracion }} horas<br>
+                                    Sprint: {{ actividad.sprint }} <br>
+                                    Fase: {% if actividad.fase_us %}
+                                                {{ actividad.fase_us.nombre }}
+                                          {% elif actividad.estado_fase == 'Control de Calidad'%}
+                                                Control de Calidad
+                                          {% endif %}
+                                    <br>
+                                    Autor: {{ actividad.usuario }}, {{ actividad.fecha }}
+                                    <div class="container" style="width: 600px;">
+                                        <hr>
+                                    </div>
+                                {% elif actividad.tipo == 'cambio' %}
+                                    <div style="color:darkblue">{{ actividad.descripcion }} <br>
+                                    Sprint: {{ actividad.sprint }} <br>
+                                    Autor: {{ actividad.usuario }}, {{ actividad.fecha }}
+                                    <div class="container" style="width: 600px;">
+                                        <hr>
+                                    </div>
+                                    </div>
+                                {% endif %}
                             {% endfor %}
                         {% endif %}
                     {% endfor %}
                 </div>
             </div>
-            <div class="modal-footer">
-                <form method="POST">
-                    {% csrf_token %}
-                    {% if us.fase != fases.0 %}
-                    <button type="submit" class="btn btn-danger change-status">
-                        <i class="fas fa-arrow-left"></i>
-                        Mover a estado anterior
-                    </button>
-                    {% elif  us.fase == fases.0 and us.estado_fase != 'To Do'%}
-                    <button type="submit" class="btn btn-danger change-status">
-                        <i class="fas fa-arrow-left"></i>
-                        Mover a estado anterior
-                    </button>
-                    {% endif %}
-                    <input type="hidden" name="anterior" value="{{ us.pk }}">
-                </form>
-                <form method="POST">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success change-status">
-                        Mover a estado siguiente
-                        <i class="fas fa-arrow-right"></i>
-                    </button>
-                    <input type="hidden" name="siguiente" value="{{ us.pk }}">
-                </form>
-            </div>
+            {% if us.team_member.pk == user.pk %}
+                <div class="modal-footer">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% if us.estado_fase != 'Control de Calidad' and us.estado != 0 %}
+                        {% if us.fase != fases.0 %}
+                        <button type="submit" class="btn btn-danger change-status">
+                            <i class="fas fa-arrow-left"></i>
+                            Mover a estado anterior
+                        </button>
+                        {% elif  us.fase == fases.0 and us.estado_fase != 'To Do'%}
+                        <button type="submit" class="btn btn-danger change-status">
+                            <i class="fas fa-arrow-left"></i>
+                            Mover a estado anterior
+                        </button>
+                        {% endif %}
+                        {% endif %}
+                        <input type="hidden" name="anterior" value="{{ us.pk }}">
+                    </form>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% if us.estado_fase != 'Control de Calidad' and us.estado != 0 %}
+                        <button type="submit" class="btn btn-success change-status">
+                            Mover a estado siguiente
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                        {% endif %}
+                        <input type="hidden" name="siguiente" value="{{ us.pk }}">
+                    </form>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -270,9 +503,9 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header" style="display: inline; text-align: center">
-                <h4>Mover {{ us.nombre }}
+                <h5>Actividad mover {{ us.nombre }}
                 <button type="button" style="display: inline" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                </h4>
+                </h5>
             </div>
             <div class="modal-body">
                 <label for="id_fase_{{ us.pk }}">Fase: </label>
@@ -280,11 +513,41 @@
                     {% for fase in fases %}
                         <option value="{{ fase.pk }}">{{ fase.nombre }}</option>
                     {% endfor %}
-                </select>
-                <input type="hidden" name="us" value="{{ us.pk }}">
+                </select><br>
+                {{ actividad_form.as_p }}
+                <input type="hidden" name="sprint" value="{{ sprint_actual.pk }}">
+                <input type='hidden' name='us' value="{{ us.pk }}">
+                <input type='hidden' name='usuario' value="{{ user.pk }}">
+                <input type='hidden' name='estado_fase' value="Control de Calidad">
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-success">Mover</button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+
+<div id="Finalizar_{{ us.pk }}" class="modal fade">
+    <form method="POST">
+    {% csrf_token %}
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="display: inline; text-align: center">
+                <h5>Actividad finalizar {{ us.nombre }}
+                <button type="button" style="display: inline" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                </h5>
+            </div>
+            <div class="modal-body">
+                {{ actividad_form.as_p }}
+                <input type="hidden" name="sprint" value="{{ sprint_actual.pk }}">
+                <input type='hidden' name='us' value="{{ us.pk }}">
+                <input type='hidden' name='usuario' value="{{ user.pk }}">
+                <input type='hidden' name='estado_fase' value="Control de Calidad">
+                <input type="hidden" name="finalizar" value="{{ us.pk }}">
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Finalizar</button>
             </div>
         </div>
     </div>
@@ -299,6 +562,7 @@
     <hr>
     {{ nota_form.as_p }}
     <input type="hidden" name="tipo-adjunto" value="nota">
+    <input type="hidden" name="sprint" value={{ sprint_actual.pk }}>
 </div>
 <!-- fin formulario de nota -->
 
@@ -307,6 +571,7 @@
     <hr>
     {{ archivo_form.as_p }}
     <input type="hidden" name="tipo-adjunto" value="archivo">
+    <input type="hidden" name="sprint" value={{ sprint_actual.pk }}>
 </div>
 <!-- fin formulario de archivo -->
 
@@ -315,18 +580,74 @@
     <hr>
     {{ actividad_form.as_p }}
     <input type="hidden" name="tipo-adjunto" value="actividad">
+    <input type="hidden" name="sprint" value={{ sprint_actual.pk }}>
 </div>
 <!-- fin formulario de actividad -->
 
+<!-- sin actividad al pasar al done -->
+<div id="SinActividad" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">User story sin actividades</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                Debe cargar al menos una actividad en la fase actual para dar por terminado el user story en esta fase
+            </div>
+        </div>
+    </div>
+</div>
+<!--fin sin actividad al pasar al done -->
+
+<!-- actividad invalida-->
+<div id="SinActividad" class="modal fade">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Formulario de Actividad invalido</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                No se pudo guardar la actividad, favor complete todos los campos del formulario con
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--fin actividad invalida -->
+
+<input type="hidden" value="{{ s_fase.pk }}" id="fase_actual">
 <script type="text/javascript">
     $(document).ready(function($) {
+        {% if s_fase %}
+            var pk_fase = document.getElementById('fase_actual').value;
+            var tablero_id = '#tablero_'.concat(pk_fase);
+            var tablero =  $(tablero_id).html();
+            var ex_select = document.getElementsByClassName("fases-btn");
+            for (var i=0; i< ex_select.length; i++){
+                 ex_select[i].setAttribute('class','btn btn-dark fases-btn btn-sm');
+            }
+            document.getElementById('btn_'+pk_fase).className = "btn btn-light fases-btn btn-sm";
+            document.getElementById('tablero_actual').innerHTML = tablero;
+        {% endif %}
+        {% if error %}
+            {% if error == 'sinactividad' %}
+                $("#SinActividad").modal("show");
+            {% elif error == 'act_inv' %}
+                $("#ActividadInvalida").modal("show");
+            {% endif %}
+        {% endif %}
+        {% if modal %}
+            $("#UserStory_{{ modal }}").modal("show");
+        {% endif %}
         $('#finalizados-btn').click(function() {
             var finalizados =  $('#finalizados').html();
             var ex_select = document.getElementsByClassName("fases-btn");
             for (var i=0; i< ex_select.length; i++){
-                 ex_select[i].setAttribute('class','btn btn-dark fases-btn');
+                 ex_select[i].setAttribute('class','btn btn-dark fases-btn btn-sm');
             }
-            document.getElementById(this.id).className = "btn btn-light fases-btn";
+            document.getElementById(this.id).className = "btn btn-light fases-btn btn-sm";
             document.getElementById('tablero_actual').innerHTML = finalizados;
         });
 
@@ -334,9 +655,9 @@
             var cc =  $('#control-calidad').html();
             var ex_select = document.getElementsByClassName("fases-btn");
             for (var i=0; i< ex_select.length; i++){
-                 ex_select[i].setAttribute('class','btn btn-dark fases-btn');
+                 ex_select[i].setAttribute('class','btn btn-dark fases-btn btn-sm');
             }
-            document.getElementById(this.id).className = "btn btn-light fases-btn";
+            document.getElementById(this.id).className = "btn btn-light fases-btn btn-sm";
             document.getElementById('tablero_actual').innerHTML = cc;
         });
 
@@ -345,9 +666,9 @@
             var tablero =  $(tablero_id).html();
             var ex_select = document.getElementsByClassName("fases-btn");
             for (var i=0; i< ex_select.length; i++){
-                 ex_select[i].setAttribute('class','btn btn-dark fases-btn');
+                 ex_select[i].setAttribute('class','btn btn-dark fases-btn btn-sm');
             }
-            document.getElementById(this.id).className = "btn btn-light fases-btn";
+            document.getElementById(this.id).className = "btn btn-light fases-btn btn-sm";
             document.getElementById('tablero_actual').innerHTML = tablero;
         });
 
