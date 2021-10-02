@@ -1,6 +1,5 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.http import HttpResponse
 from is2_014 import settings
 
 
@@ -63,50 +62,12 @@ class UserStory(models.Model):
     sprint = models.ForeignKey('sprint.Sprint', on_delete=models.PROTECT, null=True, blank=True)
 
     def __str__(self):
-        """
-        Retorna el nombre del User Story actual
-        :return: nombre del objeto actual
-        """
-
         return self.nombre
 
     def set_priorizacion(self):
         return (2*self.valor_negocio + self.prioridad + 2*self.valor_tecnico)/4
 
     priorizacion = property(set_priorizacion)
-
-
-    def has_team_member(self):
-        """
-        retorna falso si el user story no esta asignado a ningun team member, en caso contrario
-        retorna verdadero
-        :return: True o False
-        """
-        if not self.team_member:
-            return False
-        return True
-
-    def has_duracion_estimada(self):
-        """
-        retorna falso si el user story no tiene una duracion estimada o su duracion
-         estimada es 0, en caso contrario retorna verdadero
-        :return: True o False
-        """
-        if not self.duracion_estimada or self.duracion_estimada == 0:
-            return False
-        return True
-
-    def validate_asignacion(self):
-        """
-        retorna falso si el user story no tiene un team member asignado o si no se le ha
-        asignado una duracion estimada o su duracion estimada es 0
-        :return: True o Excepcion
-        """
-        if not self.has_team_member():
-            raise ValidationError('Debe asignar un team member al user story ' + str(self.nombre))
-        if not self.has_duracion_estimada():
-            raise ValidationError('Se deben estimar las horas de duración del user story ' + str(self.nombre))
-        return True
 
 
 class Nota(models.Model):
@@ -120,10 +81,6 @@ class Nota(models.Model):
     fecha = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        """
-            Retorna el contenido de la nota actual
-            :return: campo nota del objeto actual
-        """
         return self.nota
 
 
@@ -134,45 +91,35 @@ class Archivo(models.Model):
     """Campos:"""
     titulo = models.CharField(max_length=255, blank=True)
     archivo = models.FileField(upload_to='')
-    binario = models.BinaryField(null=True, blank=True)
     fecha = models.DateTimeField(auto_now_add=True)
     us = models.ForeignKey('UserStory', on_delete=models.CASCADE, null=True)
     usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT, null=True)
-    sprint = models.ForeignKey('sprint.Sprint', on_delete=models.CASCADE)
-
 
     def __str__(self):
         return self.titulo
 
-    def set_data(self, data):
-        self.binario = pickle.dumps(data)
-
-    def get_data(self):
-        return pickle.loads(self.binario)
-
 
 class Actividad(models.Model):
     """
-        Clase para agregar una actividad a un User Story
+    Clase para agregar una actividad a un User Story
     """
-    """Campos:"""
     nombre = models.CharField(max_length=20)
     descripcion = models.TextField()
-    duracion = models.TimeField()
-    usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT, null=True)
+    duracion = models.IntegerField()
+    usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT)
     us = models.ForeignKey('UserStory', on_delete=models.CASCADE, null=True)
-    fecha = models.DateTimeField(auto_now_add=True)
+    fecha = models.DateTimeField()
     sprint = models.ForeignKey('sprint.Sprint', on_delete=models.CASCADE)
-    fase_us = models.ForeignKey('flujo.Fase', on_delete=models.CASCADE, null=True, blank=True)
+    fase_us = models.ForeignKey('flujo.Fase', on_delete=models.CASCADE,null=True,blank=True)
     estado_fase = models.CharField(max_length=30, choices=ESTADOS_EN_FASE, default='To Do')
 
     def __str__(self):
         """
-            Retorna el nombre del objeto actual
-            :return: nombre del objeto actual
+        Retorna el nombre del objeto actual
+        :return: nombre del objeto actual
         """
-
         return self.nombre
+
 class CambioEstado(models.Model):
     descripcion = models.TextField()
     usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT)
@@ -188,3 +135,9 @@ class CambioEstado(models.Model):
         :return: descripcion del objeto actual
         """
         return self.descripcion
+
+class HistorialEstimaciones(models.Model):
+    duracion_estimada = models.PositiveIntegerField()
+    sprint = models.ForeignKey('sprint.Sprint', on_delete=models.CASCADE)
+    us = models.ForeignKey('UserStory', on_delete=models.CASCADE, null=True)
+

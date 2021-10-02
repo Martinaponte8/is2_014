@@ -159,29 +159,59 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
     template_name = 'flujo/tablero.html'
 
     def get(self,request,*args,**kwargs):
+        """
+        Metodo que es ejecutado al darse una consulta GET
+        :param request: consulta recibida
+        :param args: argumentos adicionales
+        :param kwargs: diccionario de datos adicionales
+        :return: la respuesta a la consulta GET
+        """
         self.object = None
         usuario = request.user
         permisos = request.user.get_nombres_permisos(proyecto=self.kwargs['pk_proyecto'])
         return self.render_to_response(self.get_context_data(usuario=usuario, permisos=permisos))
 
     def get_context_data(self, **kwargs):
+        """
+        Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+        :param kwargs: Diccionario de datos adicionales para el contexto
+        :return: diccionario de contexto necesario para la correcta visualizacion de los datos
+        """
         context = super(TableroTemplateView, self).get_context_data(**kwargs)
         context['title'] = "Tableros de Proyecto"
         context['project'] = Proyecto.objects.get(pk=self.kwargs['pk_proyecto'])
         context['sprint_actual'] = Sprint.objects.get(pk=self.kwargs['sprint_pk'])
         context['flujo'] = Flujo.objects.get(pk=self.kwargs['flujo_pk'])
         context['fases'] = Fase.objects.filter(flujo=self.kwargs['flujo_pk']).order_by('pk')
-        context['user_stories'] = UserStory.objects.filter(sprint=self.kwargs['sprint_pk'])
+        context['user_stories'] = UserStory.objects.filter(sprint=self.kwargs['sprint_pk'], flujo=context['flujo'].pk)
         context['nota_form'] = NotaForm()
         context['archivo_form'] = ArchivoForm()
         context['actividad_form'] = ActividadForm()
         context['notas'] = {}
         context['archivos'] = {}
+        context['direccion'] = {}
         context['actividades'] = {}
         for us in context['user_stories']:
-            context['notas'][us.pk] = Nota.objects.filter(us=us.pk)
-            context['archivos'][us.pk] = Archivo.objects.filter(us=us.pk)
-            context['actividades'][us.pk] = Actividad.objects.filter(us=us.pk)
+            context['notas'][us.pk] = Nota.objects.filter(us=us.pk).order_by('fecha').reverse()
+            context['archivos'][us.pk] = Archivo.objects.filter(us=us.pk).order_by('fecha').reverse()
+            actividades = Actividad.objects.filter(us=us.pk)
+            cambios = CambioEstado.objects.filter(us=us.pk)
+            context['actividades'][us.pk] = []
+            for a in actividades:
+                a.tipo = 'actividad'
+                context['actividades'][us.pk].append(a)
+            for c in cambios:
+                c.tipo = 'cambio'
+                context['actividades'][us.pk].append(c)
+            context['actividades'][us.pk].sort(key=lambda x: x.fecha, reverse=True)
+            us.horas_sprint = us.get_horas_trabajadas(sprint=context['sprint_actual'])
+            us.horas_total = us.get_horas_trabajadas()
+        context['direccion']['Ejecuciones'] = (1,"/proyectos/ejecuciones/")
+        context['direccion'][str(context['project'].nombre)] = (2,"/proyectos/ejecuciones/"+str(self.kwargs['pk_proyecto'])+"/")
+        link = "/proyectos/ejecuciones/"+str(self.kwargs['pk_proyecto'])+"/"
+        link += "sprint/"+str(self.kwargs['sprint_pk'])+"/tableros/"
+        link += str(self.kwargs['flujo_pk'])
+        context['direccion']['Tablero ' + str(context['flujo'].nombre)] = (3,link)
         return context
 
     def post(self, request, *args, **kwargs):
@@ -191,26 +221,109 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
         US a una fase especifica si no paso el control de calidad o pasa a finalizado si es
         que paso el control de calidad, se toma una y solo una de las acciones mecionadas
         segun la consulta POST recibida
+        :param request: consulta recibida
+        :param args: argumentos adicionales
+        :param kwargs: diccionario de datos adicionales
+        :return: la respuesta a la consulta POST
         """
+        usuario = request.user
+        permisos = request.user.get_nombres_permisos(proyecto=self.kwargs['pk_proyecto'])
         if 'tipo-adjunto' in request.POST.keys():
             if request.POST['tipo-adjunto'] == 'nota':
                 adjunto = GuardarNotaForm(request.POST)
             if request.POST['tipo-adjunto'] == 'archivo':
                 adjunto = GuardarArchivoForm(request.POST, request.FILES)
+                # Modificaciones para guardar el archivo binario
+                file = adjunto.save()
+                if not request.FILES.__len__() == 0:
+                    file.set_data(request.FILES['archivo'])
             if request.POST['tipo-adjunto'] == 'actividad':
                 adjunto = GuardarActividadForm(request.POST)
             if adjunto.is_valid():
                 adjunto.save()
             else:
-                self.render_to_response(self.get_context_data(formulario=adjunto))
+                self.render_to_response(self.get_context_data(permisos=permisos,formulario=adjunto))
+            us = UserStory.objects.get(pk=request.POST['us'])
+            return render(request,'flujo/tablero.html',self.get_context_data(s_fase=us.fase,usuario=usuario,
+                                                                             modal=us.pk, permisos=permisos))
         elif 'siguiente' in request.POST.keys():
             us = UserStory.objects.get(id=request.POST['siguiente'])
             if us.estado_fase == 'To Do':
                 us.estado_fase = 'Doing'
                 us.save()
+                # Notificación al SCRUM por correo
+                for member in TeamMember.objects.filter(proyecto=us.proyecto):
+                    if member.rol.nombre == 'Scrum Master':
+                        scrum_mail = member.usuario.email
+                        scrum_nombre = member.usuario.first_name
+                        break
+                body = render_to_string(
+                    '../templates/notificaciones/cambio_estado.html', {
+                        # Poner los parámetros requeridos del correo
+                        'nombre_scrum': scrum_nombre,
+                        'nombre_us': us.nombre,
+                        'proyecto': us.proyecto.nombre,
+                        'sprint': us.sprint.nombre,
+                        'estado_actual': 'To Do',
+                        'estado_nuevo': us.estado_fase,
+                        'team_member': us.team_member,
+                        'fase': us.fase.nombre,
+                        'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                    },
+                )
+                email_msg = EmailMessage(
+                    subject='Cambio de Estado US',
+                    body=body,
+                    from_email=['PoliProyectos-noreply'],
+                    to=[scrum_mail],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
+
             elif us.estado_fase == 'Doing':
+                ultima_actividad = list(Actividad.objects.filter(us=us.pk,sprint=us.sprint,
+                                                                 fase_us=us.fase).order_by('fecha').reverse())
+                ultimo_cambio = list(CambioEstado.objects.filter(us=us.pk,sprint=us.sprint,
+                                                                 fase=us.fase,estado_fase='To Do').order_by('fecha').reverse())
+                if ultima_actividad and ultimo_cambio:
+                    ultima_actividad = ultima_actividad[0]
+                    ultimo_cambio = ultimo_cambio[0]
+                    if ultima_actividad.fecha < ultimo_cambio.fecha:
+                        return self.render_to_response(self.get_context_data(s_fase=us.fase,usuario=usuario,
+                                                                             permisos=permisos, error='sinactividad'))
+                elif not ultima_actividad:
+                    return self.render_to_response(self.get_context_data(s_fase=us.fase, usuario=usuario,
+                                                                         permisos=permisos, error='sinactividad'))
                 us.estado_fase = "Done"
                 us.save()
+                # Notificación al SCRUM por correo
+                for member in TeamMember.objects.filter(proyecto=us.proyecto):
+                    if member.rol.nombre == 'Scrum Master':
+                        scrum_mail = member.usuario.email
+                        scrum_nombre = member.usuario.first_name
+                        break
+                body = render_to_string(
+                    '../templates/notificaciones/cambio_estado.html', {
+                        # Poner los parámetros requeridos del correo
+                        'nombre_scrum': scrum_nombre,
+                        'nombre_us': us.nombre,
+                        'proyecto': us.proyecto.nombre,
+                        'sprint': us.sprint.nombre,
+                        'fase': us.fase.nombre,
+                        'estado_actual': 'Doing',
+                        'estado_nuevo': us.estado_fase,
+                        'team_member': us.team_member,
+                        'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                    },
+                )
+                email_msg = EmailMessage(
+                    subject='Cambio de Estado US',
+                    body=body,
+                    from_email=['PoliProyectos-noreply'],
+                    to=[scrum_mail],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
             elif us.estado_fase == 'Done':
                 fases = Fase.objects.filter(flujo=self.kwargs['flujo_pk']).order_by('pk')
                 idx_fase = None
@@ -224,18 +337,145 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                     us.fase = fases[idx_fase + 1]
                     us.estado_fase = 'To Do'
                     us.save()
+                    # Notificación al SCRUM por correo
+                    for member in TeamMember.objects.filter(proyecto=us.proyecto):
+                        if member.rol.nombre == 'Scrum Master':
+                            scrum_mail = member.usuario.email
+                            scrum_nombre = member.usuario.first_name
+                            break
+                    body = render_to_string(
+                        '../templates/notificaciones/cambio_fase.html', {
+                            # Poner los parámetros requeridos del correo
+                            'nombre_scrum': scrum_nombre,
+                            'nombre_us': us.nombre,
+                            'proyecto': us.proyecto.nombre,
+                            'sprint': us.sprint.nombre,
+                            'team_member': us.team_member,
+                            'fase_actual': fases[idx_fase].nombre,
+                            'fase_nueva': us.fase.nombre,
+                            'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                        },
+                    )
+                    email_msg = EmailMessage(
+                        subject='Cambio de Fase US',
+                        body=body,
+                        from_email=['PoliProyectos-noreply'],
+                        to=[scrum_mail],
+                    )
+                    email_msg.content_subtype = 'html'
+                    email_msg.send()
                 else: #es la ultima fase, pasa a control de calidad
                     us.fase = None
                     us.estado_fase = 'Control de Calidad'
+                    # Notificación al SCRUM por correo
+                    for member in TeamMember.objects.filter(proyecto=us.proyecto):
+                        if member.rol.nombre == 'Scrum Master':
+                            scrum_mail = member.usuario.email
+                            scrum_nombre = member.usuario.first_name
+                            break
+                    body = render_to_string(
+                        '../templates/notificaciones/control_de_calidad.html', {
+                            # Poner los parámetros requeridos del correo
+                            'nombre_scrum': scrum_nombre,
+                            'nombre_us': us.nombre,
+                            'proyecto': us.proyecto.nombre,
+                            'sprint': us.sprint.nombre,
+                            'team_member': us.team_member,
+                            'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                        },
+                    )
+                    email_msg = EmailMessage(
+                        subject='US para Control de Calidad',
+                        body=body,
+                        from_email=['PoliProyectos-noreply'],
+                        to=[scrum_mail],
+                    )
+                    email_msg.content_subtype = 'html'
+                    email_msg.send()
                 us.save()
+            if us.fase:
+                ce = CambioEstado()
+                ce.us = us
+                ce.fase = us.fase
+                ce.sprint = us.sprint
+                ce.usuario = request.user
+                ce.estado_fase = us.estado_fase
+                ce.descripcion = "Cambio de estado a " + us.estado_fase + " de la fase " + us.fase.nombre
+                ce.save()
+            elif us.estado_fase == "Control de Calidad":
+                ce = CambioEstado()
+                ce.us = us
+                ce.fase = us.fase
+                ce.sprint = us.sprint
+                ce.usuario = request.user
+                ce.estado_fase = us.estado_fase
+                ce.descripcion = "El US pasa a control de calidad"
+                ce.save()
+            return render(request,'flujo/tablero.html',self.get_context_data(s_fase=us.fase,usuario=usuario, permisos=permisos))
         if 'anterior' in request.POST.keys():
             us = UserStory.objects.get(id=request.POST['anterior'])
             if us.estado_fase == 'Done':
                 us.estado_fase = 'Doing'
                 us.save()
+                # Notificación al SCRUM por correo
+                for member in TeamMember.objects.filter(proyecto=us.proyecto):
+                    if member.rol.nombre == 'Scrum Master':
+                        scrum_mail = member.usuario.email
+                        scrum_nombre = member.usuario.first_name
+                        break
+                body = render_to_string(
+                    '../templates/notificaciones/cambio_estado.html', {
+                        # Poner los parámetros requeridos del correo
+                        'nombre_scrum': scrum_nombre,
+                        'nombre_us': us.nombre,
+                        'proyecto': us.proyecto.nombre,
+                        'sprint': us.sprint.nombre,
+                        'estado_actual': 'Done',
+                        'estado_nuevo': us.estado_fase,
+                        'team_member': us.team_member,
+                        'fase': us.fase.nombre,
+                        'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                    },
+                )
+                email_msg = EmailMessage(
+                    subject='Cambio de Estado US',
+                    body=body,
+                    from_email=['PoliProyectos-noreply'],
+                    to=[scrum_mail],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
             elif us.estado_fase == 'Doing':
                 us.estado_fase = "To Do"
                 us.save()
+                # Notificación al SCRUM por correo
+                for member in TeamMember.objects.filter(proyecto=us.proyecto):
+                    if member.rol.nombre == 'Scrum Master':
+                        scrum_mail = member.usuario.email
+                        scrum_nombre = member.usuario.first_name
+                        break
+                body = render_to_string(
+                    '../templates/notificaciones/cambio_estado.html', {
+                        # Poner los parámetros requeridos del correo
+                        'nombre_scrum': scrum_nombre,
+                        'nombre_us': us.nombre,
+                        'proyecto': us.proyecto.nombre,
+                        'sprint': us.sprint.nombre,
+                        'estado_actual': 'Doing',
+                        'estado_nuevo': us.estado_fase,
+                        'team_member': us.team_member,
+                        'fase': us.fase.nombre,
+                        'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                    },
+                )
+                email_msg = EmailMessage(
+                    subject='Cambio de Estado US',
+                    body=body,
+                    from_email=['PoliProyectos-noreply'],
+                    to=[scrum_mail],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
             elif us.estado_fase == 'To Do':
                 fases = Fase.objects.filter(flujo=self.kwargs['flujo_pk']).order_by('pk')
                 idx_fase = None
@@ -248,34 +488,168 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                 us.fase = fases[idx_fase - 1]
                 us.estado_fase = 'To Do'
                 us.save()
+                # Notificación al SCRUM por correo
+                for member in TeamMember.objects.filter(proyecto=us.proyecto):
+                    if member.rol.nombre == 'Scrum Master':
+                        scrum_mail = member.usuario.email
+                        scrum_nombre = member.usuario.first_name
+                        break
+                body = render_to_string(
+                    '../templates/notificaciones/cambio_fase.html', {
+                        # Poner los parámetros requeridos del correo
+                        'nombre_scrum': scrum_nombre,
+                        'nombre_us': us.nombre,
+                        'proyecto': us.proyecto.nombre,
+                        'sprint': us.sprint.nombre,
+                        'team_member': us.team_member,
+                        'fase_actual': fases[idx_fase].nombre,
+                        'fase_nueva': us.fase.nombre,
+                        'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                    },
+                )
+                email_msg = EmailMessage(
+                    subject='Cambio de Fase US',
+                    body=body,
+                    from_email=['PoliProyectos-noreply'],
+                    to=[scrum_mail],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
+            ce = CambioEstado()
+            ce.us = us
+            ce.fase = us.fase
+            ce.sprint = us.sprint
+            ce.usuario = request.user
+            ce.estado_fase = us.estado_fase
+            ce.descripcion = "Cambio de estado a " + us.estado_fase + " de la fase " + us.fase.nombre
+            ce.save()
+            return render(request, 'flujo/tablero.html',
+                          self.get_context_data(s_fase=us.fase, usuario=usuario, permisos=permisos))
         if 'finalizar' in request.POST.keys():
+            actividad = GuardarActividadForm(request.POST)
+            if actividad.is_valid():
+                actividad.save()
+            else:
+                return self.render_to_response(self.get_context_data(s_fase='Control de Calidad',
+                                                                     permisos=permisos,
+                                                                     error='act_inv'
+                                                                     ))
             us = UserStory.objects.get(id=request.POST['finalizar'])
             us.fase = None
             us.estado_fase = 'Done'
             us.estado = 0
             us.save()
+            ce = CambioEstado()
+            ce.us = us
+            ce.fase = us.fase
+            ce.sprint = us.sprint
+            ce.usuario = request.user
+            ce.estado_fase = us.estado_fase
+            ce.descripcion = "Se finaliza el User Story"
+            ce.save()
+            # Notificación al Desarrollador por correo
+            body = render_to_string(
+                '../templates/notificaciones/control_calidad_aceptado.html', {
+                    # Poner los parámetros requeridos del correo
+                    'nombre_us': us.nombre,
+                    'proyecto': us.proyecto.nombre,
+                    'sprint': us.sprint.nombre,
+                    'team_member': us.team_member.first_name,
+                },
+            )
+            email_msg = EmailMessage(
+                subject='QA: Finalización Aprobada de US',
+                body=body,
+                from_email=['PoliProyectos-noreply'],
+                to=[us.team_member.email],
+            )
+            email_msg.content_subtype = 'html'
+            email_msg.send()
         if 'fase' in request.POST.keys():
+            actividad = GuardarActividadForm(request.POST)
+            if actividad.is_valid():
+                actividad = actividad.save()
+            else:
+                return self.render_to_response(self.get_context_data(s_fase='Control de Calidad',
+                                                                     permisos=permisos,
+                                                                     error='act_inv'
+                                                                     ))
             us = UserStory.objects.get(id=request.POST['us'])
             fase = Fase.objects.get(id=request.POST['fase'])
             us.fase = fase
             us.estado_fase = 'To Do'
             us.save()
+            ce = CambioEstado()
+            ce.us = us
+            ce.fase = us.fase
+            ce.sprint = us.sprint
+            ce.usuario = request.user
+            ce.estado_fase = us.estado_fase
+            ce.descripcion = "Cambio de estado a " + us.estado_fase + " de la fase " + us.fase.nombre
+            ce.save()
+            # Notificación al Desarrollador por correo
+            body = render_to_string(
+                '../templates/notificaciones/control_calidad_rechazado.html', {
+                    # Poner los parámetros requeridos del correo
+                    'nombre_us': us.nombre,
+                    'proyecto': us.proyecto.nombre,
+                    'sprint': us.sprint.nombre,
+                    'team_member': us.team_member.first_name,
+                    'fase_nueva': us.fase.nombre,
+                    'motivo': actividad.descripcion,
+                },
+            )
+            email_msg = EmailMessage(
+                subject='QA: Se necesitan realizar modificaciones a US',
+                body=body,
+                from_email=['PoliProyectos-noreply'],
+                to=[us.team_member.email],
+            )
+            email_msg.content_subtype = 'html'
+            email_msg.send()
         return HttpResponseRedirect('./')
 
 @method_decorator(login_required, name='dispatch')
 class VerFlujoDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):
+    """
+    Vista para ver un flujo, sin opciones de modificación
+    """
     model = Flujo
     template_name = 'flujo/ver_flujo.html'
 
     def get(self,request,*args,**kwargs):
+        """
+        Metodo que es ejecutado al darse una consulta GET
+        :param request: consulta recibida
+        :param args: argumentos adicionales
+        :param kwargs: diccionario de datos adicionales
+        :return: la respuesta a la consulta GET
+        """
         self.object = self.get_object()
         permisos = request.user.get_nombres_permisos(proyecto=self.kwargs['pk_proyecto'])
         return self.render_to_response(self.get_context_data(permisos=permisos))
 
     def get_context_data(self, **kwargs):
+        """
+        Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+        :param kwargs: Diccionario de datos adicionales para el contexto
+        :return: diccionario de contexto necesario para la correcta visualizacion de los datos
+        """
         context = super().get_context_data(**kwargs)
-        context['title'] = "Ver Flujo"
+        context['project'] = Proyecto.objects.get(pk=self.kwargs['pk_proyecto'])
+        context['title'] = "Ver Flujo " + str(self.object.pk)
+        context['direccion'] = {}
+        context['direccion']['Definiciones'] = (1, '/proyectos/definiciones/')
+        context['direccion'][str(context['project'])] = (2, '/proyectos/definiciones/' + str(self.kwargs['pk_proyecto']) + '/')
+        context['direccion']['Flujos'] = (3, '/proyectos/definiciones/' + str(self.kwargs['pk_proyecto']) + '/flujos/')
+        context['direccion']['Ver: ' + self.object.nombre] = (4, '/proyectos/definiciones/' + str(self.kwargs['pk_proyecto']) + '/flujos/ver/' + str(self.object.pk))
+        context['fases'] = Fase.objects.filter(flujo=self.object.pk)
         return context
 
     def get_object(self, queryset=None):
+        """
+        Metodo que retorna el objeto a ser visualizado
+        :param queryset:
+        :return: El proyecto a ser modificado
+        """
         return Flujo.objects.get(pk=self.kwargs['pk'])
