@@ -101,15 +101,43 @@ class Archivo(models.Model):
 
 class Actividad(models.Model):
     """
-        Clase para agregar una actividad a un User Story
+    Clase para agregar una actividad a un User Story
     """
-    """Campos:"""
     nombre = models.CharField(max_length=20)
     descripcion = models.TextField()
-    duracion = models.TimeField()
-    usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT, null=True)
+    duracion = models.IntegerField()
+    usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT)
     us = models.ForeignKey('UserStory', on_delete=models.CASCADE, null=True)
-    fecha = models.DateTimeField(auto_now_add=True)
+    fecha = models.DateTimeField()
+    sprint = models.ForeignKey('sprint.Sprint', on_delete=models.CASCADE)
+    fase_us = models.ForeignKey('flujo.Fase', on_delete=models.CASCADE,null=True,blank=True)
+    estado_fase = models.CharField(max_length=30, choices=ESTADOS_EN_FASE, default='To Do')
 
     def __str__(self):
+        """
+        Retorna el nombre del objeto actual
+        :return: nombre del objeto actual
+        """
         return self.nombre
+
+class CambioEstado(models.Model):
+    descripcion = models.TextField()
+    usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT)
+    us = models.ForeignKey('UserStory', on_delete=models.CASCADE, null=True)
+    fecha = models.DateTimeField(auto_now_add=True)
+    sprint = models.ForeignKey('sprint.Sprint', on_delete=models.CASCADE)
+    fase = models.ForeignKey('flujo.Fase', on_delete=models.CASCADE,null=True)
+    estado_fase = models.CharField(max_length=30, choices=ESTADOS_EN_FASE, null=True, blank=True)
+
+    def __str__(self):
+        """
+        Retorna la descripcion del objeto actual
+        :return: descripcion del objeto actual
+        """
+        return self.descripcion
+
+class HistorialEstimaciones(models.Model):
+    duracion_estimada = models.PositiveIntegerField()
+    sprint = models.ForeignKey('sprint.Sprint', on_delete=models.CASCADE)
+    us = models.ForeignKey('UserStory', on_delete=models.CASCADE, null=True)
+
