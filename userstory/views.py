@@ -27,6 +27,9 @@ from reportlab.platypus import (
         Paragraph,
         Image)
 
+"""
+Funcion eliminar UserStory
+"""
 def eliminar4(request,pk_proyecto,us_id):
     payload = {'project.pk': pk_proyecto, 'us_id': us_id}
     Us = UserStory.objects.get(id=payload['us_id'])
