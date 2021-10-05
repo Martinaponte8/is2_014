@@ -27,6 +27,11 @@ from reportlab.platypus import (
         Paragraph,
         Image)
 
+def eliminar4(request,pk_proyecto,us_id):
+    payload = {'project.pk': pk_proyecto, 'us_id': us_id}
+    Us = UserStory.objects.get(id=payload['us_id'])
+    Us.delete()
+    return redirect("index")
 
 @method_decorator(login_required, name='dispatch')
 class UserStoryListView(LoginRequiredMixin, ListView):
