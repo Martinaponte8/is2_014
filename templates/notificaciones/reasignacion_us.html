@@ -1,0 +1,9 @@
+<h3>Buenas {{ team_member }},
+    se le ha asignado los siguientes US en el sprint: "{{ sprint }}" del Proyecto: "{{ proyecto }}":
+</h3>
+<br>
+{% for us in lista_us %}
+    <ul>
+        <li>{{ us }}: {{ us.descripcion }}</li>
+    </ul>
+{% endfor %}
