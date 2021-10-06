@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from proyecto.models import Proyecto
 from django.utils import timezone
 from datetime import timedelta
-from userstory.models import UserStory
+from userstory.models import UserStory, Actividad
 
 """
 Estados posibles del sprint
@@ -153,6 +153,16 @@ class Sprint(models.Model):
         """
         return UserStory.objects.filter(sprint=self.pk)
 
+    def get_horas_trabajadas(self):
+        """
+        metodo de la clase Sprint que retorna el total de horas trabajadas en el sprint
+        :return: total de horas trabajadas en el sprint
+        """
+        actividades = Actividad.objects.filter(sprint=self.pk)
+        horas = 0
+        for actividad in actividades:
+            horas += actividad.duracion
+        return horas
 
 
 class Horas(models.Model):

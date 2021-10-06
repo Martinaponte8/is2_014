@@ -53,6 +53,7 @@ class UserStory(models.Model):
     descripcion = models.TextField(max_length=300)
     fecha_inicio = models.DateField('Fecha de inicio del User Story', null=True, blank=True)
     duracion_estimada = models.TimeField()
+    duracion_restante = models.IntegerField(null=True, blank=True)
     valor_negocio = models.PositiveIntegerField(validators=[rango])
     prioridad = models.PositiveIntegerField(validators=[rango])
     valor_tecnico = models.PositiveIntegerField(validators=[rango])
@@ -69,6 +70,56 @@ class UserStory(models.Model):
 
     priorizacion = property(set_priorizacion)
 
+    def has_team_member(self):
+        """
+        retorna falso si el user story no esta asignado a ningun team member, en caso contrario
+        retorna verdadero
+        :return: True o False
+        """
+        if not self.team_member:
+            return False
+        return True
+
+    def has_duracion_estimada(self):
+        """
+        retorna falso si el user story no tiene una duracion estimada o su duracion
+         estimada es 0, en caso contrario retorna verdadero
+        :return: True o False
+        """
+        if not self.duracion_estimada or self.duracion_estimada == 0:
+            return False
+        return True
+
+    def validate_asignacion(self):
+        """
+        retorna falso si el user story no tiene un team member asignado o si no se le ha
+        asignado una duracion estimada o su duracion estimada es 0
+        :return: True o Excepcion
+        """
+        if not self.has_team_member():
+            raise ValidationError('Debe asignar un team member al user story ' + str(self.nombre))
+        if not self.has_duracion_estimada():
+            raise ValidationError('Se deben estimar las horas de duración del user story ' + str(self.nombre))
+        # if not self.duracion_restante:
+        #     raise ValidationError('Se deben estimar las horas de duración del user story ' + str(self.nombre))
+        # if self.duracion_restante <= 0:
+        #     raise ValidationError('Debe indicar una duracion estimada mayor a 0 al user story ' + str(self.nombre))
+        return True
+
+    def get_horas_trabajadas(self, sprint=None):
+        """
+        metodo de la clase de user stories que retorna la cantidad de horas trabajadas
+        hasta el momento en el user story
+        :return: las horas trabajadas en el user story actual
+        """
+        if not sprint:
+            actividades = Actividad.objects.filter(us=self.pk)
+        else:
+            actividades = Actividad.objects.filter(us=self.pk, sprint=sprint)
+        horas = 0.0
+        for actividad in actividades:
+            horas += actividad.duracion
+        return horas
 
 class Nota(models.Model):
     """

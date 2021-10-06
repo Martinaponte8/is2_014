@@ -14,6 +14,43 @@ from django.db import transaction
 import json
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from django.http import HttpResponseRedirect
+
+from is2_014 import settings
+from .forms import *
+from proyecto.models import *
+from sprint.forms import CreateSprintForm, UpdateSprintForm
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from userstory.models import *
+from flujo.models import *
+from django.forms import inlineformset_factory
+from django.db import transaction
+import json
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from io import BytesIO
+from reportlab.pdfgen import canvas
+import locale
+from django.views.generic import View
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import ParagraphStyle, TA_CENTER, TA_LEFT
+from reportlab.lib.units import inch, mm
+from reportlab.lib import colors
+from reportlab.graphics.shapes import Drawing, Line
+from reportlab.lib.enums import TA_RIGHT
+from reportlab.platypus import (
+        Paragraph,
+        Table,
+        SimpleDocTemplate,
+        Spacer,
+        TableStyle,
+        Paragraph,
+        Image)
+
 
 """
 Vista del Login
@@ -477,7 +514,7 @@ class AsignarUSUpdateView(LoginRequiredMixin, ListView):
                 if asignado_pk:
                     asignado = Usuario.objects.get(pk=asignado_pk)
                 us.team_member = asignado
-                us.duracion_estimada = int(request.POST['duracion_estimada_' + str(us.pk)])
+                us.duracion_restante = int(request.POST['duracion_estimada_' + str(us.pk)])
                 try:
                     us.validate_asignacion()
                     us.save()

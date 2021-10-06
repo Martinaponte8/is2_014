@@ -12,10 +12,10 @@ class CreateProjectForm(forms.ModelForm):
         model = Proyecto
         fields = ('nombre', 'fecha_ini_estimada', 'fecha_fin_estimada', 'descripcion')
 
-    widgets = {
-        'fecha_ini_estimada': forms.DateField(),
-        'fecha_fin_estimada': forms.DateField()
-    }
+    # widgets = {
+    #     'fecha_ini_estimada': forms.DateField(),
+    #     'fecha_fin_estimada': forms.DateField()
+    # }
 
 
 class UpdateProjectForm(forms.ModelForm):
@@ -26,10 +26,10 @@ class UpdateProjectForm(forms.ModelForm):
         model = Proyecto
         fields = ('nombre', 'fecha_ini_estimada', 'fecha_fin_estimada', 'descripcion')
 
-    widgets = {
-        'fecha_ini_estimada': forms.DateField(),
-        'fecha_fin_estimada': forms.DateField()
-    }
+    # widgets = {
+    #     'fecha_ini_estimada': forms.DateField(),
+    #     'fecha_fin_estimada': forms.DateField()
+    # }
 
 
 class TeamMemberForm(forms.ModelForm):

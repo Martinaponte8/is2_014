@@ -1,3 +1,4 @@
+from django.shortcuts import redirect
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from .models import UserStory
 from userstory.forms import CreateUserStoryForm, UpdateUserStoryForm
