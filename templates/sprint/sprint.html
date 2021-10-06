@@ -1,4 +1,4 @@
-{% if 'Crear Sprints' in permisos and not object.nombre or 'Modificar Sprints' in permisos and object.nombre %}
+
 {%include 'base.html'%}
 <html>
 <body>
@@ -328,10 +328,3 @@
 </script>
 </body>
 </html>
-{% else %}
-    {% if object.nombre %}
-        Permiso denegado (Modificar Sprint)
-    {% else %}
-        Permiso denegado (Crear Sprint)
-    {% endif %}
-{% endif %}

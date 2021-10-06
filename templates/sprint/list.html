@@ -1,4 +1,4 @@
-{% if 'Ver Sprint' in permisos %}
+<!--{% if 'Ver Sprint' in permisos %}-->
 {%include 'base.html'%}
 <div class="container">
     <div class="head">
@@ -30,7 +30,7 @@
                         <td width="10%">{{ sprint.pk }}</td>
                         <td width="45%">{{ sprint.nombre }}</td>
                         <td width="34">{{ sprint.estado }}</td>
-                        <td id="acciones" width="8%">
+                        <td id="acciones" width="8%">-
                             <a href="{% url 'ver_sprint' project.pk sprint.pk %}"><i class="fas fa-eye"></i></a>
                             <a href="{% url 'update_sprint' project.pk sprint.pk %}"><i class="fas fa-edit"></i></a>
                         </td>
