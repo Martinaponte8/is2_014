@@ -1,3 +1,5 @@
+from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.views.generic import ListView, CreateView, UpdateView, TemplateView, DetailView
 from .forms import *
 from django.http import HttpResponseRedirect
@@ -10,6 +12,7 @@ from proyecto.models import *
 from sprint.models import *
 from userstory.models import *
 from userstory.forms import *
+from django.core.mail import EmailMessage
 
 
 @method_decorator(login_required, name='dispatch')
@@ -271,14 +274,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                     },
                 )
-                email_msg = EmailMessage(
-                    subject='Cambio de Estado US',
-                    body=body,
-                    from_email=['PoliProyectos-noreply'],
-                    to=[scrum_mail],
-                )
-                email_msg.content_subtype = 'html'
-                email_msg.send()
+                # email_msg = EmailMessage(
+                #     subject='Cambio de Estado US',
+                #     body=body,
+                #     from_email=['PoliProyectos-noreply'],
+                #     to=[scrum_mail],
+                # )
+                # email_msg.content_subtype = 'html'
+                # email_msg.send()
 
             elif us.estado_fase == 'Doing':
                 ultima_actividad = list(Actividad.objects.filter(us=us.pk,sprint=us.sprint,
@@ -316,14 +319,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                     },
                 )
-                email_msg = EmailMessage(
-                    subject='Cambio de Estado US',
-                    body=body,
-                    from_email=['PoliProyectos-noreply'],
-                    to=[scrum_mail],
-                )
-                email_msg.content_subtype = 'html'
-                email_msg.send()
+                # email_msg = EmailMessage(
+                #     subject='Cambio de Estado US',
+                #     body=body,
+                #     from_email=['PoliProyectos-noreply'],
+                #     to=[scrum_mail],
+                # )
+                # email_msg.content_subtype = 'html'
+                # email_msg.send()
             elif us.estado_fase == 'Done':
                 fases = Fase.objects.filter(flujo=self.kwargs['flujo_pk']).order_by('pk')
                 idx_fase = None
@@ -356,14 +359,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                             'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                         },
                     )
-                    email_msg = EmailMessage(
-                        subject='Cambio de Fase US',
-                        body=body,
-                        from_email=['PoliProyectos-noreply'],
-                        to=[scrum_mail],
-                    )
-                    email_msg.content_subtype = 'html'
-                    email_msg.send()
+                    # email_msg = EmailMessage(
+                    #     subject='Cambio de Fase US',
+                    #     body=body,
+                    #     from_email=['PoliProyectos-noreply'],
+                    #     to=[scrum_mail],
+                    # )
+                    # email_msg.content_subtype = 'html'
+                    # email_msg.send()
                 else: #es la ultima fase, pasa a control de calidad
                     us.fase = None
                     us.estado_fase = 'Control de Calidad'
@@ -384,14 +387,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                             'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                         },
                     )
-                    email_msg = EmailMessage(
-                        subject='US para Control de Calidad',
-                        body=body,
-                        from_email=['PoliProyectos-noreply'],
-                        to=[scrum_mail],
-                    )
-                    email_msg.content_subtype = 'html'
-                    email_msg.send()
+                #     email_msg = EmailMessage(
+                #         subject='US para Control de Calidad',
+                #         body=body,
+                #         from_email=['PoliProyectos-noreply'],
+                #         to=[scrum_mail],
+                #     )
+                #     email_msg.content_subtype = 'html'
+                #     email_msg.send()
                 us.save()
             if us.fase:
                 ce = CambioEstado()
@@ -437,14 +440,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                     },
                 )
-                email_msg = EmailMessage(
-                    subject='Cambio de Estado US',
-                    body=body,
-                    from_email=['PoliProyectos-noreply'],
-                    to=[scrum_mail],
-                )
-                email_msg.content_subtype = 'html'
-                email_msg.send()
+                # email_msg = EmailMessage(
+                #     subject='Cambio de Estado US',
+                #     body=body,
+                #     from_email=['PoliProyectos-noreply'],
+                #     to=[scrum_mail],
+                # )
+                # email_msg.content_subtype = 'html'
+                # email_msg.send()
             elif us.estado_fase == 'Doing':
                 us.estado_fase = "To Do"
                 us.save()
@@ -468,14 +471,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                     },
                 )
-                email_msg = EmailMessage(
-                    subject='Cambio de Estado US',
-                    body=body,
-                    from_email=['PoliProyectos-noreply'],
-                    to=[scrum_mail],
-                )
-                email_msg.content_subtype = 'html'
-                email_msg.send()
+                # email_msg = EmailMessage(
+                #     subject='Cambio de Estado US',
+                #     body=body,
+                #     from_email=['PoliProyectos-noreply'],
+                #     to=[scrum_mail],
+                # )
+                # email_msg.content_subtype = 'html'
+                # email_msg.send()
             elif us.estado_fase == 'To Do':
                 fases = Fase.objects.filter(flujo=self.kwargs['flujo_pk']).order_by('pk')
                 idx_fase = None
@@ -507,14 +510,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                     },
                 )
-                email_msg = EmailMessage(
-                    subject='Cambio de Fase US',
-                    body=body,
-                    from_email=['PoliProyectos-noreply'],
-                    to=[scrum_mail],
-                )
-                email_msg.content_subtype = 'html'
-                email_msg.send()
+                # email_msg = EmailMessage(
+                #     subject='Cambio de Fase US',
+                #     body=body,
+                #     from_email=['PoliProyectos-noreply'],
+                #     to=[scrum_mail],
+                # )
+                # email_msg.content_subtype = 'html'
+                # email_msg.send()
             ce = CambioEstado()
             ce.us = us
             ce.fase = us.fase
@@ -557,14 +560,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                     'team_member': us.team_member.first_name,
                 },
             )
-            email_msg = EmailMessage(
-                subject='QA: Finalización Aprobada de US',
-                body=body,
-                from_email=['PoliProyectos-noreply'],
-                to=[us.team_member.email],
-            )
-            email_msg.content_subtype = 'html'
-            email_msg.send()
+            # email_msg = EmailMessage(
+            #     subject='QA: Finalización Aprobada de US',
+            #     body=body,
+            #     from_email=['PoliProyectos-noreply'],
+            #     to=[us.team_member.email],
+            # )
+            # email_msg.content_subtype = 'html'
+            # email_msg.send()
         if 'fase' in request.POST.keys():
             actividad = GuardarActividadForm(request.POST)
             if actividad.is_valid():
@@ -599,14 +602,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                     'motivo': actividad.descripcion,
                 },
             )
-            email_msg = EmailMessage(
-                subject='QA: Se necesitan realizar modificaciones a US',
-                body=body,
-                from_email=['PoliProyectos-noreply'],
-                to=[us.team_member.email],
-            )
-            email_msg.content_subtype = 'html'
-            email_msg.send()
+            # email_msg = EmailMessage(
+            #     subject='QA: Se necesitan realizar modificaciones a US',
+            #     body=body,
+            #     from_email=['PoliProyectos-noreply'],
+            #     to=[us.team_member.email],
+            # )
+            # email_msg.content_subtype = 'html'
+            # email_msg.send()
         return HttpResponseRedirect('./')
 
 @method_decorator(login_required, name='dispatch')

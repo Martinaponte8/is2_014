@@ -109,7 +109,13 @@ class GuardarActividadForm(forms.ModelForm):
                   'descripcion',
                   'duracion',
                   'us',
-                  'usuario',)
-                  # 'sprint',
-                  # 'fase',
-                  # 'estado_fase'
+                  'usuario',
+                  'sprint',
+                  'estado_fase'
+                  )
+
+
+        # 'sprint',
+        # 'fase',
+        # 'estado_fase'
+

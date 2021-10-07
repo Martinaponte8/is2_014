@@ -23,7 +23,7 @@ from django.conf.urls import url
 
 
 # configuramos las rutas y vistas
-
+from userstory.views import ver_archivo
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,4 +37,5 @@ urlpatterns = [
     url(r'^proyecto/', include('proyecto.urls')),
     url(r'^proyectos/', include('proyecto.urls')),
     url(r'^usuarios/', include('usuarios.urls')),
+    path(route='media/<int:archivo_id>/', view=ver_archivo, name='ver_archivo')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
