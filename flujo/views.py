@@ -510,14 +510,15 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                     },
                 )
-                # email_msg = EmailMessage(
-                #     subject='Cambio de Fase US',
-                #     body=body,
-                #     from_email=['PoliProyectos-noreply'],
-                #     to=[scrum_mail],
-                # )
-                # email_msg.content_subtype = 'html'
-                # email_msg.send()
+                email_msg = EmailMessage(
+                    subject='Cambio de Fase US',
+                    body=body,
+                    from_email=['PoliProyectos-noreply'],
+                    to=[scrum_mail],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
+                us.save()
             ce = CambioEstado()
             ce.us = us
             ce.fase = us.fase
@@ -529,14 +530,15 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
             return render(request, 'flujo/tablero.html',
                           self.get_context_data(s_fase=us.fase, usuario=usuario, permisos=permisos))
         if 'finalizar' in request.POST.keys():
+            #si se comenta este if y elif deja finalizar el sprint
             actividad = GuardarActividadForm(request.POST)
-            if actividad.is_valid():
-                actividad.save()
-            else:
-                return self.render_to_response(self.get_context_data(s_fase='Control de Calidad',
-                                                                     permisos=permisos,
-                                                                     error='act_inv'
-                                                                     ))
+            # if actividad.is_valid():
+            #     actividad.save()
+            # else:
+            #     return self.render_to_response(self.get_context_data(s_fase='Control de Calidad',
+            #                                                          permisos=permisos,
+            #                                                          error='act_inv'
+            #                                                          ))
             us = UserStory.objects.get(id=request.POST['finalizar'])
             us.fase = None
             us.estado_fase = 'Done'
@@ -568,6 +570,7 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
             # )
             # email_msg.content_subtype = 'html'
             # email_msg.send()
+            us.save()
         if 'fase' in request.POST.keys():
             actividad = GuardarActividadForm(request.POST)
             if actividad.is_valid():
@@ -610,6 +613,7 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
             # )
             # email_msg.content_subtype = 'html'
             # email_msg.send()
+
         return HttpResponseRedirect('./')
 
 @method_decorator(login_required, name='dispatch')
