@@ -288,15 +288,15 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                                                                  fase_us=us.fase).order_by('fecha').reverse())
                 ultimo_cambio = list(CambioEstado.objects.filter(us=us.pk,sprint=us.sprint,
                                                                  fase=us.fase,estado_fase='To Do').order_by('fecha').reverse())
-                if ultima_actividad and ultimo_cambio:
-                    ultima_actividad = ultima_actividad[0]
-                    ultimo_cambio = ultimo_cambio[0]
-                    if ultima_actividad.fecha < ultimo_cambio.fecha:
-                        return self.render_to_response(self.get_context_data(s_fase=us.fase,usuario=usuario,
-                                                                             permisos=permisos, error='sinactividad'))
-                elif not ultima_actividad:
-                    return self.render_to_response(self.get_context_data(s_fase=us.fase, usuario=usuario,
-                                                                         permisos=permisos, error='sinactividad'))
+                # if ultima_actividad and ultimo_cambio:
+                #     ultima_actividad = ultima_actividad[0]
+                #     ultimo_cambio = ultimo_cambio[0]
+                #     if ultima_actividad.fecha < ultimo_cambio.fecha:
+                #         return self.render_to_response(self.get_context_data(s_fase=us.fase,usuario=usuario,
+                #                                                              permisos=permisos, error='sinactividad'))
+                # elif not ultima_actividad:
+                #     return self.render_to_response(self.get_context_data(s_fase=us.fase, usuario=usuario,
+                #                                                          permisos=permisos, error='sinactividad'))
                 us.estado_fase = "Done"
                 us.save()
                 # Notificación al SCRUM por correo

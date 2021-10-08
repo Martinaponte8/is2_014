@@ -607,14 +607,14 @@ class UpdateEjecucionView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                             'team_member': us.team_member,
                         },
                     )
-                    email_msg = EmailMessage(
-                        subject='Inicio de Sprint',
-                        body=body,
-                        from_email=['PoliProyectos-noreply'],
-                        to=[us.team_member.email],
-                    )
-                    email_msg.content_subtype = 'html'
-                    email_msg.send()
+                    # email_msg = EmailMessage(
+                    #     subject='Inicio de Sprint',
+                    #     body=body,
+                    #     from_email=['PoliProyectos-noreply'],
+                    #     to=[us.team_member.email],
+                    # )
+                    # email_msg.content_subtype = 'html'
+                    # email_msg.send()
             else:
                 return render(self.get_context_data(error='sinus',permisos=permisos))
         return HttpResponseRedirect('./')

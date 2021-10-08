@@ -349,14 +349,14 @@ class UpdateSprintView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                     'team_member': nuevo_tm.first_name,
                 },
             )
-            email_msg = EmailMessage(
-                subject='Asignacion de US',
-                body=body,
-                from_email=['PoliProyectos-noreply'],
-                to=[nuevo_tm.email],
-            )
-            email_msg.content_subtype = 'html'
-            email_msg.send()
+            # email_msg = EmailMessage(
+            #     subject='Asignacion de US',
+            #     body=body,
+            #     from_email=['PoliProyectos-noreply'],
+            #     to=[nuevo_tm.email],
+            # )
+            # email_msg.content_subtype = 'html'
+            # email_msg.send()
             return HttpResponseRedirect('./')
         #fin reasignacion de team members
         if form.is_valid() and horas_team.is_valid():
