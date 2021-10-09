@@ -84,11 +84,11 @@ class SprintModelTest(TestCase):
         self.assertIsNotNone(sprint)
 
     def test_fechasSprint(self):
-        sprint = Sprint(nombre='sprint', fecha_inicio='29/04/2019', fecha_fin='12/04/2019')
+        sprint = Sprint(nombre='sprint', fecha_inicio='29/09/2021', fecha_fin='27/09/2021')
         fechaInicio = time.strptime(sprint.fecha_inicio, "%d/%m/%Y")
         fechaFin = time.strptime(sprint.fecha_fin, "%d/%m/%Y")
         self.assertLessEqual(fechaInicio, fechaFin, "La Fecha de Inicio de Sprint debe ser menor a la fecha de Fin")
 
     def test_duracion(self):
-        sprint = Sprint(nombre='sprint', fecha_inicio='29/04/2019', fecha_fin='12/04/2019', dias_laborales=200)
+        sprint = Sprint(nombre='sprint', fecha_inicio='29/04/2021', fecha_fin='12/04/2021', dias_laborales=200)
         self.assertIs(sprint.dias_laborales, 200)
