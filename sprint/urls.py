@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.urls import path
-from .views import *
 from flujo.views import *
+from sprint.views import SprintListView, CreateSprintView, UpdateSprintView, AsignarUSUpdateView, VerSprintDetailView
 
 """
 URL para el Sprint crear, listar y modificar

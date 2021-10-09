@@ -33,7 +33,6 @@ import json
 from django.template.loader import render_to_string
 # from django.core.mail import EmailMessage
 # from io import BytesIO
-# from reportlab.pdfgen import canvas
 # import locale
 # from django.views.generic import View
 # from reportlab.lib.pagesizes import A4
