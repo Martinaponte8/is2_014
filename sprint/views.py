@@ -31,25 +31,25 @@ from django.forms import inlineformset_factory
 from django.db import transaction
 import json
 from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
-from io import BytesIO
-from reportlab.pdfgen import canvas
-import locale
-from django.views.generic import View
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import ParagraphStyle, TA_CENTER, TA_LEFT
-from reportlab.lib.units import inch, mm
-from reportlab.lib import colors
-from reportlab.graphics.shapes import Drawing, Line
-from reportlab.lib.enums import TA_RIGHT
-from reportlab.platypus import (
-        Paragraph,
-        Table,
-        SimpleDocTemplate,
-        Spacer,
-        TableStyle,
-        Paragraph,
-        Image)
+# from django.core.mail import EmailMessage
+# from io import BytesIO
+# from reportlab.pdfgen import canvas
+# import locale
+# from django.views.generic import View
+# from reportlab.lib.pagesizes import A4
+# from reportlab.lib.styles import ParagraphStyle, TA_CENTER, TA_LEFT
+# from reportlab.lib.units import inch, mm
+# from reportlab.lib import colors
+# from reportlab.graphics.shapes import Drawing, Line
+# from reportlab.lib.enums import TA_RIGHT
+# from reportlab.platypus import (
+#         Paragraph,
+#         Table,
+#         SimpleDocTemplate,
+#         Spacer,
+#         TableStyle,
+#         Paragraph,
+#         Image)
 
 
 """
