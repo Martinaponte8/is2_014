@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Comentarios &#8212; Gestor de Proyectos  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="comentarios">
+<h1>Comentarios<a class="headerlink" href="#comentarios" title="Permalink to this headline">¶</a></h1>
+<p>from django.test import TestCase
+from sprint.models import *
+import time
+from proyecto.models import *</p>
+<p>class SprintModelTest(TestCase):</p>
+<dl class="simple">
+<dt>“””</dt><dd><p>Clase de Tests del modelo sprint</p>
+</dd>
+</dl>
+<p>“””</p>
+<blockquote>
+<div><p>def test_creacion(self):</p>
+</div></blockquote>
+<dl class="simple">
+<dt>“””</dt><dd><p>verifica que los sprints se guarden correctamente en un estado valido</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><dl class="simple">
+<dt>proyecto = Proyecto(</dt><dd><p>nombre=”prueba”,
+estado=”Pendiente”,
+descripcion=”proyecto de prueba”</p>
+</dd>
+</dl>
+<p>)
+proyecto.save()
+sprint = Sprint(</p>
+<blockquote>
+<div><p>nombre=”prueba”,
+proyecto=proyecto,
+estado=’Pendiente’,
+dias_laborales=20,
+dias_habiles=’1,2,3,4,5’</p>
+</div></blockquote>
+<p>)
+self.assertTrue(sprint.validate_test())</p>
+</div></blockquote>
+<p>def test_validacion_nombre(self):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>Verifica que la validacion de obligatoriedad del campo nombre se ejecute correctamente</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>p = Proyecto()
+sprint = Sprint(</p>
+<blockquote>
+<div><p>proyecto=p,
+estado=’Pendiente’,
+dias_laborales=20,
+dias_habiles=’1,2,3,4,5’</p>
+</div></blockquote>
+<p>)
+self.assertTrue(sprint.validate_test(), “Debe ingresar el nombre del sprint”)</p>
+</div></blockquote>
+<p>def test_validacion_proyecto(self):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>Verifica que la validacion de obligatoriedad del campo proyecto se ejecute correctamente</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><dl class="simple">
+<dt>sprint = Sprint(</dt><dd><p>nombre=’prueba’,
+estado=’Pendiente’,
+dias_laborales=20,
+dias_habiles=’1,2,3,4,5’</p>
+</dd>
+</dl>
+<p>)
+self.assertTrue(sprint.validate_test(), “En sprint debe estar relacionado a un proyecto”)</p>
+</div></blockquote>
+<p>def test_validacion_dias_laborales(self):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>Verifica que la validacion de obligatoriedad del campo dias laborales se ejecute correctamente</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>p = Proyecto()
+sprint = Sprint(</p>
+<blockquote>
+<div><p>nombre=’prueba’,
+proyecto=p,
+estado=’Pendiente’,
+dias_habiles=’1,2,3,4,5’</p>
+</div></blockquote>
+<p>)
+self.assertTrue(sprint.validate_test(), “En sprint debe estar relacionado a un proyecto”)</p>
+</div></blockquote>
+<p>def test_validacion_dias_laborales(self):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>Verifica que la validacion de obligatoriedad del campo dias habiles se ejecute correctamente</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>p = Proyecto()
+sprint = Sprint(</p>
+<blockquote>
+<div><p>nombre=’prueba’,
+proyecto=p,
+estado=’Pendiente’,
+dias_laborales=20</p>
+</div></blockquote>
+<p>)
+self.assertTrue(sprint.validate_test(), “Debe ingresar al menos un dia hábil”)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>def test_creacionSprint(self):</dt><dd><p>sprint = Sprint()
+self.assertIsNotNone(sprint)</p>
+</dd>
+<dt>def test_fechasSprint(self):</dt><dd><p>sprint = Sprint(nombre=’sprint’, fecha_inicio=’29/04/2019’, fecha_fin=’12/04/2019’)
+fechaInicio = time.strptime(sprint.fecha_inicio, “%d/%m/%Y”)
+fechaFin = time.strptime(sprint.fecha_fin, “%d/%m/%Y”)
+self.assertLessEqual(fechaInicio, fechaFin, “La Fecha de Inicio de Sprint debe ser menor a la fecha de Fin”)</p>
+</dd>
+<dt>def test_duracion(self):</dt><dd><p>sprint = Sprint(nombre=’sprint’, fecha_inicio=’29/04/2019’, fecha_fin=’12/04/2019’, dias_laborales=200)
+self.assertIs(sprint.dias_laborales, 200)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Gestor de Proyectos</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="flujo.html">Flujo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inicio.html">Inicio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proyecto.html">Proyecto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rol.html">Rol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sprint.html">Sprint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipoUserStory.html">Tipo de User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="userStory.html">User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usuarios.html">Usuarios</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Grupo 14.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sprintTests.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

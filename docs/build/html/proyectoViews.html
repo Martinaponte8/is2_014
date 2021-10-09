@@ -1,0 +1,876 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Comentarios &#8212; Gestor de Proyectos  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Rol" href="rol.html" />
+    <link rel="prev" title="Comentarios" href="proyectoUrls.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="comentarios">
+<h1>Comentarios<a class="headerlink" href="#comentarios" title="Permalink to this headline">¶</a></h1>
+<p>from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from .forms import *
+from proyecto.forms import CreateProjectForm, UpdateProjectForm
+from django.http import HttpResponseRedirect
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from sprint.models import *
+from flujo.models import *
+from django.utils import timezone
+from userstory.models import *
+from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage</p>
+<p>“””
+Vistas del Proyecto
+“””</p>
+<p>“””
+Funcion eliminar Proyecto
+“””
+def eliminar2(request, project_id):</p>
+<blockquote>
+<div><p>return redirect(“index”)</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class VerProyectoDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):</p>
+<blockquote>
+<div><p>def get(self,request,*args,**kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return self.render_to_response(self.get_context_data(permisos=permisos))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return context</p>
+</div></blockquote>
+<p>def get_object(self, queryset=None):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna el objeto a ser visualizado
+“””
+:param queryset:
+“””
+:return: Retorna el proyecto a ser visualizado
+“””</p>
+<blockquote>
+<div><p>return Proyecto.objects.get(pk=self.kwargs[‘pk’])</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class ProjectListView(LoginRequiredMixin, ListView):
+“””
+Clase de la vista de la lista de Proyectos
+“””</p>
+<blockquote>
+<div><p>def get(self, request, <a href="#id3"><span class="problematic" id="id4">*</span></a>args, <a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return self.render_to_response(self.get_context_data(object_list=self.object_list, permisos=permisos))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><p>context = super().get_context_data(<a href="#id9"><span class="problematic" id="id10">**</span></a>kwargs)
+return context</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class CreateProjectView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+“””</p>
+<blockquote>
+<div><p>Clase de la vista para la creacion de un nuevo Proyecto</p>
+</div></blockquote>
+<dl class="simple">
+<dt>“””</dt><dd><p>def get(self, request, <a href="#id11"><span class="problematic" id="id12">*</span></a>args, <a href="#id13"><span class="problematic" id="id14">**</span></a>kwargs):</p>
+</dd>
+</dl>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return self.render_to_response(self.get_context_data(permisos=permisos, form=form, team_members=team_member_formset))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>context = super(CreateProjectView, self).get_context_data(<a href="#id17"><span class="problematic" id="id18">**</span></a>kwargs)
+return context</p>
+</div></blockquote>
+<p>def post(self, request, <a href="#id19"><span class="problematic" id="id20">*</span></a>args, <a href="#id21"><span class="problematic" id="id22">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta POST
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta POST
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><dl class="simple">
+<dt>if form.is_valid() and team_member_formset.is_valid():</dt><dd><p>return self.form_valid(form, team_member_formset)</p>
+</dd>
+<dt>else:</dt><dd><p>return self.form_invalid(form, team_member_formset, permisos)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>def form_valid(self, form, team_member_formset):</p>
+</div></blockquote>
+<p>“””
+Metodo ejecutado luego de verificar que el formulario recibido en la consulta POST es valido
+“””
+:param form: formulario a ser guardado
+“””
+:param team_member_formset: grupo de team members del proyecto
+“””
+:return: redireccion al sucess_url de la clase
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return HttpResponseRedirect(self.success_url)</p>
+</div></blockquote>
+<p>def form_invalid(self, form, team_member_formset, permisos):</p>
+</div></blockquote>
+<p>“””
+Metodo que se ejecuta si el formulario recibido en la consulta POST es invalido
+“””
+:param form: formulario a ser guardado
+“””
+:param team_member_formset: grupo de team members del proyecto
+“””
+:return: redireccion a la pagina actual con los errores de validacion
+“””</p>
+<blockquote>
+<div><dl class="simple">
+<dt>if team_member_formset.vacio:</dt><dd><p>fs_error = “Debe ingresar al menos un team member”</p>
+</dd>
+<dt>if team_member_formset.sin_usuario:</dt><dd><p>fs_error = “Debe completar el campo Usuario de todos los team members”</p>
+</dd>
+<dt>if team_member_formset.sin_rol:</dt><dd><p>fs_error = “Debe asignar un rol a todos los team members”</p>
+</dd>
+<dt>if team_member_formset.doble_usuario:</dt><dd><p>fs_error = “El usuario ” + team_member_formset.doble_usuario + ” se asignó mas de una vez”</p>
+</dd>
+<dt>if team_member_formset.rol_doble:</dt><dd><p>fs_error = “Solo puede existir un “+str(team_member_formset.rol_doble.nombre)</p>
+</dd>
+</dl>
+<p>return self.render_to_response(self.get_context_data(fs_error=fs_error, form=form, team_members=team_member_formset, permisos=permisos))</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateProjectView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+“””
+Clase de la vista para la modificacion de un Proyecto
+“””</p>
+<blockquote>
+<div><p>def get(self, request, <a href="#id23"><span class="problematic" id="id24">*</span></a>args, <a href="#id25"><span class="problematic" id="id26">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return self.render_to_response(self.get_context_data(permisos=permisos, form=form, team_members=team_member_formset))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>context = super().get_context_data(<a href="#id29"><span class="problematic" id="id30">**</span></a>kwargs)
+return context</p>
+</div></blockquote>
+<p>def get_object(self, queryset=None):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna el objeto a ser modificado
+“””
+:param queryset:
+“””
+:return: El proyecto a ser modificado
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])</p>
+</div></blockquote>
+<p>def post(self,request,*args,**kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta POST
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta POST
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>permisos = request.user.get_nombres_permisos()
+if form.is_valid() and team_member_formset.is_valid():</p>
+<blockquote>
+<div><p>return self.form_valid(form, team_member_formset)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>return self.form_invalid(form, team_member_formset, permisos)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>def form_valid(self, form, team_member_formset):</p>
+</div></blockquote>
+<p>“””
+Metodo ejecutado luego de verificar que el formulario recibido en la consulta POST es valido
+“””
+:param form: formulario a ser guardado
+“””
+:param team_member_formset: grupo de team members del proyecto
+“””
+:return: redireccion al sucess_url de la clase
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return HttpResponseRedirect(self.get_success_url())</p>
+</div></blockquote>
+<p>def form_invalid(self, form, team_member_formset, permisos):</p>
+</div></blockquote>
+<p>“””
+Metodo que se ejecuta si el formulario recibido en la consulta POST es invalido
+“””
+:param form: formulario a ser guardado
+“””
+:param team_member_formset: grupo de team members del proyecto
+“””
+:return: redireccion a la pagina actual con los errores de validacion
+“””</p>
+<blockquote>
+<div><dl class="simple">
+<dt>if team_member_formset.vacio:</dt><dd><p>fs_error = “Debe ingresar al menos un team member”</p>
+</dd>
+<dt>if team_member_formset.sin_usuario:</dt><dd><p>fs_error = “Debe completar el campo Usuario de todos los team members”</p>
+</dd>
+<dt>if team_member_formset.sin_rol:</dt><dd><p>fs_error = “Debe asignar un rol a todos los team members”</p>
+</dd>
+<dt>if team_member_formset.doble_usuario:</dt><dd><p>fs_error = “El usuario ” + team_member_formset.doble_usuario + ” se asignó mas de una vez”</p>
+</dd>
+<dt>if team_member_formset.rol_doble:</dt><dd><p>fs_error = “Solo puede existir un “+str(team_member_formset.rol_doble.nombre)</p>
+</dd>
+</dl>
+<p>return self.render_to_response(self.get_context_data(permisos=permisos, fs_error=fs_error, form=form, team_members=team_member_formset))</p>
+</div></blockquote>
+<p>“””
+Vistas de Definiciones de Proyecto
+“””</p>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class OptionsListView(LoginRequiredMixin, ListView):
+“””
+Clase de la vista de la lista de definiciones de un proyecto existente
+“””</p>
+<blockquote>
+<div><p>template_name = ‘proyecto/opciones_list.html’
+model = Proyecto
+queryset = Proyecto.objects.all()</p>
+<p>def get(self,request,*args,**kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>self.object_list = Proyecto.objects.all()
+return self.render_to_response(self.get_context_data(visibles=visibles, permisos=permisos))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id31"><span class="problematic" id="id32">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><p>context = super().get_context_data(<a href="#id33"><span class="problematic" id="id34">**</span></a>kwargs)
+return context</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateOptionsView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+“””
+Clase de la vista para modificacion de las definiciones de proyecto
+“””</p>
+<blockquote>
+<div><p>def get(self,request,*args,**kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return self.render_to_response(self.get_context_data(permisos=permisos, form=form, team_members=team_member_formset))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id35"><span class="problematic" id="id36">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>context = super().get_context_data(<a href="#id37"><span class="problematic" id="id38">**</span></a>kwargs)
+return context</p>
+</div></blockquote>
+<p>def get_object(self, queryset=None):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna el objeto a ser modificado
+“””
+:param queryset:
+“””
+:return: El proyecto a ser modificado
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])</p>
+</div></blockquote>
+<p>def post(self,request,*args,**kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta POST
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta POST
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><dl class="simple">
+<dt>if form.is_valid() and team_member_formset.is_valid():</dt><dd><p>return self.form_valid(form, team_member_formset)</p>
+</dd>
+<dt>else:</dt><dd><p>return self.form_invalid(form, team_member_formset)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>def form_valid(self, form, team_member_formset):</p>
+</div></blockquote>
+<p>“””
+Metodo ejecutado luego de verificar que el formulario recibido en la consulta POST es valido
+“””
+:param form: formulario a ser guardado
+“””
+:param team_member_formset: grupo de team members del proyecto
+“””
+:return: redireccion al sucess_url de la clase
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return HttpResponseRedirect(self.get_success_url())</p>
+</div></blockquote>
+<p>def form_invalid(self, form,team_member_formset):</p>
+</div></blockquote>
+<p>“””
+Metodo que se ejecuta si el formulario recibido en la consulta POST es invalido
+“””
+:param form: formulario a ser guardado
+“””
+:param team_member_formset: grupo de team members del proyecto
+“””
+:return: redireccion a la pagina actual con los errores de validacion
+“””</p>
+<blockquote>
+<div><p>return self.render_to_response(self.get_context_data(form=form, team_members=team_member_formset))</p>
+</div></blockquote>
+<p>“””
+Vistas de Ejecucion
+“””</p>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class EjecucionListView(LoginRequiredMixin, ListView):
+“””
+Clase de la vista de la lista de los proyectos en ejecucion
+“””</p>
+<blockquote>
+<div><p>def get(self, request, <a href="#id39"><span class="problematic" id="id40">*</span></a>args, <a href="#id41"><span class="problematic" id="id42">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return self.render_to_response(self.get_context_data(visibles=visibles, permisos=permisos))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id43"><span class="problematic" id="id44">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><p>context = super().get_context_data(<a href="#id45"><span class="problematic" id="id46">**</span></a>kwargs)
+return context</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateEjecucionView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+“””
+Clase de la vista para las modificaciones de los proyectos en ejecucion
+“””</p>
+<blockquote>
+<div><p>def get(self, request, <a href="#id47"><span class="problematic" id="id48">*</span></a>args, <a href="#id49"><span class="problematic" id="id50">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>self.object = self.get_object()
+permisos = request.user.get_nombres_permisos(proyecto=self.kwargs[‘pk_proyecto’])
+return self.render_to_response(self.get_context_data(permisos=permisos))</p>
+</div></blockquote>
+<p>def post(self, request, <a href="#id51"><span class="problematic" id="id52">*</span></a>args, <a href="#id53"><span class="problematic" id="id54">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta POST
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta POST
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>self.object = self.get_object()
+proyecto = self.get_object()
+permisos = request.user.get_nombres_permisos(proyecto=self.kwargs[‘pk_proyecto’])
+if ‘iniciar’ in request.POST.keys():</p>
+<blockquote>
+<div><p>proyecto.estado = “Activo”
+proyecto.save()</p>
+</div></blockquote>
+<dl>
+<dt>if ‘terminar’ in request.POST.keys():</dt><dd><p>proyecto.estado = “Terminado”
+proyecto.save()</p>
+</dd>
+<dt>if ‘suspender’ in request.POST.keys():</dt><dd><p>proyecto.estado = “Suspendido”
+proyecto.save()</p>
+</dd>
+<dt>if ‘cancelar’ in request.POST.keys():</dt><dd><p>proyecto.estado = “Cancelado”
+proyecto.save()</p>
+</dd>
+<dt>if ‘reiniciar’ in request.POST.keys():</dt><dd><p>proyecto.estado = “Activo”
+proyecto.save()</p>
+</dd>
+<dt>if ‘terminar_sprint’ in request.POST.keys():</dt><dd><p>sprint = Sprint.objects.get(pk=request.POST[‘terminar_sprint’])
+no_terminados = UserStory.objects.filter(estado=1,sprint=sprint.pk)
+if not no_terminados:
+else:</p>
+<blockquote>
+<div><p>return render(request,’proyecto/ejecucion.html’,self.get_context_data(permisos=permisos, confirmar=’fin_sprint’))</p>
+</div></blockquote>
+</dd>
+<dt>if ‘conf_terminar’ in request.POST.keys():</dt><dd><dl>
+<dt>for us in us_list:</dt><dd><p># Notificación al Desarrollador por correo
+body = render_to_string(</p>
+<blockquote>
+<div><p>},</p>
+</div></blockquote>
+<p>)</p>
+</dd>
+</dl>
+</dd>
+<dt>if ‘iniciar_sprint’ in request.POST.keys():</dt><dd><p>sprint_us = sprint.get_user_stories()
+if sprint_us:</p>
+<blockquote>
+<div><p>sprint.estado = ‘En Proceso’
+for us in us_list:</p>
+<blockquote>
+<div><p>us.estado_fase = ‘To Do’
+us.save()</p>
+</div></blockquote>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>return render(self.get_context_data(error=’sinus’,permisos=permisos))</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>return HttpResponseRedirect(‘./’)</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id55"><span class="problematic" id="id56">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>context = super().get_context_data(<a href="#id57"><span class="problematic" id="id58">**</span></a>kwargs)
+context[‘title’] = “Ejecucion de Proyecto”
+try:</p>
+<blockquote>
+<div><p>context[‘sprint_pendiente’] = Sprint.objects.get(proyecto=self.kwargs[‘pk_proyecto’], estado=”Pendiente”)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>except:</dt><dd><p>pass</p>
+</dd>
+<dt>try:</dt><dd><p>context[‘sprint_actual’] = Sprint.objects.get(proyecto=self.kwargs[‘pk_proyecto’], estado=”En Proceso”)</p>
+</dd>
+<dt>except:</dt><dd><p>pass</p>
+</dd>
+</dl>
+<p>return context</p>
+</div></blockquote>
+<p>def get_object(self, queryset=None):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna el objeto a ser modificado
+“””
+:param queryset:
+“””
+:return: Retorna el proyecto a ser modificado
+“””</p>
+<blockquote>
+<div><p>return Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateTeamMemberView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+“””
+Clase de la vista para la modificacion del Team Member
+“””</p>
+<blockquote>
+<div><p>def get(self, request, <a href="#id59"><span class="problematic" id="id60">*</span></a>args, <a href="#id61"><span class="problematic" id="id62">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return self.render_to_response(self.get_context_data(permisos=permisos, form=form, team_members=team_member_formset))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id63"><span class="problematic" id="id64">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>context = super().get_context_data(<a href="#id65"><span class="problematic" id="id66">**</span></a>kwargs)
+return context</p>
+</div></blockquote>
+<p>def get_object(self, queryset=None):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna el objeto a ser visualizado
+“””
+:param queryset:
+“””
+:return: Retorna el proyecto a ser modificado
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])</p>
+</div></blockquote>
+<p>def post(self, request, <a href="#id67"><span class="problematic" id="id68">*</span></a>args, <a href="#id69"><span class="problematic" id="id70">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta POST
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta POST
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><dl class="simple">
+<dt>if form.is_valid() and team_member_formset.is_valid():</dt><dd><p>return self.form_valid(form, team_member_formset)</p>
+</dd>
+<dt>else:</dt><dd><p>return self.form_invalid(form, team_member_formset)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>def form_valid(self, form, team_member_formset):</p>
+</div></blockquote>
+<p>“””
+Metodo que se ejecuta si el formulario recibido en la consulta POST es valido
+“””
+:param form: formulario a ser guardado
+“””
+:param team_member_formset: grupo de team members del proyecto
+“””
+:return: redireccion a la direccion definida en el atributo success_url de la clase
+“””</p>
+<blockquote>
+<div><p>def form_invalid(self, form, team_member_formset):</p>
+</div></blockquote>
+<p>“””
+Metodo que se ejecuta si el formulario recibido en la consulta POST es invalido
+“””
+:param form: formulario a ser guardado
+“””
+:param team_member_formset: grupo de team members del proyecto
+“””
+:return: redireccion a la pagina actual con los errores de validacion
+“””</p>
+<blockquote>
+<div><dl class="simple">
+<dt>if team_member_formset.vacio:</dt><dd><p>fs_error = “Debe ingresar al menos un team member”</p>
+</dd>
+<dt>if team_member_formset.sin_usuario:</dt><dd><p>fs_error = “Debe completar el campo Usuario de todos los team members”</p>
+</dd>
+<dt>if team_member_formset.sin_rol:</dt><dd><p>fs_error = “Debe asignar un rol a todos los team members”</p>
+</dd>
+<dt>if team_member_formset.doble_usuario:</dt><dd><p>fs_error = “El usuario ” + team_member_formset.doble_usuario + ” se asignó mas de una vez”</p>
+</dd>
+<dt>if team_member_formset.rol_doble:</dt><dd><p>fs_error = “Solo puede existir un “+str(team_member_formset.rol_doble.nombre)</p>
+</dd>
+</dl>
+<p>return self.render_to_response(self.get_context_data(fs_error=fs_error, form=form, team_members=team_member_formset))</p>
+</div></blockquote>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Gestor de Proyectos</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="flujo.html">Flujo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inicio.html">Inicio</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="proyecto.html">Proyecto</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="glosarioproyecto.html">Glosario Proyecto</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="rol.html">Rol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sprint.html">Sprint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipoUserStory.html">Tipo de User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="userStory.html">User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usuarios.html">Usuarios</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="proyecto.html">Proyecto</a><ul>
+  <li><a href="glosarioproyecto.html">Glosario Proyecto</a><ul>
+      <li>Previous: <a href="proyectoUrls.html" title="previous chapter">Comentarios</a></li>
+      <li>Next: <a href="rol.html" title="next chapter">Rol</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Grupo 14.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/proyectoViews.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

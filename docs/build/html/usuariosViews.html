@@ -1,0 +1,411 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Comentarios &#8212; Gestor de Proyectos  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Comentarios" href="usuariosUrls.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="comentarios">
+<h1>Comentarios<a class="headerlink" href="#comentarios" title="Permalink to this headline">¶</a></h1>
+<p>from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from .models import UserStory
+from userstory.forms import CreateUserStoryForm, UpdateUserStoryForm
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from tipoUserStory.models import *
+from userstory.models import *</p>
+<p>“””
+Funcion eliminar UserStory
+“””
+def eliminar4(request,pk_proyecto,us_id):</p>
+<blockquote>
+<div><p>return redirect(“index”)</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UserStoryListView(LoginRequiredMixin, ListView):
+“””
+Vista de la lista de UserStory
+“””</p>
+<blockquote>
+<div><p>def get(self,request,*args,**kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>proyecto = Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])
+permisos = request.user.get_nombres_permisos(proyecto=self.kwargs[‘pk_proyecto’])
+return self.render_to_response(self.get_context_data(project=proyecto,object_list=self.object_list,permisos=permisos))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><p>context = super(UserStoryListView,self).get_context_data(<a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)
+context[‘title’] = ‘User Stories’
+return context</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class CreateUserStoryView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+“””
+Vista para la creacion de un User Story
+“””</p>
+<blockquote>
+<div><p>def get_object(self, queryset=None):</p>
+</div></blockquote>
+<p>“””
+metodo que retorna el objeto actual
+“””
+:param queryset:
+“””
+:return: el objeto actual
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>obj = UserStory()
+return obj</p>
+</div></blockquote>
+<p>def get(self,request,*args,**kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>permisos = request.user.get_nombres_permisos(proyecto=self.kwargs[‘pk_proyecto’])
+return self.render_to_response(self.get_context_data(permisos=permisos, form=form))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><p>context = super().get_context_data(<a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs)
+for tipo in context[‘tipos_us’]:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>if tipo.pk not in context[‘flujos’].keys():</dt><dd><p>context[‘flujos’][tipo.pk] = tipo.flujos.all</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>context[‘title’] = “Crear User Story”
+return context</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateUserStoryView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+“””
+Vista para la modificacion de un User Story
+“””</p>
+<blockquote>
+<div><p>def get(self, request, <a href="#id9"><span class="problematic" id="id10">*</span></a>args, <a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>permisos = request.user.get_nombres_permisos(proyecto=self.kwargs[‘pk_proyecto’])
+return self.render_to_response(self.get_context_data(permisos=permisos))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id13"><span class="problematic" id="id14">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>context = super().get_context_data(<a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs)
+for tipo in context[‘tipos_us’]:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>if tipo.pk not in context[‘flujos’].keys():</dt><dd><p>context[‘flujos’][tipo.pk] = tipo.flujos.all</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>context[‘title’] = “Modificar User Story”
+return context</p>
+</div></blockquote>
+<p>def get_object(self, queryset=None):</p>
+</div></blockquote>
+<p>“””
+metodo que retorna el objeto actual
+“””
+:param queryset:
+“””
+:return: el objeto actual
+“””</p>
+<blockquote>
+<div><p>return UserStory.objects.get(pk=self.kwargs[‘pk’])</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class VerUserStoryDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):
+“””
+Clase de la vista para ver User Stories, sin opcion de modificar
+“””</p>
+<blockquote>
+<div><p>def get(self, request, <a href="#id17"><span class="problematic" id="id18">*</span></a>args, <a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>permisos = request.user.get_nombres_permisos(proyecto=self.kwargs[‘pk_proyecto’])
+return self.render_to_response(self.get_context_data(permisos=permisos))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id21"><span class="problematic" id="id22">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>context = super().get_context_data(<a href="#id23"><span class="problematic" id="id24">**</span></a>kwargs)
+context[‘title’] = “Ver User Story”
+return context</p>
+</div></blockquote>
+<p>def get_object(self, queryset=None):</p>
+</div></blockquote>
+<p>“””
+retorna el objecto actual
+“””
+:param queryset:
+“””
+:return: el objeto actual
+“””</p>
+<blockquote>
+<div><p>return UserStory.objects.get(pk=self.kwargs[‘pk’])</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class ProductBacklogListView(LoginRequiredMixin, ListView):
+“””
+Vista del Product Backlog
+“””</p>
+<blockquote>
+<div><p>def get(self, request, <a href="#id25"><span class="problematic" id="id26">*</span></a>args, <a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>proyecto = Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])
+permisos = request.user.get_nombres_permisos(proyecto=self.kwargs[‘pk_proyecto’])
+return self.render_to_response(self.get_context_data(permisos=permisos, project=proyecto, ol=ol))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id29"><span class="problematic" id="id30">*</span></a>, object_list=None, <a href="#id31"><span class="problematic" id="id32">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><p>context[‘title’] = “Product Backlog”
+for us in self.object_list:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>for a in actividades:</dt><dd><p>a.tipo = ‘actividad’
+context[‘actividades’][us.pk].append(a)</p>
+</dd>
+<dt>for c in cambios:</dt><dd><p>c.tipo = ‘cambio’
+context[‘actividades’][us.pk].append(c)</p>
+</dd>
+</dl>
+<p>context[‘actividades’][us.pk].sort(key=lambda x: x.fecha, reverse=True)</p>
+</div></blockquote>
+<p>proyecto = Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])
+return context</p>
+</div></blockquote>
+<p>&#64;login_required
+def ver_archivo(request,archivo_id):
+“””
+Vista utilizada para la visualizacion de archivos
+“””
+:param request:
+“””
+:param archivo_id: id del archivo a ser visualizado
+“””
+:return: el archivo adjunto
+“””</p>
+<blockquote>
+<div><p>return respuesta</p>
+</div></blockquote>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Gestor de Proyectos</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="flujo.html">Flujo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inicio.html">Inicio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proyecto.html">Proyecto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rol.html">Rol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sprint.html">Sprint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipoUserStory.html">Tipo de User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="userStory.html">User Story</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="usuarios.html">Usuarios</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="glosariousuarios.html">Glosario Usuario</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="usuarios.html">Usuarios</a><ul>
+  <li><a href="glosariousuarios.html">Glosario Usuario</a><ul>
+      <li>Previous: <a href="usuariosUrls.html" title="previous chapter">Comentarios</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Grupo 14.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/usuariosViews.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,69 @@
+Comentarios
+============
+
+from django import forms
+from django.forms import inlineformset_factory
+from usuarios.models import Usuario
+from .models import *
+
+class CreateProjectForm(forms.ModelForm):
+"""
+Formulario para la creacion de un nuevo Proyecto
+"""
+    class Meta:
+        fields = ('nombre', 'fecha_ini_estimada', 'fecha_fin_estimada', 'descripcion')
+
+
+
+class UpdateProjectForm(forms.ModelForm):
+"""
+Formulario para la modificacion de un Proyecto
+"""
+    class Meta:
+        fields = ('nombre', 'fecha_ini_estimada', 'fecha_fin_estimada', 'descripcion')
+
+
+class TeamMemberForm(forms.ModelForm):
+"""
+Formulario para la creacion del TeamMember
+"""
+    class Meta:
+        exclude = ()
+        fields = ('usuario', 'rol')
+
+
+BaseTeamMemberFormSet = inlineformset_factory(Proyecto, TeamMember, form=TeamMemberForm, extra=1)
+
+class TeamMemberFormSet(BaseTeamMemberFormSet):
+"""
+Formulario para la validacion de los campos del TeamMember
+"""
+    def is_valid(self):
+"""
+Retorna verdadero si existe al menos un formulario dentro del formset y todos los
+"""
+formularios en el formset tienen usuario y rol, en caso contrario retorna falso
+"""
+        super(TeamMemberFormSet,self).is_valid()
+
+        for form in self.forms:
+            # verificacion de roles unicos
+
+            # un usuario solo puede asignarse una vez
+            if form['usuario'].value() and not form['usuario'].value() in usuarios:
+                usuarios.append(form['usuario'].value())
+            elif form['usuario'].value() and form['usuario'].value() in usuarios:
+                    self.doble_usuario = Usuario.objects.get(pk=form['usuario'].value()).username
+                    return False
+            #existe al menos un form que no se elimina, por lo tanto el formset no esta vacio
+            if not form['DELETE'].value():
+            #todos los forms deben tener usuario
+            if not form['usuario'].value() and not form['DELETE'].value():
+                return False
+            # todos los forms deben tener rol
+            if not form['rol'].value() and not form['DELETE'].value():
+                return False
+        #si todos los forms se van a eliminar
+        if all_delete:
+            return False
+        return True

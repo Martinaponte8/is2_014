@@ -1,0 +1,67 @@
+Comentarios
+============
+
+import json
+import requests
+from django.test import TestCase
+import unittest
+
+"""
+test basico para entender como funciona test.py
+"""
+realizado el 16/09/2021
+"""
+from pip._internal import utils
+
+
+class TestBasic(unittest.TestCase):
+    "Test Basico"
+
+    def test_basic(self):
+        a = 1
+        self.assertEqual(1, a)
+
+    def test_basic_2(self):
+        a = 1
+        assert a == 1
+
+"""
+test para comprobar el Inicio de sesion, pasandole el username password
+"""
+realizado el 16/09/2021
+"""
+
+try:
+    from unittest.mock import Mock, patch
+except ImportError:
+    from mock import Mock, patch  # noqa
+
+
+class MockedResponse(object):
+    def _init_(self, status_code, content, headers=None):
+        return json.loads(self.text)
+
+    @property
+    def text(self):
+        return self.content.decode("utf8")
+
+    class mocked_response:
+        def _init_(self, *responses):
+            self.responses = list(responses)
+
+        def _enter_(self):
+
+
+            def mockable_request(f):
+                return new_f
+
+        def _exit_(self, type, value, traceback):
+
+
+            class BasicTests(TestCase):
+
+                def test_generate_unique_username(self):
+
+                def test_email_validation(self):
+
+                def test_serializer(self):

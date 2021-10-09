@@ -1,0 +1,272 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Comentarios &#8212; Gestor de Proyectos  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Comentarios" href="usUrls.html" />
+    <link rel="prev" title="Comentarios" href="usForms.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="comentarios">
+<h1>Comentarios<a class="headerlink" href="#comentarios" title="Permalink to this headline">¶</a></h1>
+<p>from django.core.exceptions import ValidationError
+from django.db import models
+from is2_014 import settings</p>
+<p>“””
+Definicion de los estados de User Story
+“””</p>
+<p>PENDIENTE = 2
+ASIGNADO = 1
+FINALIZADO = 0
+ESTADOS_US = (</p>
+<blockquote>
+<div><p>(PENDIENTE, ‘Pendiente’),
+(ASIGNADO, ‘Asignado’),
+(FINALIZADO,’Finalizado’)</p>
+</div></blockquote>
+<p>)</p>
+<p>“””
+Se definen los estados en fase
+“””</p>
+<dl class="simple">
+<dt>ESTADOS_EN_FASE = (</dt><dd><p>(‘To Do’, ‘To Do’),
+(‘Doing’, ‘Doing’),
+(‘Done’, ‘Done’),
+(‘Control de Calidad’, ‘Control de Calidad’),</p>
+</dd>
+</dl>
+<p>)</p>
+<p>“””
+Metodo que realiza la validacion del rango permitido para los campos de: Valor de Negocio, Prioridad y Valor tecnico
+“””
+def rango(valor):</p>
+<blockquote>
+<div><p>“””
+Validación de rango permitido
+“””
+if valor &gt;10 or valor &lt; 0:</p>
+<blockquote>
+<div><p>raise ValidationError(‘El valor debe estar en 0-10’)</p>
+</div></blockquote>
+</div></blockquote>
+<p>“””
+Se define el modelo User Story
+“””
+class UserStory(models.Model):
+“””</p>
+<blockquote>
+<div><p>Se definen los campos necesarios para el modelo</p>
+</div></blockquote>
+<p>“””</p>
+<blockquote>
+<div><p>sprints_asignados = models.ManyToManyField(‘sprint.Sprint’, blank=True, related_name=’userstory_sprint_asignado’)
+estado_fase = models.CharField(max_length=30, choices=ESTADOS_EN_FASE, default=’To Do’)
+flujo = models.ForeignKey(‘flujo.Flujo’, on_delete=models.PROTECT)
+fase = models.ForeignKey(‘flujo.Fase’, on_delete=models.PROTECT, null=True, blank=True)
+proyecto = models.ForeignKey(‘proyecto.Proyecto’, on_delete=models.CASCADE)
+nombre = models.CharField(max_length=100)
+descripcion = models.TextField(max_length=300)
+fecha_inicio = models.DateField(‘Fecha de inicio del User Story’, null=True, blank=True)
+duracion_estimada = models.TimeField()
+valor_negocio = models.PositiveIntegerField(validators=[rango])
+prioridad = models.PositiveIntegerField(validators=[rango])
+valor_tecnico = models.PositiveIntegerField(validators=[rango])
+estado = models.PositiveIntegerField(default=PENDIENTE, choices=ESTADOS_US)
+team_member = models.ForeignKey(‘usuarios.Usuario’, on_delete=models.CASCADE, blank=True, null=True)
+tipo_us = models.ForeignKey(‘tipoUserStory.TipoUserStory’, on_delete=models.PROTECT)
+sprint = models.ForeignKey(‘sprint.Sprint’, on_delete=models.PROTECT, null=True, blank=True)</p>
+<dl class="simple">
+<dt>def __str__(self):</dt><dd><p>return self.nombre</p>
+</dd>
+<dt>def set_priorizacion(self):</dt><dd><p>return (2*self.valor_negocio + self.prioridad + 2*self.valor_tecnico)/4</p>
+</dd>
+</dl>
+<p>priorizacion = property(set_priorizacion)</p>
+</div></blockquote>
+<p>class Nota(models.Model):
+“””</p>
+<blockquote>
+<div><p>Clase para adjuntar una nota a un US</p>
+</div></blockquote>
+<p>“””
+Campos:
+“””</p>
+<blockquote>
+<div><p>nota = models.TextField()
+us = models.ForeignKey(‘UserStory’, on_delete=models.CASCADE, null=True)
+usuario = models.ForeignKey(‘usuarios.Usuario’, on_delete=models.PROTECT, null=True)
+fecha = models.DateTimeField(auto_now_add=True)</p>
+<dl class="simple">
+<dt>def __str__(self):</dt><dd><p>return self.nota</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>class Archivo(models.Model):
+“””</p>
+<blockquote>
+<div><p>Clase para adjuntar un archivo a un US</p>
+</div></blockquote>
+<dl class="simple">
+<dt>“””</dt><dd><p>Campos:</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><p>titulo = models.CharField(max_length=255, blank=True)
+archivo = models.FileField(upload_to=’’)
+fecha = models.DateTimeField(auto_now_add=True)
+us = models.ForeignKey(‘UserStory’, on_delete=models.CASCADE, null=True)
+usuario = models.ForeignKey(‘usuarios.Usuario’, on_delete=models.PROTECT, null=True)</p>
+<dl class="simple">
+<dt>def __str__(self):</dt><dd><p>return self.titulo</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>class Actividad(models.Model):
+“””
+Clase para agregar una actividad a un User Story
+“””
+Campos:
+“””</p>
+<blockquote>
+<div><p>nombre = models.CharField(max_length=20)
+descripcion = models.TextField()
+duracion = models.TimeField()
+usuario = models.ForeignKey(‘usuarios.Usuario’, on_delete=models.PROTECT, null=True)
+us = models.ForeignKey(‘UserStory’, on_delete=models.CASCADE, null=True)
+fecha = models.DateTimeField(auto_now_add=True)</p>
+<dl class="simple">
+<dt>def __str__(self):</dt><dd><p>return self.nombre</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>class CambioEstado(models.Model):</p>
+<blockquote>
+<div><p>def __str__(self):</p>
+</div></blockquote>
+<p>“””
+Retorna la descripcion del objeto actual
+“””
+:return: descripcion del objeto actual
+“””</p>
+<blockquote>
+<div><p>return self.descripcion</p>
+</div></blockquote>
+<dl class="simple">
+<dt>class HistorialEstimaciones(models.Model):</dt><dd><p>duracion_estimada = models.PositiveIntegerField()
+sprint = models.ForeignKey(‘sprint.Sprint’, on_delete=models.CASCADE)
+us = models.ForeignKey(‘UserStory’, on_delete=models.CASCADE, null=True)</p>
+</dd>
+</dl>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Gestor de Proyectos</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="flujo.html">Flujo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inicio.html">Inicio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proyecto.html">Proyecto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rol.html">Rol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sprint.html">Sprint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipoUserStory.html">Tipo de User Story</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="userStory.html">User Story</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="glosariouserStory.html">Glosario User Story</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="usuarios.html">Usuarios</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="userStory.html">User Story</a><ul>
+  <li><a href="glosariouserStory.html">Glosario User Story</a><ul>
+      <li>Previous: <a href="usForms.html" title="previous chapter">Comentarios</a></li>
+      <li>Next: <a href="usUrls.html" title="next chapter">Comentarios</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Grupo 14.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/usModels.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

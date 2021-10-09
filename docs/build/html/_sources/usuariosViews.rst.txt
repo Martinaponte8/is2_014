@@ -1,0 +1,250 @@
+Comentarios
+============
+
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from .models import UserStory
+from userstory.forms import CreateUserStoryForm, UpdateUserStoryForm
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from tipoUserStory.models import *
+from userstory.models import *
+
+
+"""
+Funcion eliminar UserStory
+"""
+def eliminar4(request,pk_proyecto,us_id):
+    return redirect("index")
+
+@method_decorator(login_required, name='dispatch')
+class UserStoryListView(LoginRequiredMixin, ListView):
+"""
+Vista de la lista de UserStory
+"""
+
+    def get(self,request,*args,**kwargs):
+"""
+Metodo que es ejecutado al darse una consulta GET
+"""
+:param request: consulta recibida
+"""
+:param args: argumentos adicionales
+"""
+:param kwargs: diccionario de datos adicionales
+"""
+:return: la respuesta a la consulta GET
+"""
+        proyecto = Proyecto.objects.get(pk=self.kwargs['pk_proyecto'])
+        permisos = request.user.get_nombres_permisos(proyecto=self.kwargs['pk_proyecto'])
+        return self.render_to_response(self.get_context_data(project=proyecto,object_list=self.object_list,permisos=permisos))
+
+    def get_context_data(self, **kwargs):
+"""
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+"""
+:param kwargs: Diccionario de datos adicionales para el contexto
+"""
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+"""
+        context = super(UserStoryListView,self).get_context_data(**kwargs)
+        context['title'] = 'User Stories'
+        return context
+
+
+@method_decorator(login_required, name='dispatch')
+class CreateUserStoryView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+"""
+Vista para la creacion de un User Story
+"""
+    def get_object(self, queryset=None):
+"""
+metodo que retorna el objeto actual
+"""
+:param queryset:
+"""
+:return: el objeto actual
+"""
+        obj = UserStory()
+        return obj
+
+    def get(self,request,*args,**kwargs):
+"""
+Metodo que es ejecutado al darse una consulta GET
+"""
+:param request: consulta recibida
+"""
+:param args: argumentos adicionales
+"""
+:param kwargs: diccionario de datos adicionales
+"""
+:return: la respuesta a la consulta GET
+"""
+        permisos = request.user.get_nombres_permisos(proyecto=self.kwargs['pk_proyecto'])
+        return self.render_to_response(self.get_context_data(permisos=permisos, form=form))
+
+    def get_context_data(self, **kwargs):
+"""
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+"""
+:param kwargs: Diccionario de datos adicionales para el contexto
+"""
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+"""
+        context = super().get_context_data(**kwargs)
+        for tipo in context['tipos_us']:
+            if tipo.pk not in context['flujos'].keys():
+                context['flujos'][tipo.pk] = tipo.flujos.all
+        context['title'] = "Crear User Story"
+        return context
+
+
+@method_decorator(login_required, name='dispatch')
+class UpdateUserStoryView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+"""
+Vista para la modificacion de un User Story
+"""
+
+    def get(self, request, *args, **kwargs):
+"""
+Metodo que es ejecutado al darse una consulta GET
+"""
+:param request: consulta recibida
+"""
+:param args: argumentos adicionales
+"""
+:param kwargs: diccionario de datos adicionales
+"""
+:return: la respuesta a la consulta GET
+"""
+        permisos = request.user.get_nombres_permisos(proyecto=self.kwargs['pk_proyecto'])
+        return self.render_to_response(self.get_context_data(permisos=permisos))
+
+    def get_context_data(self, **kwargs):
+"""
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+"""
+:param kwargs: Diccionario de datos adicionales para el contexto
+"""
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+"""
+        context = super().get_context_data(**kwargs)
+        for tipo in context['tipos_us']:
+            if tipo.pk not in context['flujos'].keys():
+                context['flujos'][tipo.pk] = tipo.flujos.all
+        context['title'] = "Modificar User Story"
+        return context
+
+    def get_object(self, queryset=None):
+"""
+metodo que retorna el objeto actual
+"""
+:param queryset:
+"""
+:return: el objeto actual
+"""
+        return UserStory.objects.get(pk=self.kwargs['pk'])
+
+
+@method_decorator(login_required, name='dispatch')
+class VerUserStoryDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):
+"""
+Clase de la vista para ver User Stories, sin opcion de modificar
+"""
+    def get(self, request, *args, **kwargs):
+"""
+Metodo que es ejecutado al darse una consulta GET
+"""
+:param request: consulta recibida
+"""
+:param args: argumentos adicionales
+"""
+:param kwargs: diccionario de datos adicionales
+"""
+:return: la respuesta a la consulta GET
+"""
+        permisos = request.user.get_nombres_permisos(proyecto=self.kwargs['pk_proyecto'])
+        return self.render_to_response(self.get_context_data(permisos=permisos))
+
+    def get_context_data(self, **kwargs):
+"""
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+"""
+:param kwargs: Diccionario de datos adicionales para el contexto
+"""
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+"""
+        context = super().get_context_data(**kwargs)
+        context['title'] = "Ver User Story"
+        return context
+
+    def get_object(self, queryset=None):
+"""
+retorna el objecto actual
+"""
+:param queryset:
+"""
+:return: el objeto actual
+"""
+        return UserStory.objects.get(pk=self.kwargs['pk'])
+
+
+@method_decorator(login_required, name='dispatch')
+class ProductBacklogListView(LoginRequiredMixin, ListView):
+"""
+Vista del Product Backlog
+"""
+
+    def get(self, request, *args, **kwargs):
+"""
+Metodo que es ejecutado al darse una consulta GET
+"""
+:param request: consulta recibida
+"""
+:param args: argumentos adicionales
+"""
+:param kwargs: diccionario de datos adicionales
+"""
+:return: la respuesta a la consulta GET
+"""
+        proyecto = Proyecto.objects.get(pk=self.kwargs['pk_proyecto'])
+        permisos = request.user.get_nombres_permisos(proyecto=self.kwargs['pk_proyecto'])
+        return self.render_to_response(self.get_context_data(permisos=permisos, project=proyecto, ol=ol))
+
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+"""
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+"""
+:param kwargs: Diccionario de datos adicionales para el contexto
+"""
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+"""
+        context['title'] = "Product Backlog"
+        for us in self.object_list:
+            for a in actividades:
+                a.tipo = 'actividad'
+                context['actividades'][us.pk].append(a)
+            for c in cambios:
+                c.tipo = 'cambio'
+                context['actividades'][us.pk].append(c)
+            context['actividades'][us.pk].sort(key=lambda x: x.fecha, reverse=True)
+        proyecto = Proyecto.objects.get(pk=self.kwargs['pk_proyecto'])
+        return context
+
+
+@login_required
+def ver_archivo(request,archivo_id):
+"""
+Vista utilizada para la visualizacion de archivos
+"""
+:param request:
+"""
+:param archivo_id: id del archivo a ser visualizado
+"""
+:return: el archivo adjunto
+"""
+    return respuesta

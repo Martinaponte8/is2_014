@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Comentarios &#8212; Gestor de Proyectos  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Comentarios" href="inicioViews.html" />
+    <link rel="prev" title="Comentarios" href="inicioModels.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="comentarios">
+<h1>Comentarios<a class="headerlink" href="#comentarios" title="Permalink to this headline">¶</a></h1>
+<p>import json
+import requests
+from django.test import TestCase
+import unittest</p>
+<p>“””
+test basico para entender como funciona test.py
+“””
+realizado el 16/09/2021
+“””
+from pip._internal import utils</p>
+<dl>
+<dt>class TestBasic(unittest.TestCase):</dt><dd><p>“Test Basico”</p>
+<dl class="simple">
+<dt>def test_basic(self):</dt><dd><p>a = 1
+self.assertEqual(1, a)</p>
+</dd>
+<dt>def test_basic_2(self):</dt><dd><p>a = 1
+assert a == 1</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>“””
+test para comprobar el Inicio de sesion, pasandole el username password
+“””
+realizado el 16/09/2021
+“””</p>
+<dl>
+<dt>try:</dt><dd><p>from unittest.mock import Mock, patch</p>
+</dd>
+<dt>except ImportError:</dt><dd><p>from mock import Mock, patch  # noqa</p>
+</dd>
+<dt>class MockedResponse(object):</dt><dd><dl class="simple">
+<dt>def _init_(self, status_code, content, headers=None):</dt><dd><p>return json.loads(self.text)</p>
+</dd>
+</dl>
+<p>&#64;property
+def text(self):</p>
+<blockquote>
+<div><p>return self.content.decode(“utf8”)</p>
+</div></blockquote>
+<dl>
+<dt>class mocked_response:</dt><dd><dl class="simple">
+<dt>def _init_(self, <a href="#id1"><span class="problematic" id="id2">*</span></a>responses):</dt><dd><p>self.responses = list(responses)</p>
+</dd>
+</dl>
+<p>def _enter_(self):</p>
+<blockquote>
+<div><dl class="simple">
+<dt>def mockable_request(f):</dt><dd><p>return new_f</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>def _exit_(self, type, value, traceback):</p>
+<blockquote>
+<div><p>class BasicTests(TestCase):</p>
+<blockquote>
+<div><p>def test_generate_unique_username(self):</p>
+<p>def test_email_validation(self):</p>
+<p>def test_serializer(self):</p>
+</div></blockquote>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Gestor de Proyectos</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="flujo.html">Flujo</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="inicio.html">Inicio</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="glosarioinicio.html">Glosario Inicio</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="proyecto.html">Proyecto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rol.html">Rol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sprint.html">Sprint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipoUserStory.html">Tipo de User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="userStory.html">User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usuarios.html">Usuarios</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="inicio.html">Inicio</a><ul>
+  <li><a href="glosarioinicio.html">Glosario Inicio</a><ul>
+      <li>Previous: <a href="inicioModels.html" title="previous chapter">Comentarios</a></li>
+      <li>Next: <a href="inicioViews.html" title="next chapter">Comentarios</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Grupo 14.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/inicioTests.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

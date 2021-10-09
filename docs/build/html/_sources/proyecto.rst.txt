@@ -1,6 +1,7 @@
 Proyecto
-=============
+==========
 
 .. toctree::
+   :maxdepth: 4
 
-    sumarioProyecto
+   glosarioproyecto.rst

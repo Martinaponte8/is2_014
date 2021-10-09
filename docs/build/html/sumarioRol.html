@@ -15,8 +15,6 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Proyecto" href="proyecto.html" />
-    <link rel="prev" title="Rol" href="rol.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -35,13 +33,305 @@
             
   <section id="glosario">
 <h1>Glosario<a class="headerlink" href="#glosario" title="Permalink to this headline">¶</a></h1>
-<section id="module-rol.apps">
-<span id="seccion-apps"></span><h2>Seccion apps<a class="headerlink" href="#module-rol.apps" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="rol.apps.RolConfig">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">rol.apps.</span></span><span class="sig-name descname"><span class="pre">RolConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#rol.apps.RolConfig" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<section id="apps">
+<h2>Apps<a class="headerlink" href="#apps" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="admin">
+<h2>Admin<a class="headerlink" href="#admin" title="Permalink to this headline">¶</a></h2>
+<p>from django.contrib import admin
+from .models import Rol, Permiso</p>
+<p># # Register your models here.</p>
+<p>admin.site.register(Rol)</p>
+<p>admin.site.register(Permiso)</p>
+</section>
+<section id="forms">
+<h2>Forms<a class="headerlink" href="#forms" title="Permalink to this headline">¶</a></h2>
+<p>from django import forms
+from rol.models import *
+from django import forms
+from django.forms import CharField, Form</p>
+<p>#class BuscarRol(Form):
+#    “””
+#    Formulario para buscar un Rol por nombre
+#    “””
+#    Nombre = CharField()</p>
+<dl>
+<dt>class CreateRolForm(forms.ModelForm):</dt><dd><p>“””
+Formulario para crear un Rol
+“””
+class Meta:</p>
+<blockquote>
+<div><p>model = Rol
+fields = [</p>
+<blockquote>
+<div><p>‘nombre’,
+‘descripcion’,
+‘permisos’</p>
+</div></blockquote>
+<p>]
+labels = {</p>
+<blockquote>
+<div><p>‘nombre’: ‘Nombre del rol’,
+‘descripcion’: ‘Descripcion ‘,
+‘permisos’: ‘Permisos’,</p>
+</div></blockquote>
+<p>}
+widgets = {</p>
+<blockquote>
+<div><p>‘permisos’: forms.CheckboxSelectMultiple(),</p>
+</div></blockquote>
+<p>}</p>
+</div></blockquote>
+<dl>
+<dt>def __init__(self, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs):</dt><dd><p>super(CreateRolForm, self).__init__(<a href="#id5"><span class="problematic" id="id6">*</span></a>args, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs)
+# permisos_all = Permiso.objects.filter(tipo=2)
+permisos_all = Permiso.objects.filter()
+p = self.fields[‘permisos’].widget
+permisos = []
+for permiso in permisos_all:</p>
+<blockquote>
+<div><p>permisos.append((permiso.id, permiso.nombre))</p>
+</div></blockquote>
+<p>p.choices = permisos</p>
+</dd>
+<dt>def clean_permiso(self):</dt><dd><p>permisos = self.cleaned_data[‘permisos’]
+try:</p>
+<blockquote>
+<div><p>pr = Permiso.objects.get(permisos = permisos)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>except:</dt><dd><p>return self.cleaned_data[‘permisos’]</p>
+</dd>
+</dl>
+<p>raise forms.ValidationError(‘Debe seleccionar al menos uno’)</p>
+</dd>
+</dl>
+</dd>
+<dt>class UpdateRolForm(forms.ModelForm):</dt><dd><p>“””
+Formulario para modificar un Rol
+“””
+class Meta:</p>
+<blockquote>
+<div><p>model = Rol
+fields = [</p>
+<blockquote>
+<div><p>‘nombre’,
+‘descripcion’,
+‘permisos’</p>
+</div></blockquote>
+<p>]
+labels = {</p>
+<blockquote>
+<div><p>‘nombre’: ‘Nombre del rol’,
+‘descripcion’: ‘Descripcion ‘,
+‘permisos’: ‘Permisos’,</p>
+</div></blockquote>
+<p>}
+widgets = {
+‘permisos’: forms.CheckboxSelectMultiple(),
+}</p>
+</div></blockquote>
+<dl>
+<dt>def __init__(self, <a href="#id9"><span class="problematic" id="id10">*</span></a>args, <a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs):</dt><dd><p>super(UpdateRolForm, self).__init__(<a href="#id13"><span class="problematic" id="id14">*</span></a>args, <a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs)
+#permisos_all = Permiso.objects.filter(tipo=2)
+permisos_all = Permiso.objects.filter()
+p = self.fields[‘permisos’].widget
+permisos = []
+for permiso in permisos_all:</p>
+<blockquote>
+<div><p>permisos.append((permiso.id, permiso.nombre))</p>
+</div></blockquote>
+<p>p.choices = permisos</p>
+</dd>
+<dt>def clean_permiso(self):</dt><dd><p>permisos = self.cleaned_data[‘permisos’]
+try:</p>
+<blockquote>
+<div><p>pr = Permiso.objects.get(permisos = permisos)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>except:</dt><dd><p>return self.cleaned_data[‘permisos’]</p>
+</dd>
+</dl>
+<p>raise forms.ValidationError(‘Debe seleccionar al menos uno’)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="models">
+<h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
+<p>from django.db import models</p>
+<p># Create your models here.
+“””
+Definicion de los modelos de Permiso y Rol
+“””</p>
+<dl>
+<dt>class Permiso(models.Model):</dt><dd><p>‘’’Define la clase de permisos’’’
+nombre = models.CharField(max_length=70, blank=False, null=False)
+‘’’ tipo 1 = Permisos de administracion</p>
+<blockquote>
+<div><p>tipo 2 = Permisos de Proyecto’’’</p>
+</div></blockquote>
+<p>tipo = models.IntegerField()</p>
+<dl class="simple">
+<dt>def __str__(self):</dt><dd><p>return self.nombre</p>
+</dd>
+</dl>
+</dd>
+<dt>class Rol(models.Model):</dt><dd><p>“””
+Se definen los campos necesarios para el modelo Rol
+“””</p>
+<p>id = models.AutoField
+nombre = models.CharField(max_length=50, unique=True,blank=False, null=False)
+descripcion = models.CharField(max_length=300)
+permisos = models.ManyToManyField(‘Permiso’, blank=False)</p>
+<dl class="simple">
+<dt>def __str__(self):</dt><dd><p>return self.nombre</p>
+</dd>
+<dt>def get_id(self):</dt><dd><p>return self.id</p>
+</dd>
+<dt>def set_nombre(self,nom):</dt><dd><p>self.nombre = nom</p>
+</dd>
+<dt>def set_descripcion(self, desc):</dt><dd><p>self.descripcion = desc</p>
+</dd>
+<dt>def get_descripcion(self):</dt><dd><p>return self.descripcion</p>
+</dd>
+<dt>def set_permiso(self, permisos):</dt><dd><p>self.permisos = permisos</p>
+</dd>
+<dt>def get_permiso(self):</dt><dd><p>return self.permisos</p>
+</dd>
+<dt>def list_permisos(self):</dt><dd><p>permisos = self.permiso.filter()
+lista = list(permisos)
+return lista</p>
+</dd>
+<dt>def agregar_permiso(self, permiso):</dt><dd><p>self.permisos.append(permiso)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="views">
+<h2>Views<a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
+<p>from django.shortcuts import render
+from django.views.generic import ListView, CreateView, UpdateView
+from .models import Rol
+from django.contrib.auth.models import User
+from rol.forms import *
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.http import HttpResponseForbidden
+from django.urls import reverse
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
+# Create your views here.</p>
+<p>“””
+Funcion eliminar Rol
+“””
+def eliminar3(request, rol_id):</p>
+<blockquote>
+<div><p>rol = Rol.objects.get(id=rol_id)
+rol.delete()
+return redirect(“index”)</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class RolListView(LoginRequiredMixin, ListView):</p>
+<blockquote>
+<div><p>“””
+Vista de la lista de Roles
+“””</p>
+<p>template_name = ‘rol/list.html’
+model = Rol
+queryset = Rol.objects.all()</p>
+<dl class="simple">
+<dt>def get_context_data(self, <a href="#id17"><span class="problematic" id="id18">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs)
+context[‘title’] = “Roles”
+return context</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class CreateRolView(SuccessMessageMixin, LoginRequiredMixin, CreateView):</p>
+<blockquote>
+<div><p>“””
+Vista para la creacion de un nuevo Rol
+“””</p>
+<p>template_name = ‘rol/rol.html’
+model = Rol
+success_url = ‘/index’
+form_class = CreateRolForm
+success_message = ‘Se ha creado el rol’</p>
+<dl class="simple">
+<dt>def get_context_data(self, <a href="#id21"><span class="problematic" id="id22">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id23"><span class="problematic" id="id24">**</span></a>kwargs)
+# Add in a QuerySet of all the books
+context[‘title’] = “Crear Rol”
+return context</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)</p>
+<dl>
+<dt>class UpdateRolView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):</dt><dd><p>“””
+Vista para la modificacion de un Rol
+“””</p>
+<p>template_name = ‘rol/rol.html’
+model = Rol
+# permission_required=
+form_class = UpdateRolForm
+success_url = ‘/index’
+success_message = ‘Los cambios se guardaron correctamente’</p>
+<dl class="simple">
+<dt>def get_context_data(self, <a href="#id25"><span class="problematic" id="id26">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs)
+# Add in a QuerySet of all the books
+context[‘title’] = “Modificar Rol”
+return context</p>
+</dd>
+<dt>def get_object(self, queryset=None):</dt><dd><p>return Rol.objects.get(pk=self.kwargs[‘pk’])</p>
+</dd>
+<dt>def get_absolute_url(self):</dt><dd><p>return reverse(‘update_rol’, kwargs={‘pk’: self.kwargs[‘pk’]})</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="urls">
+<h2>Urls<a class="headerlink" href="#urls" title="Permalink to this headline">¶</a></h2>
+<p>from django.conf.urls import url
+from django.urls import path
+from . import views
+from .views import eliminar3
+# from django.contrib.auth.views import login
+from .models import *</p>
+<p>“””
+URL para el ver, crear y modificar roles
+“””</p>
+<dl class="simple">
+<dt>urlpatterns = [</dt><dd><p>url(r’^$’, views.RolListView.as_view(),name=’rol_list’),
+url(r’^create/$’, views.CreateRolView.as_view(), name=’create_rol’),
+path(route=’update_rol/&lt;int:pk&gt;/’, view=views.UpdateRolView.as_view(), name=’update_rol’),
+path(“eliminar/&lt;int:rol_id&gt;/”, eliminar3, name=”eliminar3”),</p>
+</dd>
+</dl>
+<p>]</p>
+</section>
+<section id="tests">
+<h2>Tests<a class="headerlink" href="#tests" title="Permalink to this headline">¶</a></h2>
+<p>from django.test import TestCase
+import unittest
+from rol.models import Permiso, Rol</p>
+<p># Create your tests here.</p>
+<p>class Test(unittest.TestCase):</p>
+<blockquote>
+<div><p>“””
+Test de creacion de Rol vacio
+“””
+def test_creacionRol(self):</p>
+<blockquote>
+<div><p>rol = Rol()
+self.assertIsNotNone(rol)</p>
+</div></blockquote>
+</div></blockquote>
 </section>
 </section>
 
@@ -63,13 +353,14 @@
 
 <h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="rol.html">Rol</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Glosario</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="proyecto.html">Proyecto</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="flujo.html">Flujo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inicio.html">Inicio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proyecto.html">Proyecto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rol.html">Rol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sprint.html">Sprint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipoUserStory.html">Tipo de User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="userStory.html">User Story</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usuarios.html">Usuarios</a></li>
 </ul>
 
@@ -77,10 +368,6 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="rol.html">Rol</a><ul>
-      <li>Previous: <a href="rol.html" title="previous chapter">Rol</a></li>
-      <li>Next: <a href="proyecto.html" title="next chapter">Proyecto</a></li>
-  </ul></li>
   </ul></li>
 </ul>
 </div>

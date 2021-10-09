@@ -1,0 +1,547 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Comentarios &#8212; Gestor de Proyectos  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tipo de User Story" href="tipoUserStory.html" />
+    <link rel="prev" title="Comentarios" href="sprintUrls.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="comentarios">
+<h1>Comentarios<a class="headerlink" href="#comentarios" title="Permalink to this headline">¶</a></h1>
+<p>ffrom django.views.generic import ListView, CreateView, UpdateView, DetailView
+from django.http import HttpResponseRedirect
+from .forms import *
+from proyecto.models import *
+from sprint.forms import CreateSprintForm, UpdateSprintForm
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from userstory.models import *
+from flujo.models import *
+from django.forms import inlineformset_factory
+from django.db import transaction
+import json
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from django.http import HttpResponseRedirect</p>
+<p>from is2_014 import settings
+from .forms import *
+from proyecto.models import *
+from sprint.forms import CreateSprintForm, UpdateSprintForm
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from userstory.models import *
+from flujo.models import *
+from django.forms import inlineformset_factory
+from django.db import transaction
+import json
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from io import BytesIO
+from reportlab.pdfgen import canvas
+import locale
+from django.views.generic import View
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import ParagraphStyle, TA_CENTER, TA_LEFT
+from reportlab.lib.units import inch, mm
+from reportlab.lib import colors
+from reportlab.graphics.shapes import Drawing, Line
+from reportlab.lib.enums import TA_RIGHT
+from reportlab.platypus import (</p>
+<blockquote>
+<div><p>Paragraph,
+Table,
+SimpleDocTemplate,
+Spacer,
+TableStyle,
+Paragraph,
+Image)</p>
+</div></blockquote>
+<p>“””
+Vista del Login
+“””</p>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class SprintListView(LoginRequiredMixin, ListView):
+“””
+Vista de la lista de todos los Sprints del proyecto
+“””</p>
+<blockquote>
+<div><p>queryset = Sprint.objects.all()</p>
+<p>def get_context_data(self, <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>context = super().get_context_data(<a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)
+try:</p>
+<blockquote>
+<div><p>context[‘sprint_pendiente’] = Sprint.objects.get(proyecto=self.kwargs[‘pk_proyecto’],estado=’Pendiente’)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>except:</dt><dd><p>pass</p>
+</dd>
+</dl>
+<p>context[‘direccion’] = {}
+return context</p>
+</div></blockquote>
+<p>def get(self,request,*args,**kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><p>self.object = None
+return self.render_to_response(self.get_context_data(project=proyecto, object_list=self.object_list,permisos=permisos))</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class CreateSprintView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+“””
+Vista para la creacion de un Sprint
+“””</p>
+<blockquote>
+<div><p>def get_object(self, queryset=None):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna el objeto a ser creado con el proyecto actual asignado
+“””
+:param queryset:
+“””
+:return: el objeto actual con el proyecto seleccionado pre-asignado
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>obj = Sprint()
+return obj</p>
+</div></blockquote>
+<p>def get(self,request,*args,**kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><dl class="simple">
+<dt>return self.render_to_response(self.get_context_data(team=team, horas_formset=horas_team, form=form,</dt><dd><p>permisos=permisos, formularios=formularios))</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>def post(self, request, <a href="#id5"><span class="problematic" id="id6">*</span></a>args, <a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta POST
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta POST
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><dl class="simple">
+<dt>if form.is_valid() and horas_team.is_valid():</dt><dd><dl class="simple">
+<dt>try:</dt><dd><dl class="simple">
+<dt>return self.render_to_response(self.get_context_data(team=team, horas_formset=horas_team,</dt><dd><p>permisos=permisos, formularios=formularios,
+form_error=form_error))</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>else:</dt><dd><dl class="simple">
+<dt>return self.render_to_response(self.get_context_data(team=team, horas_formset=horas_team,</dt><dd><p>permisos=permisos, formularios=formularios))</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id9"><span class="problematic" id="id10">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><p>self.object = None
+context = super().get_context_data(<a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs)
+return context</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateSprintView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+“””
+Vista para la modificacion de un Sprint
+“””</p>
+<blockquote>
+<div><p>def get(self, request, <a href="#id13"><span class="problematic" id="id14">*</span></a>args, <a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>self.object = self.get_object()
+return self.render_to_response(self.get_context_data(permisos=permisos))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id17"><span class="problematic" id="id18">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>context = super().get_context_data(<a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs)
+return context</p>
+</div></blockquote>
+<p>def get_object(self, queryset=None):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna el objeto a ser modificado
+“””
+:param queryset:
+“””
+:return: el objeto actual
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return Sprint.objects.get(pk=self.kwargs[‘sprint_pk’])</p>
+</div></blockquote>
+<p>def post(self, request, <a href="#id21"><span class="problematic" id="id22">*</span></a>args, <a href="#id23"><span class="problematic" id="id24">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta POST
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta POST
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return HttpResponseRedirect(‘./’)</p>
+</div></blockquote>
+<p>#fin reasignacion de team members
+if form.is_valid() and horas_team.is_valid():</p>
+<blockquote>
+<div><dl class="simple">
+<dt>try:</dt><dd><p>return HttpResponseRedirect(self.success_url)</p>
+</dd>
+<dt>except ValidationError as e:</dt><dd><dl class="simple">
+<dt>return self.render_to_response(self.get_context_data(team=team, horas_formset=horas_team,</dt><dd><p>permisos=permisos, formularios=formularios,
+form_error=form_error))</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</div></blockquote>
+<dl>
+<dt>else:</dt><dd><p>formularios = {}
+for ht in horas_team:
+return self.render_to_response(self.get_context_data(team=team, horas_formset=horas_team,</p>
+<blockquote>
+<div><p>permisos=permisos, formularios=formularios))</p>
+</div></blockquote>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class AsignarUSUpdateView(LoginRequiredMixin, ListView):
+“””
+Vista para la asignacion de user story
+“””</p>
+<blockquote>
+<div><p>def get_queryset(self):</p>
+</div></blockquote>
+<p>“””
+retorna la lista de todos los user stories pendientes actualmente
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><dl class="simple">
+<dt>pendientes = UserStory.objects.filter(proyecto=self.kwargs[‘pk_proyecto’],</dt><dd><p>estado=2)</p>
+</dd>
+</dl>
+<p>return asignados.union(pendientes)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>def get_pendientes_clasificados(self,sprint):</dt><dd><p>“””retorna dos listas, primero una lista de todos los user stories pendientes
+que ya han sido trabajados en otro sprint ordenados por priorizacion y segundo
+la lista de todos los user stories pendientes que aun no han sido trabajados
+ordenados por priorizacion”””
+sl = []
+fl = []
+return fl, sl</p>
+</dd>
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>“””retorna el contexto y permisos de usuario que constituyen la respuesta a las
+consultas GET
+Metodo que es ejecutado al darse una consulta GET
+:param request: consulta recibida
+:param args: argumentos adicionales
+:param kwargs: diccionario de datos adicionales
+:return: la respuesta a la consulta GET
+“””
+self.object_list = self.get_queryset()
+permisos = request.user.get_nombres_permisos(proyecto=self.kwargs[‘pk_proyecto’])
+return self.render_to_response(self.get_context_data(permisos=permisos))</p>
+</dd>
+</dl>
+<p>def get_context_data(self, <a href="#id25"><span class="problematic" id="id26">*</span></a>, object_list=None, <a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>context = super(AsignarUSUpdateView,self).get_context_data(<a href="#id29"><span class="problematic" id="id30">**</span></a>kwargs)
+return context</p>
+</div></blockquote>
+<p>def post(self,request,*args,**kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que valida las asignaciones realizadas por el usuario, de ser validas guarda el user
+“””
+story asignado al sprint pendiente, de no ser validas regresa a la vista de asignacion
+“””
+para visualizar los errores
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta POST
+“””</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self.object_list = self.get_queryset()</dt><dd><dl class="simple">
+<dt>if str(us.pk) in asigned:</dt><dd><dl class="simple">
+<dt>‘’’Se asignan los us al sprint’’’</dt><dd><dl class="simple">
+<dt>return self.render_to_response(self.get_context_data(permisos=permisos,</dt><dd><p>error_msg=error_msg,
+set_team_members=True))</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd>
+<dt>else:</dt><dd><p>‘’’Se quita la asignacion a todos los us que no fueron seleccionados’’’
+us.save()</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>return HttpResponseRedirect(‘../../../’)</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class VerSprintDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):
+“””
+Clase de la vista utilizada para visualizar los sprints sin opciones de modificacion
+“””</p>
+<blockquote>
+<div><p>def get(self, request, <a href="#id31"><span class="problematic" id="id32">*</span></a>args, <a href="#id33"><span class="problematic" id="id34">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>permisos = request.user.get_nombres_permisos(proyecto=self.kwargs[‘pk_proyecto’])
+return self.render_to_response(self.get_context_data(permisos=permisos))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id35"><span class="problematic" id="id36">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>context = super().get_context_data(<a href="#id37"><span class="problematic" id="id38">**</span></a>kwargs)
+return context</p>
+</div></blockquote>
+<p>def get_object(self, queryset=None):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna el objeto actual
+“””
+:param queryset:
+“””
+:return: el objeto actual
+“””</p>
+<blockquote>
+<div><p>sprint = Sprint.objects.get(pk=self.kwargs[‘pk’])
+return sprint</p>
+</div></blockquote>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Gestor de Proyectos</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="flujo.html">Flujo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inicio.html">Inicio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proyecto.html">Proyecto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rol.html">Rol</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="sprint.html">Sprint</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="glosariosprint.html">Glosario Sprint</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tipoUserStory.html">Tipo de User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="userStory.html">User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usuarios.html">Usuarios</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="sprint.html">Sprint</a><ul>
+  <li><a href="glosariosprint.html">Glosario Sprint</a><ul>
+      <li>Previous: <a href="sprintUrls.html" title="previous chapter">Comentarios</a></li>
+      <li>Next: <a href="tipoUserStory.html" title="next chapter">Tipo de User Story</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Grupo 14.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/sprintViews.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

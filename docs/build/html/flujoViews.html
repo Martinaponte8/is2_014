@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Comentarios &#8212; Gestor de Proyectos  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Inicio" href="inicio.html" />
+    <link rel="prev" title="Comentarios" href="flujoUrls.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="comentarios">
+<h1>Comentarios<a class="headerlink" href="#comentarios" title="Permalink to this headline">¶</a></h1>
+<p>from django.views.generic import ListView, CreateView, UpdateView, TemplateView, DetailView
+from .forms import *
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from proyecto.models import *
+from sprint.models import *
+from userstory.models import *
+from userstory.forms import *</p>
+<blockquote>
+<div><p>&#64;method_decorator(login_required, name=’dispatch’)
+class FlujoListView(LoginRequiredMixin, ListView):</p>
+</div></blockquote>
+<p>“””
+Vista de la lista de Flujos
+“””</p>
+<blockquote>
+<div><p>template_name = ‘flujo/list.html’
+model = Flujo
+queryset = Flujo.objects.all()</p>
+<dl class="simple">
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>return self.render_to_response(self.get_context_data(permisos=permisos, project=proyecto,object_list=self.object_list))</p>
+</dd>
+<dt>def get_context_data(self, <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)
+return context</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>class UpdateFlujoView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):</p>
+<p>“””
+Vista para la modificacion de flujo
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><dl class="simple">
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>return self.render_to_response(self.get_context_data(permisos=permisos,form=form, fases=fases_orden_formset))</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl>
+<dt>def get_context_data(self, <a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs)
+return context</p>
+</dd>
+<dt>def get_object(self, queryset=None):</dt><dd><p>return Flujo.objects.get(pk=self.kwargs[‘pk’])</p>
+</dd>
+<dt>def post(self,request,*args,**kwargs):</dt><dd><dl class="simple">
+<dt>if form.is_valid() and fases_formset.is_valid():</dt><dd><p>return self.form_valid(form, fases_formset)</p>
+</dd>
+<dt>else:</dt><dd><p>return self.form_invalid(form, fases_formset)</p>
+</dd>
+</dl>
+</dd>
+<dt>def form_valid(self, form, fases_formset):</dt><dd><p>return HttpResponseRedirect(self.get_success_url())</p>
+</dd>
+<dt>def form_invalid(self, form,fases_formset):</dt><dd><dl class="simple">
+<dt>if fases_formset.vacio:</dt><dd><p>fs_error = “El flujo debe tener al menos una fase”</p>
+</dd>
+<dt>if fases_formset.sin_nombre:</dt><dd><p>fs_error = “Las fases deben tener un nombre”</p>
+</dd>
+</dl>
+<p>return self.render_to_response(self.get_context_data(fs_error=fs_error, form=form, fases=fases_formset))</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class CreateFlujoView(SuccessMessageMixin, LoginRequiredMixin, CreateView):</p>
+<blockquote>
+<div><p>“””
+Vista de la creacion de Flujo
+“””
+template_name = ‘flujo/flujo.html’
+model = Flujo
+success_url = ‘../’
+form_class = CreateFlujoForm
+success_message = ‘Se ha creado el flujo’</p>
+<dl>
+<dt>def get_object(self, queryset=None):</dt><dd><p>obj = Flujo()
+proyecto = Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])
+obj.proyecto = proyecto
+return obj</p>
+</dd>
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+fases_orden_formset = FaseFormSet()
+permisos = request.user.get_nombres_permisos(proyecto=self.kwargs[‘pk_proyecto’])
+return self.render_to_response(self.get_context_data(permisos=permisos, form=form, fases=fases_orden_formset))</p>
+</dd>
+<dt>def get_context_data(self, <a href="#id9"><span class="problematic" id="id10">**</span></a>kwargs):</dt><dd><p>context = super(CreateFlujoView,self).get_context_data(<a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs)
+context[‘project’] = Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])
+context[‘title’] = “Crear Flujo”
+return context</p>
+</dd>
+<dt>def post(self,request,*args,**kwargs):</dt><dd><p>self.object = None
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+fases_formset = FaseFormSet(request.POST)
+if form.is_valid() and fases_formset.is_valid():</p>
+<blockquote>
+<div><p>return self.form_valid(form,fases_formset)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>return self.form_invalid(form,fases_formset)</p>
+</dd>
+</dl>
+</dd>
+<dt>def form_valid(self, form, fases_formset):</dt><dd><p>self.object = form.save()
+fases_formset.instance = self.object
+fases_formset.save()
+return HttpResponseRedirect(self.success_url)</p>
+</dd>
+<dt>def form_invalid(self, form,fases_formset):</dt><dd><p>fs_error = None
+if fases_formset.vacio:</p>
+<blockquote>
+<div><p>fs_error = “El flujo debe tener al menos una fase”</p>
+</div></blockquote>
+<dl class="simple">
+<dt>if fases_formset.sin_nombre:</dt><dd><p>fs_error = “Las fases deben tener un nombre”</p>
+</dd>
+</dl>
+<p>return self.render_to_response(self.get_context_data(fs_error=fs_error, form=form, fases=fases_formset))</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class CreateFlujoView(SuccessMessageMixin, LoginRequiredMixin, CreateView):</p>
+<p>“””
+Vista de la creacion de Flujo
+“””</p>
+<blockquote>
+<div><dl>
+<dt>def get_object(self, queryset=None):</dt><dd><p>obj = Flujo()
+return obj</p>
+</dd>
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>return self.render_to_response(self.get_context_data(permisos=permisos, form=form, fases=fases_orden_formset))</p>
+</dd>
+<dt>def get_context_data(self, <a href="#id13"><span class="problematic" id="id14">**</span></a>kwargs):</dt><dd><p>context = super(CreateFlujoView,self).get_context_data(<a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs)
+return context</p>
+</dd>
+<dt>def post(self,request,*args,**kwargs):</dt><dd><dl class="simple">
+<dt>if form.is_valid() and fases_formset.is_valid():</dt><dd><p>return self.form_valid(form,fases_formset)</p>
+</dd>
+<dt>else:</dt><dd><p>return self.form_invalid(form,fases_formset)</p>
+</dd>
+</dl>
+</dd>
+<dt>def form_valid(self, form, fases_formset):</dt><dd><p>return HttpResponseRedirect(self.success_url)</p>
+</dd>
+<dt>def form_invalid(self, form,fases_formset):</dt><dd><dl class="simple">
+<dt>if fases_formset.vacio:</dt><dd><p>fs_error = “El flujo debe tener al menos una fase”</p>
+</dd>
+<dt>if fases_formset.sin_nombre:</dt><dd><p>fs_error = “Las fases deben tener un nombre”</p>
+</dd>
+</dl>
+<p>return self.render_to_response(self.get_context_data(fs_error=fs_error, form=form, fases=fases_formset))</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView):</p>
+<p>“””
+Vista del tablero de los flujos
+“””</p>
+<blockquote>
+<div><p>def get(self,request,*args,**kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return self.render_to_response(self.get_context_data(usuario=usuario, permisos=permisos))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id17"><span class="problematic" id="id18">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return context</p>
+</div></blockquote>
+<p>def post(self, request, <a href="#id19"><span class="problematic" id="id20">*</span></a>args, <a href="#id21"><span class="problematic" id="id22">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+En este metodo se guardan los archivos, actividades o notas si lo que se agrega
+“””
+es un adjunto, o se mueve un US al estado siguiente o estado anterior o se mueve el
+“””
+US a una fase especifica si no paso el control de calidad o pasa a finalizado si es
+“””
+que paso el control de calidad, se toma una y solo una de las acciones mecionadas
+“””
+segun la consulta POST recibida
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta POST
+“””</p>
+<blockquote>
+<div><dl>
+<dt>return render(request,’flujo/tablero.html’,self.get_context_data(s_fase=us.fase,usuario=usuario,</dt><dd><blockquote>
+<div><p>modal=us.pk, permisos=permisos))</p>
+</div></blockquote>
+<dl class="simple">
+<dt>elif ‘siguiente’ in request.POST.keys():</dt><dd><p>return render(request,’flujo/tablero.html’,self.get_context_data(s_fase=us.fase,usuario=usuario, permisos=permisos))</p>
+</dd>
+<dt>if ‘anterior’ in request.POST.keys():</dt><dd><p>return render(request, ‘flujo/tablero.html’,</p>
+</dd>
+<dt>if ‘finalizar’ in request.POST.keys():</dt><dd><p>#si se comenta este if y elif deja finalizar el sprint
+actividad = GuardarActividadForm(request.POST)</p>
+</dd>
+</dl>
+<p>return HttpResponseRedirect(‘./’)</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class VerFlujoDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):</p>
+<p>“””
+Vista para ver un flujo, sin opciones de modificación
+“””</p>
+<blockquote>
+<div><p>def get(self,request,*args,**kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return self.render_to_response(self.get_context_data(permisos=permisos))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id23"><span class="problematic" id="id24">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+“””
+:param kwargs: Diccionario de datos adicionales para el contexto
+“””
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>return context</p>
+</div></blockquote>
+<p>def get_object(self, queryset=None):</p>
+</div></blockquote>
+<p>“””
+Metodo que retorna el objeto a ser visualizado
+“””
+:param queryset:
+“””
+:return: El proyecto a ser modificado
+“””</p>
+<blockquote>
+<div><p>return Flujo.objects.get(pk=self.kwargs[‘pk’])</p>
+</div></blockquote>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Gestor de Proyectos</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="flujo.html">Flujo</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="glosarioflujo.html">Glosario Flujo</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="inicio.html">Inicio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proyecto.html">Proyecto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rol.html">Rol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sprint.html">Sprint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipoUserStory.html">Tipo de User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="userStory.html">User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usuarios.html">Usuarios</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="flujo.html">Flujo</a><ul>
+  <li><a href="glosarioflujo.html">Glosario Flujo</a><ul>
+      <li>Previous: <a href="flujoUrls.html" title="previous chapter">Comentarios</a></li>
+      <li>Next: <a href="inicio.html" title="next chapter">Inicio</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Grupo 14.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/flujoViews.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

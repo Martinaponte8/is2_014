@@ -15,8 +15,6 @@
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Inicio" href="inicio.html" />
-    <link rel="prev" title="Proyecto" href="proyecto.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -35,16 +33,810 @@
             
   <section id="glosario">
 <h1>Glosario<a class="headerlink" href="#glosario" title="Permalink to this headline">¶</a></h1>
-<section id="module-proyecto.apps">
-<span id="seccion-apps"></span><h2>Seccion apps<a class="headerlink" href="#module-proyecto.apps" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="proyecto.apps.ProyectoConfig">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">proyecto.apps.</span></span><span class="sig-name descname"><span class="pre">ProyectoConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#proyecto.apps.ProyectoConfig" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
+<section id="apps">
+<h2>Apps<a class="headerlink" href="#apps" title="Permalink to this headline">¶</a></h2>
 </section>
-<section id="seccion-admin">
-<h2>Seccion admin<a class="headerlink" href="#seccion-admin" title="Permalink to this headline">¶</a></h2>
+<section id="admin">
+<h2>Admin<a class="headerlink" href="#admin" title="Permalink to this headline">¶</a></h2>
+<p>from django.contrib import admin</p>
+<p># Register your models here.
+from .models import *
+from rol.models import Rol
+from rol.models import Permiso</p>
+<dl class="simple">
+<dt>class ProyectoDetalleInLine(admin.TabularInline):</dt><dd><p>model = ProyectoDetalle</p>
+</dd>
+<dt>class ProyectoAdmin(admin.ModelAdmin):</dt><dd><p>inlines = (ProyectoDetalleInLine,)</p>
+</dd>
+</dl>
+<p>admin.site.register(Proyecto,ProyectoAdmin)</p>
+</section>
+<section id="forms">
+<h2>Forms<a class="headerlink" href="#forms" title="Permalink to this headline">¶</a></h2>
+<p>from django import forms
+from django.forms import inlineformset_factory
+from .models import *</p>
+<dl>
+<dt>class CreateProjectForm(forms.ModelForm):</dt><dd><dl class="simple">
+<dt>“””</dt><dd><p>Formulario para la creacion de un nuevo Proyecto
+“””</p>
+</dd>
+<dt>class Meta:</dt><dd><p>model = Proyecto
+fields = (‘nombre’, ‘fecha_inicio’, ‘fecha_fin’, ‘estado’, ‘descripcion’)</p>
+</dd>
+<dt>widgets = {</dt><dd><p>‘fecha_inicio’: forms.DateTimeField(),
+‘fecha_fin’: forms.DateTimeField()</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>labels = {</dt><dd><p>‘nombre’: ‘Nombre del Proyecto’,
+‘fecha_inicio’: ‘Fecha de Inicio’,
+‘fecha_fin’: ‘Fecha de Fin’,
+‘estado’: ‘Estado’,
+‘descripcion’: ‘Descripcion ‘,</p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+<dt>class UpdateProjectForm(forms.ModelForm):</dt><dd><dl class="simple">
+<dt>“””</dt><dd><p>Formulario para la modificacion de un Proyecto
+“””</p>
+</dd>
+<dt>class Meta:</dt><dd><p>model = Proyecto
+fields = (‘nombre’, ‘fecha_inicio’, ‘fecha_fin’, ‘estado’, ‘descripcion’)</p>
+</dd>
+<dt>widgets = {</dt><dd><p>‘fecha_inicio’: forms.DateTimeField(),
+‘fecha_fin’: forms.DateTimeField()</p>
+</dd>
+</dl>
+<p>}</p>
+<dl class="simple">
+<dt>labels = {</dt><dd><p>‘nombre’: ‘Nombre del Proyecto’,
+‘fecha_inicio’: ‘Fecha de Inicio’,
+‘fecha_fin’: ‘Fecha de Fin’,
+‘estado’: ‘Estado’,
+‘descripcion’: ‘Descripcion ‘,</p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+<dt>class CreateFlujoForm(forms.ModelForm):</dt><dd><dl class="simple">
+<dt>class Meta:</dt><dd><p>model = Flujo
+fields = (‘nombre’,’proyecto’,’descripcion’)</p>
+</dd>
+<dt>widgets = {</dt><dd><p>‘proyecto’: forms.HiddenInput()</p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+<dt>class UpdateFlujoForm(forms.ModelForm):</dt><dd><dl class="simple">
+<dt>class Meta:</dt><dd><p>model = Flujo
+fields = (‘nombre’,’proyecto’,’descripcion’)</p>
+</dd>
+<dt>widgets = {</dt><dd><p>‘proyecto’: forms.HiddenInput()</p>
+</dd>
+</dl>
+<p>}</p>
+</dd>
+<dt>class ProyectoDetalleForm(forms.ModelForm):</dt><dd><dl class="simple">
+<dt>class Meta:</dt><dd><p>model = ProyectoDetalle
+exclude = ()
+fields = (‘usuario’,’rol’)</p>
+</dd>
+</dl>
+</dd>
+<dt>class FaseForm(forms.ModelForm):</dt><dd><dl class="simple">
+<dt>class Meta:</dt><dd><p>model = Fase
+exclude = ()
+fields = (‘nombre’,)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>ProyectoDetalleFormSet = inlineformset_factory(Proyecto,ProyectoDetalle,form=ProyectoDetalleForm,extra=1)
+FaseFormSet = inlineformset_factory(Flujo,Fase,form=FaseForm,extra=1)</p>
+</section>
+<section id="models">
+<h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
+<p>import datetime
+from django.db import models
+from rol.models import Rol
+from usuarios.models import Usuario</p>
+<p># Create your models here.
+“””
+Definimos los estados de un Proyecto
+“””</p>
+<dl class="simple">
+<dt>ESTADOS_PROYECTO = (</dt><dd><p>(‘Pendiente’, ‘Pendiente’), # cuando se crea
+(‘Activo’, ‘Activo’), # cuando se inicia
+(‘Cancelado’,’Cancelado’), # cuando se cancela
+(‘Terminado’, ‘Terminado’), # cuando se aprueba uno finalizado
+(‘Suspendido’, ‘Suspendido’), # cuando se inactiva el proyecto</p>
+</dd>
+</dl>
+<p>)</p>
+<dl>
+<dt>class Proyecto(models.Model):</dt><dd><p>nombre = models.CharField(max_length=20)
+fecha_inicio = models.DateField(‘Fecha de Inicio Proyecto’)
+fecha_fin = models.DateField(‘Fecha de Fin Proyecto’)
+estado = models.CharField(max_length=25, choices=ESTADOS_PROYECTO, default=’PEN’)
+descripcion= models.TextField()</p>
+<dl class="simple">
+<dt>def __str__(self):</dt><dd><p>return self.nombre</p>
+</dd>
+</dl>
+</dd>
+<dt>class ProyectoDetalle(models.Model):</dt><dd><p>proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
+usuario = models.ForeignKey(Usuario, on_delete=models.PROTECT)
+rol = models.ForeignKey(Rol, on_delete=models.PROTECT)</p>
+</dd>
+<dt>ESTADOS_FASE = (</dt><dd><p>(‘To Do’, ‘To Do’), # pendiente
+(‘Doing’, ‘Doing’), # en proceso
+(‘Do’,’Do’), #terminado</p>
+</dd>
+</dl>
+<p>)</p>
+<dl class="simple">
+<dt>class Flujo(models.Model):</dt><dd><p>proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
+nombre = models.CharField(max_length=20)
+descripcion = models.TextField()</p>
+</dd>
+<dt>class Fase(models.Model):</dt><dd><p>flujo = models.ForeignKey(Flujo,on_delete=models.CASCADE)
+nombre = models.CharField(max_length=20)
+estado = models.CharField(max_length=25, choices=ESTADOS_FASE, default=’To Do’)</p>
+</dd>
+</dl>
+</section>
+<section id="views">
+<h2>Views<a class="headerlink" href="#views" title="Permalink to this headline">¶</a></h2>
+<p>from .models import Proyecto
+“””
+Vistas del Proyecto
+“””</p>
+<p>“””
+Funcion eliminar Proyecto
+“””
+def eliminar2(request, project_id):</p>
+<blockquote>
+<div><p>project = Proyecto.objects.get(id=project_id)
+project.delete()
+return redirect(“index”)</p>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateOptionsView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):</p>
+<blockquote>
+<div><p>“””
+Vista de modificar Proyectos
+“””</p>
+<p>template_name = ‘proyecto/options.html’
+model = Proyecto
+form_class = UpdateProjectForm
+success_url = ‘/proyectos/opciones/’
+success_message = ‘Los cambios se guardaron correctamente’</p>
+<dl>
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+detalles = ProyectoDetalle.objects.filter(proyecto=self.object).order_by(‘pk’)
+detalles_data = []
+for detalle in detalles:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>d = {‘usuario’: detalle.usuario,</dt><dd><p>‘rol’: detalle.rol}</p>
+</dd>
+</dl>
+<p>detalles_data.append(d)</p>
+</div></blockquote>
+<p>ProyectoDetalleFormSet = inlineformset_factory(Proyecto, ProyectoDetalle, form=ProyectoDetalleForm,extra=len(detalles_data))
+proyectodetalle_orden_formset = ProyectoDetalleFormSet(initial=detalles_data)
+return self.render_to_response(self.get_context_data(form=form, proyectodetalles=proyectodetalle_orden_formset))</p>
+</dd>
+<dt>def get_context_data(self, <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs)
+context[‘title’] = “Modificar Proyecto”
+return context</p>
+</dd>
+<dt>def get_object(self, queryset=None):</dt><dd><p>return Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])</p>
+</dd>
+<dt>def get_absolute_url(self):</dt><dd><p>return reverse(‘update_options’, kwargs={‘pk_proyecto’: self.kwargs[‘pk_proyecto’]})</p>
+</dd>
+<dt>def post(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+proyectodetalle_formset = ProyectoDetalleFormSet(request.POST)
+if form.is_valid() and proyectodetalle_formset.is_valid():</p>
+<blockquote>
+<div><p>return self.form_valid(form, proyectodetalle_formset)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>return self.form_invalid(form, proyectodetalle_formset)</p>
+</dd>
+</dl>
+</dd>
+<dt>def form_valid(self, form, proyectodetalle_formset):</dt><dd><p>self.object = form.save()
+proyectodetalle_formset.instance = self.object
+ProyectoDetalle.objects.filter(proyecto=self.object).delete()
+proyectodetalle_formset.save()
+return HttpResponseRedirect(self.get_success_url())</p>
+</dd>
+<dt>def form_invalid(self, form,proyectodetalle_formset):</dt><dd><p>return self.render_to_response(self.get_context_data(form=form, proyectodetalles=proyectodetalle_formset))</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class FlujoListView(LoginRequiredMixin, ListView):</p>
+<blockquote>
+<div><p>template_name = ‘proyecto/flujo_list.html’
+model = Flujo
+queryset = Flujo.objects.all()</p>
+<dl class="simple">
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>self.object = None
+self.object_list = Flujo.objects.filter(proyecto=self.kwargs[‘pk_proyecto’])
+proyecto = Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])
+return self.render_to_response(self.get_context_data(project=proyecto,object_list=self.object_list))</p>
+</dd>
+<dt>def get_context_data(self, <a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs)
+context[‘title’] = “Flujos de Proyecto”
+return context</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateOptionsView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):</p>
+<blockquote>
+<div><dl class="simple">
+<dt>“””</dt><dd><p>Vistas para modificacion de las opciones de proyecto</p>
+</dd>
+</dl>
+<p>“””</p>
+<p>template_name = ‘proyecto/options.html’
+model = Proyecto
+form_class = UpdateProjectForm
+success_url = ‘/proyectos/opciones/’
+success_message = ‘Los cambios se guardaron correctamente’</p>
+<dl>
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+detalles = ProyectoDetalle.objects.filter(proyecto=self.object).order_by(‘pk’)
+detalles_data = []
+for detalle in detalles:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>d = {‘usuario’: detalle.usuario,</dt><dd><p>‘rol’: detalle.rol}</p>
+</dd>
+</dl>
+<p>detalles_data.append(d)</p>
+</div></blockquote>
+<p>ProyectoDetalleFormSet = inlineformset_factory(Proyecto, ProyectoDetalle, form=ProyectoDetalleForm,extra=len(detalles_data))
+proyectodetalle_orden_formset = ProyectoDetalleFormSet(initial=detalles_data)
+return self.render_to_response(self.get_context_data(form=form, proyectodetalles=proyectodetalle_orden_formset))</p>
+</dd>
+<dt>def get_context_data(self, <a href="#id9"><span class="problematic" id="id10">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs)
+context[‘title’] = “Modificar Proyecto”
+return context</p>
+</dd>
+<dt>def get_object(self, queryset=None):</dt><dd><p>return Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])</p>
+</dd>
+<dt>def get_absolute_url(self):</dt><dd><p>return reverse(‘update_options’, kwargs={‘pk_proyecto’: self.kwargs[‘pk_proyecto’]})</p>
+</dd>
+<dt>def post(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+proyectodetalle_formset = ProyectoDetalleFormSet(request.POST)
+if form.is_valid() and proyectodetalle_formset.is_valid():</p>
+<blockquote>
+<div><p>return self.form_valid(form, proyectodetalle_formset)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>return self.form_invalid(form, proyectodetalle_formset)</p>
+</dd>
+</dl>
+</dd>
+<dt>def form_valid(self, form, proyectodetalle_formset):</dt><dd><p>self.object = form.save()
+proyectodetalle_formset.instance = self.object
+ProyectoDetalle.objects.filter(proyecto=self.object).delete()
+proyectodetalle_formset.save()
+return HttpResponseRedirect(self.get_success_url())</p>
+</dd>
+<dt>def form_invalid(self, form,proyectodetalle_formset):</dt><dd><p>return self.render_to_response(self.get_context_data(form=form, proyectodetalles=proyectodetalle_formset))</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class FlujoListView(LoginRequiredMixin, ListView):</p>
+<blockquote>
+<div><p>template_name = ‘proyecto/flujo_list.html’
+model = Flujo
+queryset = Flujo.objects.all()</p>
+<dl class="simple">
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>self.object = None
+self.object_list = Flujo.objects.filter(proyecto=self.kwargs[‘pk_proyecto’])
+proyecto = Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])
+return self.render_to_response(self.get_context_data(project=proyecto,object_list=self.object_list))</p>
+</dd>
+<dt>def get_context_data(self, <a href="#id13"><span class="problematic" id="id14">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs)
+context[‘title’] = “Flujos de Proyecto”
+return context</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class ProjectListView(LoginRequiredMixin, ListView):</p>
+<blockquote>
+<div><p>template_name = ‘proyecto/list.html’
+model = Proyecto
+queryset = Proyecto.objects.all()</p>
+<dl class="simple">
+<dt>def get_context_data(self, <a href="#id17"><span class="problematic" id="id18">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs)
+context[‘title’] = “Proyectos”
+return context</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class OptionsListView(LoginRequiredMixin, ListView):</p>
+<blockquote>
+<div><p>template_name = ‘proyecto/opciones_list.html’
+model = Proyecto
+queryset = Proyecto.objects.all()</p>
+<dl class="simple">
+<dt>def get_context_data(self, <a href="#id21"><span class="problematic" id="id22">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id23"><span class="problematic" id="id24">**</span></a>kwargs)
+context[‘title’] = “Opciones de Proyectos”
+return context</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>“””
+Vistas de Ejecucion
+“””</p>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class EjecucionListView(LoginRequiredMixin, ListView):</p>
+<blockquote>
+<div><p>template_name = ‘proyecto/ejecuciones_list.html’
+model = Proyecto
+queryset = Proyecto.objects.all()</p>
+<dl class="simple">
+<dt>def get_context_data(self, <a href="#id25"><span class="problematic" id="id26">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs)
+context[‘title’] = “Ejecuciones de Proyectos”
+return context</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class CreateFlujoView(SuccessMessageMixin, LoginRequiredMixin, CreateView):</p>
+<blockquote>
+<div><p>template_name = ‘proyecto/flujo.html’
+model = Flujo
+success_url = ‘../’
+form_class = CreateFlujoForm
+success_message = ‘Se ha creado el flujo’</p>
+<dl>
+<dt>def get_object(self, queryset=None):</dt><dd><p>obj = Flujo()
+proyecto = Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])
+obj.proyecto = proyecto
+return obj</p>
+</dd>
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+fases_orden_formset = FaseFormSet()
+return self.render_to_response(self.get_context_data(form=form, fases=fases_orden_formset))</p>
+</dd>
+<dt>def get_context_data(self, <a href="#id29"><span class="problematic" id="id30">**</span></a>kwargs):</dt><dd><p>context = super(CreateFlujoView,self).get_context_data(<a href="#id31"><span class="problematic" id="id32">**</span></a>kwargs)
+context[‘title’] = “Crear Flujo”
+return context</p>
+</dd>
+<dt>def post(self,request,*args,**kwargs):</dt><dd><p>self.object = None
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+fases_formset = FaseFormSet(request.POST)
+if form.is_valid() and fases_formset.is_valid():</p>
+<blockquote>
+<div><p>return self.form_valid(form,fases_formset)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>return self.form_invalid(form,fases_formset)</p>
+</dd>
+</dl>
+</dd>
+<dt>def form_valid(self, form, fases_formset):</dt><dd><p>self.object = form.save()
+fases_formset.instance = self.object
+fases_formset.save()
+return HttpResponseRedirect(self.success_url)</p>
+</dd>
+<dt>def form_invalid(self, form,fases_formset):</dt><dd><p>return self.render_to_respose(self.get_context_data(form=form,fases=fases_formset))</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class CreateProjectView(SuccessMessageMixin, LoginRequiredMixin, CreateView):</p>
+<blockquote>
+<div><p>template_name = ‘proyecto/proyecto.html’
+model = Proyecto
+success_url = ‘/proyectos/’
+form_class = CreateProjectForm
+success_message = ‘Se ha creado el proyecto’</p>
+<dl>
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>self.object = None
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+proyectodetalle_orden_formset = ProyectoDetalleFormSet()
+return self.render_to_response(self.get_context_data(form=form, proyectodetalles=proyectodetalle_orden_formset))</p>
+</dd>
+<dt>def get_context_data(self, <a href="#id33"><span class="problematic" id="id34">**</span></a>kwargs):</dt><dd><p>context = super(CreateProjectView,self).get_context_data(<a href="#id35"><span class="problematic" id="id36">**</span></a>kwargs)
+context[‘title’] = “Crear Proyecto”
+return context</p>
+</dd>
+<dt>def post(self,request,*args,**kwargs):</dt><dd><p>self.object = None
+form_class = self.get_form_class()
+form = self.get_form()
+proyectodetalle_formset = ProyectoDetalleFormSet(request.POST)</p>
+<dl class="simple">
+<dt>if form.is_valid() and proyectodetalle_formset.is_valid():</dt><dd><p>return self.form_valid(form,proyectodetalle_formset)</p>
+</dd>
+<dt>else:</dt><dd><p>return self.form_invalid(form,proyectodetalle_formset)</p>
+</dd>
+</dl>
+</dd>
+<dt>def form_valid(self, form, proyectodetalle_formset):</dt><dd><p>self.object = form.save()
+proyectodetalle_formset.instance = self.object
+proyectodetalle_formset.save()
+return HttpResponseRedirect(self.success_url)</p>
+</dd>
+<dt>def form_invalid(self, form,proyectodetalle_formset):</dt><dd><p>return self.render_to_respose(self.get_context_data(form=form,proyectodetalles=proyectodetalle_formset))</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateProjectView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):</p>
+<blockquote>
+<div><p>template_name = ‘proyecto/proyecto.html’
+model = Proyecto
+form_class = UpdateProjectForm
+success_url = ‘/proyectos/’
+success_message = ‘Los cambios se guardaron correctamente’</p>
+<dl>
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+detalles = ProyectoDetalle.objects.filter(proyecto=self.object).order_by(‘pk’)
+detalles_data = []
+for detalle in detalles:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>d = {‘usuario’: detalle.usuario,</dt><dd><p>‘rol’: detalle.rol}</p>
+</dd>
+</dl>
+<p>detalles_data.append(d)</p>
+</div></blockquote>
+<p>ProyectoDetalleFormSet = inlineformset_factory(Proyecto, ProyectoDetalle, form=ProyectoDetalleForm,extra=len(detalles_data))
+proyectodetalle_orden_formset = ProyectoDetalleFormSet(initial=detalles_data)
+return self.render_to_response(self.get_context_data(form=form, proyectodetalles=proyectodetalle_orden_formset))</p>
+</dd>
+<dt>def get_context_data(self, <a href="#id37"><span class="problematic" id="id38">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id39"><span class="problematic" id="id40">**</span></a>kwargs)
+context[‘title’] = “Modificar Proyecto”
+return context</p>
+</dd>
+<dt>def get_object(self, queryset=None):</dt><dd><p>return Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])</p>
+</dd>
+<dt>def get_absolute_url(self):</dt><dd><p>return reverse(‘update_project’, kwargs={‘pk_proyecto’: self.kwargs[‘pk_proyecto’]})</p>
+</dd>
+<dt>def post(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+proyectodetalle_formset = ProyectoDetalleFormSet(request.POST)
+if form.is_valid() and proyectodetalle_formset.is_valid():</p>
+<blockquote>
+<div><p>return self.form_valid(form,proyectodetalle_formset)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>return self.form_invalid(form,proyectodetalle_formset)</p>
+</dd>
+</dl>
+</dd>
+<dt>def form_valid(self, form, proyectodetalle_formset):</dt><dd><p>self.object = form.save()
+proyectodetalle_formset.instance = self.object
+ProyectoDetalle.objects.filter(proyecto=self.object).delete()
+proyectodetalle_formset.save()
+return HttpResponseRedirect(self.get_success_url())</p>
+</dd>
+<dt>def form_invalid(self, form,proyectodetalle_formset):</dt><dd><p>return self.render_to_response(self.get_context_data(form=form, proyectodetalles=proyectodetalle_formset))</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateFlujoView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):</p>
+<blockquote>
+<div><p>template_name = ‘proyecto/flujo.html’
+model = Flujo
+success_url = ‘../’
+form_class = CreateFlujoForm
+success_message = ‘Se ha modificado el flujo’</p>
+<dl>
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+fases = Fase.objects.filter(flujo=self.object).order_by(‘pk’)
+fases_data = []
+for fase in fases:</p>
+<blockquote>
+<div><p>d = {‘nombre’: fase.nombre,}
+fases_data.append(d)</p>
+</div></blockquote>
+<p>FaseFormSet = inlineformset_factory(Flujo, Fase, form=FaseForm,extra=len(fases_data))
+fases_orden_formset = FaseFormSet(initial=fases_data)
+return self.render_to_response(self.get_context_data(form=form, fases=fases_orden_formset))</p>
+</dd>
+<dt>def get_context_data(self, <a href="#id41"><span class="problematic" id="id42">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id43"><span class="problematic" id="id44">**</span></a>kwargs)
+context[‘title’] = “Modificar Flujo”
+return context</p>
+</dd>
+<dt>def get_object(self, queryset=None):</dt><dd><p>return Flujo.objects.get(pk=self.kwargs[‘pk’])</p>
+</dd>
+<dt>def get_absolute_url(self):</dt><dd><p>return reverse(‘update_project’, kwargs={‘pk_proyecto’: self.kwargs[‘pk_proyecto’]})</p>
+</dd>
+<dt>def post(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+fases_formset = FaseFormSet(request.POST)
+if form.is_valid() and fases_formset.is_valid():</p>
+<blockquote>
+<div><p>return self.form_valid(form,fases_formset)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>return self.form_invalid(form,fases_formset)</p>
+</dd>
+</dl>
+</dd>
+<dt>def form_valid(self, form, fases_formset):</dt><dd><p>self.object = form.save()
+fases_formset.instance = self.object
+Fase.objects.filter(flujo=self.object).delete()
+fases_formset.save()
+return HttpResponseRedirect(self.get_success_url())</p>
+</dd>
+<dt>def form_invalid(self, form,fases_formset):</dt><dd><p>return self.render_to_response(self.get_context_data(form=form, fases=fases_formset))</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateDetalleProyectoView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):</p>
+<blockquote>
+<div><p>template_name = ‘proyecto/asignacion_roles.html’
+model = Proyecto
+form_class = UpdateProjectForm
+success_url = ‘../’
+success_message = ‘Los cambios se guardaron correctamente’</p>
+<dl>
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+detalles = ProyectoDetalle.objects.filter(proyecto=self.object).order_by(‘pk’)
+detalles_data = []
+for detalle in detalles:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>d = {‘usuario’: detalle.usuario,</dt><dd><p>‘rol’: detalle.rol}</p>
+</dd>
+</dl>
+<p>detalles_data.append(d)</p>
+</div></blockquote>
+<p>ProyectoDetalleFormSet = inlineformset_factory(Proyecto, ProyectoDetalle, form=ProyectoDetalleForm,extra=len(detalles_data))
+proyectodetalle_orden_formset = ProyectoDetalleFormSet(initial=detalles_data)
+return self.render_to_response(self.get_context_data(form=form, proyectodetalles=proyectodetalle_orden_formset))</p>
+</dd>
+<dt>def get_context_data(self, <a href="#id45"><span class="problematic" id="id46">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id47"><span class="problematic" id="id48">**</span></a>kwargs)
+context[‘title’] = “Modificar Proyecto”
+return context</p>
+</dd>
+<dt>def get_object(self, queryset=None):</dt><dd><p>return Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])</p>
+</dd>
+<dt>def get_absolute_url(self):</dt><dd><p>return reverse(‘update_project’, kwargs={‘pk_proyecto’: self.kwargs[‘pk_proyecto’]})</p>
+</dd>
+<dt>def post(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+proyectodetalle_formset = ProyectoDetalleFormSet(request.POST)
+if form.is_valid() and proyectodetalle_formset.is_valid():</p>
+<blockquote>
+<div><p>return self.form_valid(form,proyectodetalle_formset)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>return self.form_invalid(form,proyectodetalle_formset)</p>
+</dd>
+</dl>
+</dd>
+<dt>def form_valid(self, form, proyectodetalle_formset):</dt><dd><p>self.object = form.save()
+proyectodetalle_formset.instance = self.object
+ProyectoDetalle.objects.filter(proyecto=self.object).delete()
+proyectodetalle_formset.save()
+return HttpResponseRedirect(self.get_success_url())</p>
+</dd>
+<dt>def form_invalid(self, form,proyectodetalle_formset):</dt><dd><p>return self.render_to_response(self.get_context_data(form=form, proyectodetalles=proyectodetalle_formset))</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateProjectView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):</p>
+<blockquote>
+<div><p>template_name = ‘proyecto/proyecto.html’
+model = Proyecto
+form_class = UpdateProjectForm
+success_url = ‘/proyectos/’
+success_message = ‘Los cambios se guardaron correctamente’</p>
+<dl>
+<dt>def get(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+detalles = ProyectoDetalle.objects.filter(proyecto=self.object).order_by(‘pk’)
+detalles_data = []
+for detalle in detalles:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>d = {‘usuario’: detalle.usuario,</dt><dd><p>‘rol’: detalle.rol}</p>
+</dd>
+</dl>
+<p>detalles_data.append(d)</p>
+</div></blockquote>
+<p>ProyectoDetalleFormSet = inlineformset_factory(Proyecto, ProyectoDetalle, form=ProyectoDetalleForm,extra=len(detalles_data))
+proyectodetalle_orden_formset = ProyectoDetalleFormSet(initial=detalles_data)
+return self.render_to_response(self.get_context_data(form=form, proyectodetalles=proyectodetalle_orden_formset))</p>
+</dd>
+<dt>def get_context_data(self, <a href="#id49"><span class="problematic" id="id50">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id51"><span class="problematic" id="id52">**</span></a>kwargs)
+context[‘title’] = “Modificar Proyecto”
+return context</p>
+</dd>
+<dt>def get_object(self, queryset=None):</dt><dd><p>return Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])</p>
+</dd>
+<dt>def get_absolute_url(self):</dt><dd><p>return reverse(‘update_project’, kwargs={‘pk_proyecto’: self.kwargs[‘pk_proyecto’]})</p>
+</dd>
+<dt>def post(self,request,*args,**kwargs):</dt><dd><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+proyectodetalle_formset = ProyectoDetalleFormSet(request.POST)
+if form.is_valid() and proyectodetalle_formset.is_valid():</p>
+<blockquote>
+<div><p>return self.form_valid(form,proyectodetalle_formset)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>return self.form_invalid(form,proyectodetalle_formset)</p>
+</dd>
+</dl>
+</dd>
+<dt>def form_valid(self, form, proyectodetalle_formset):</dt><dd><p>self.object = form.save()
+proyectodetalle_formset.instance = self.object
+ProyectoDetalle.objects.filter(proyecto=self.object).delete()
+proyectodetalle_formset.save()
+return HttpResponseRedirect(self.get_success_url())</p>
+</dd>
+<dt>def form_invalid(self, form,proyectodetalle_formset):</dt><dd><p>return self.render_to_response(self.get_context_data(form=form, proyectodetalles=proyectodetalle_formset))</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateEjecucionView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):</p>
+<blockquote>
+<div><p>template_name = ‘proyecto/ejecucion.html’
+model = Proyecto
+form_class = UpdateProjectForm
+success_url = ‘/proyectos/ejecuciones/’
+success_message = ‘Los cambios se guardaron correctamente’</p>
+<dl class="simple">
+<dt>def get_context_data(self, <a href="#id53"><span class="problematic" id="id54">**</span></a>kwargs):</dt><dd><p>context = super().get_context_data(<a href="#id55"><span class="problematic" id="id56">**</span></a>kwargs)
+context[‘title’] = “Ejecucion de Proyecto”
+return context</p>
+</dd>
+<dt>def get_object(self, queryset=None):</dt><dd><p>return Proyecto.objects.get(pk=self.kwargs[‘pk_proyecto’])</p>
+</dd>
+<dt>def get_absolute_url(self):</dt><dd><p>return reverse(‘update_ejecucion’, kwargs={‘pk_proyecto’: self.kwargs[‘pk_proyecto’]})</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="urls">
+<h2>Urls<a class="headerlink" href="#urls" title="Permalink to this headline">¶</a></h2>
+<p>from django.conf.urls import url
+from django.urls import path
+from . import views
+from .views import eliminar2
+#from tipoUserStory.views import *
+#from userstory.views import *
+#from sprint.views import *</p>
+<p>“””
+Definicion de URLs contenidas en proyectos
+“””</p>
+<p>urlpatterns = [</p>
+<blockquote>
+<div><p>#administracion</p>
+<dl class="simple">
+<dt>url(r’^$’, views.ProjectListView.as_view(),name=’project_list’),</dt><dd><p>url(r’^create/$’, views.CreateProjectView.as_view(), name=’create_project’),</p>
+</dd>
+</dl>
+<p>path(route=’update_project/&lt;int:pk_proyecto&gt;/’, view=views.UpdateProjectView.as_view(), name=’update_project’),
+path(“eliminar/&lt;int:project_id&gt;/”, eliminar2, name=”eliminar2”),
+#definicion</p>
+<p>url(r’^opciones/$’, views.OptionsListView.as_view(), name=’options_project’),
+path(route=’opciones/&lt;int:pk_proyecto&gt;/’, view=views.UpdateOptionsView.as_view(), name=’update_options’),
+path(route=’opciones/&lt;int:pk_proyecto&gt;/flujos/create/’, view=views.CreateFlujoView.as_view(), name=’create_options_flujo’),
+path(route=’opciones/&lt;int:pk_proyecto&gt;/flujos/&lt;int:pk&gt;/’, view=views.UpdateFlujoView.as_view(), name=’update_options_flujo’),
+path(route=’opciones/&lt;int:pk_proyecto&gt;/flujos/’, view=views.FlujoListView.as_view(), name=’update_options_flujo_list’),
+#path(route=’opciones/&lt;int:pk_proyecto&gt;/tipoUserStory/’, view=tipoUserStoryListView.as_view(), name=’user_story_type_list’),
+#path(route=’opciones/&lt;int:pk_proyecto&gt;/tipoUserStory/create/’, view=CreateUserStoryTypeView.as_view(), name=’create_user_story_type’),</p>
+<blockquote>
+<div><p>#path(route=’opciones/&lt;int:pk_proyecto&gt;/tipoUserStory/&lt;int:pk&gt;/’, view=UpdateUserStoryTypeView.as_view(), name=’update_user_story_type’),</p>
+</div></blockquote>
+<p>path(route=’opciones/&lt;int:pk_proyecto&gt;/asignarRoles/’, view=views.UpdateDetalleProyectoView.as_view(), name=’update_roles_proyecto’),</p>
+<p>#ejecucion</p>
+<p>url(r’^ejecuciones/$’, views.EjecucionListView.as_view(), name=’options_project’),
+path(route=’ejecuciones/&lt;int:pk_proyecto&gt;/’, view=views.UpdateEjecucionView.as_view(), name=’update_ejecucion’),
+#path(route=’ejecuciones/&lt;int:pk_proyecto&gt;/userstory/’, view=UserStoryListView.as_view(), name=’user_story_list’),
+#path(route=’ejecuciones/&lt;int:pk_proyecto&gt;/userstory/create/’, view=CreateUserStoryView.as_view(), name=’create_userstory’),</p>
+<blockquote>
+<div><p>#path(route=’ejecuciones/&lt;int:pk_proyecto&gt;/userstory/&lt;int:pk&gt;/’, view=UpdateUserStoryView.as_view(), name=’update_userstory’),</p>
+</div></blockquote>
+<p>#path(route=’ejecuciones/&lt;int:pk_proyecto&gt;/productbacklog/’,view=ProductBacklogListView.as_view(), name = ‘product_backlog’),
+#path(route=’ejecuciones/&lt;int:pk_proyecto&gt;/sprint/’, view=SprintListView.as_view(), name=’sprint_list’),
+#path(route=’ejecuciones/&lt;int:pk_proyecto&gt;/sprint/create/’, view=CreateSprintView.as_view(), name=’create_sprint’),</p>
+<blockquote>
+<div><p>#path(route=’ejecuciones/&lt;int:pk_proyecto&gt;/sprint/&lt;int:pk&gt;/’, view=UpdateSprintView.as_view(), name=’update_sprint’),</p>
+</div></blockquote>
+</div></blockquote>
+<p>]
+Tests
+——————-
+import unittest
+import time</p>
+<p>from proyecto.models import Proyecto
+from proyecto.models import Flujo
+from proyecto.models import Fase</p>
+<dl>
+<dt>class Test(unittest.TestCase):</dt><dd><dl class="simple">
+<dt>“””</dt><dd><p>Test Creacion de Proyecto</p>
+</dd>
+</dl>
+<p>“””
+def test_creacionProyecto(self):</p>
+<blockquote>
+<div><p>project = Proyecto()
+self.assertIsNotNone(project)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>“””</dt><dd><p>Test validacion de fechas de inicio y fin de proyecto</p>
+</dd>
+</dl>
+<p>“””
+def test_fechasProyecto(self):</p>
+<blockquote>
+<div><p>proyectoPrueba = Proyecto(nombre=’ProyectoPrueba’, fecha_inicio=’21/09/2021’, fecha_fin=’22/10/2021’)
+fechaInicio = time.strptime(proyectoPrueba.fecha_inicio, “%d/%m/%Y”)
+fechaFin = time.strptime(proyectoPrueba.fecha_fin, “%d/%m/%Y”)
+self.assertLessEqual(fechaInicio, fechaFin, “La Fecha de Inicio debe ser anterior a la fecha de Fin”)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>“””</dt><dd><p>Test Creacion de Flujo</p>
+</dd>
+</dl>
+<p>“””
+def test_creacionFlujo(self):</p>
+<blockquote>
+<div><p>proyectoPrueba= Proyecto(‘ProyectoPrueba’,’21/09/2021’,’22/10/2021’,’Pendiente’,’descripcion’)
+flujo= Flujo(proyectoPrueba, ‘Flujo’, ‘desc flujo’)
+self.assertIsNotNone(flujo)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>“””</dt><dd><p>Test Creacion de Fase</p>
+</dd>
+</dl>
+<p>“””
+def test_creacionFase(self):</p>
+<blockquote>
+<div><p>proyectoPrueba = Proyecto(‘ProyectoPrueba’, ‘21/09/2021’,’22/10/2021’, ‘Pendiente’, ‘descripcion’)
+flujo1 = Flujo(proyectoPrueba, ‘Flujo’, ‘desc flujo’)
+fase= Fase(flujo1, ‘Fase’, ‘desc fase’)
+self.assertIsNotNone(fase)</p>
+</div></blockquote>
+</dd>
+</dl>
 </section>
 </section>
 
@@ -66,13 +858,14 @@
 
 <h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="rol.html">Rol</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="proyecto.html">Proyecto</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Glosario</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="flujo.html">Flujo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="inicio.html">Inicio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proyecto.html">Proyecto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rol.html">Rol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sprint.html">Sprint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipoUserStory.html">Tipo de User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="userStory.html">User Story</a></li>
 <li class="toctree-l1"><a class="reference internal" href="usuarios.html">Usuarios</a></li>
 </ul>
 
@@ -80,10 +873,6 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-  <li><a href="proyecto.html">Proyecto</a><ul>
-      <li>Previous: <a href="proyecto.html" title="previous chapter">Proyecto</a></li>
-      <li>Next: <a href="inicio.html" title="next chapter">Inicio</a></li>
-  </ul></li>
   </ul></li>
 </ul>
 </div>
