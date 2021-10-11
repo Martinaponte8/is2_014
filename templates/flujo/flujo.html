@@ -4,7 +4,7 @@
     <div class="head">
         <h1 align="center"> {{ title }} </h1>
         <hr>
-        <h3 style="text-align: center">Proyecto: {{ project.nombre }}</h3>
+        <h3 style="text-align: center;color:dodgerblue">Proyecto: {{ project.nombre }}</h3>
     </div>
     <div class="register">
         <form method="POST">
@@ -19,7 +19,7 @@
                     <p style="color: red">{{ fs_error }}</p>
                 {% endif %}
                 <table id="tabla_detalle" class="table table-sm scrolltable-team">
-                    <thead class="thead-dark">
+                    <thead class="thead-light">
                         <tr>
                             <th width="75%">Nombre</th>
                             <th width="15%">Eliminar</th>
@@ -56,7 +56,7 @@
                 <input type="button" value="Nueva fase" class="adddetail-btn" id="add_fase">
             </div>
             <div class="row">
-                <input type="submit" value="Guardar" class="btn submit-btn">
+                <input type="submit" value="Guardar" class="btn submit-btn" style="background-color:red">
             </div>
         </form>
         <br><br><br>
