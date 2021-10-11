@@ -8,44 +8,44 @@
     </div>
     <div class="body" style="">
         {% if 'Ver Definiciones de Proyecto' in permisos %}
-        <a href="{% url 'update_options' object.pk %}" style="color: white">
-            <button type="button" class="btn btn-success" style="margin-left: 50em">
+        <a href="{% url 'update_options' object.pk %}" style="color: gray">
+            <button type="button" class="btn btn-success" style="margin-left: 50em"style="background-color:blue; border-color:blue">
                 Ir a Definición
             </button>
         </a>
         {% endif %}
-        <div class="options" style="font-size: 1.5em; padding-top: 0em!important;;">
+        <div class="options" style="font-size: 1.5em; padding-top: 0em!important;color:cornflowerblue">
             {% if object.estado == "Activo" %}
                 {% if 'Ver Sprints' in permisos %}
                 <li>
-                    <a href="{% url 'sprint_list' object.pk %}">Sprints</a>
+                    <a href="{% url 'sprint_list' object.pk %}" style="background-color:#067D17">Sprints</a>
                 </li>
                 {% endif %}
                 {% if 'Ver User Stories' in permisos %}
                 <li>
-                    <a href="{% url 'user_story_list' object.pk %}">Administrar User Stories</a>
+                    <a href="{% url 'user_story_list' object.pk %}" style="background-color:#067D17">Administrar User Stories</a>
                 </li>
                 {% endif %}
                 {% if 'Ver Product Backlog' in permisos %}
                 <li>
-                    <a href="{% url 'product_backlog' object.pk%}">Product Backlog</a>
+                    <a href="{% url 'product_backlog' object.pk%}" style="background-color:#067D17">Product Backlog</a>
                 </li>
                 {% endif %}
                 {% if 'Asignar User Stories' in permisos %}
                 <li>
                     {% if sprint_pendiente %}
-                    <a href="{% url 'asignar_us' object.pk sprint_pendiente.pk %}">Planificar siguiente sprint</a>
+                    <a href="{% url 'asignar_us' object.pk sprint_pendiente.pk %}" style="background-color:#067D17">Planificar siguiente sprint</a>
                     {% else %}
-                    <a href="#sinSprintPendiente" role="button" data-toggle="modal">Planificar siguiente sprint</a>
+                    <a href="#sinSprintPendiente" role="button" data-toggle="modal" style="background-color:#067D17">Planificar siguiente sprint</a>
                     {% endif %}
                 </li>
                 {% endif %}
                 {% if 'Ver Tablero' in permisos %}
                 <li>
                     {% if sprint_actual %}
-                    <a href="#tiposTablero" role="button" data-toggle="modal">Sprint actual</a>
+                    <a href="#tiposTablero" role="button" data-toggle="modal" style="background-color:#067D17">Sprint actual</a>
                     {% else %}
-                    <a href="#sinSprintActual" role="button" data-toggle="modal">Sprint actual</a>
+                    <a href="#sinSprintActual" role="button" data-toggle="modal" style="background-color:#067D17">Sprint actual</a>
                     {% endif %}
                 </li>
                 {% endif %}
@@ -55,7 +55,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="terminar">
                         {% if 'Terminar Proyecto' in permisos %}
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-success" style="background-color:gray; border-color:dodgerblue*; color:white">
                             <i class="far fa-stop-circle"></i> Terminar Proyecto
                         </button>
                         {% endif %}
@@ -64,7 +64,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="cancelar">
                         {% if 'Cancelar Proyecto' in permisos %}
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-success" style="background-color:red; border-color:blue">
                             <i class="fas fa-ban"></i> Cancelar Proyecto
                         </button>
                         {% endif %}
@@ -73,7 +73,7 @@
                         {% csrf_token %}
                         <input type="hidden" name="suspender">
                         {% if 'Suspender Proyecto' in permisos %}
-                        <button type="submit" class="btn btn-success">
+                        <button type="submit" class="btn btn-success"style="background-color:dodgerblue; border-color:blue">
                             <i class="far fa-pause-circle"></i> Suspender Proyecto
                         </button>
                         {% endif %}

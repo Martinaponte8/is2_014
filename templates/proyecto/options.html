@@ -6,20 +6,20 @@
         <hr>
     </div>
     <div class="body">
-        <div class="options">
+        <div class="options" style="color: #007bff">
             {% if 'Ver Flujos' in permisos %}
             <li>
-                <a href="{% url 'update_options_flujo_list' object.pk %}">Flujos</a>
+                <a href="{% url 'update_options_flujo_list' object.pk %}"style="background-color:#067D17">Flujos</a>
             </li>
             {% endif %}
             {% if 'Ver Tipos de User Story' in permisos %}
             <li>
-                <a href="{% url 'user_story_type_list' object.pk %}">Tipos de User Story</a>
+                <a href="{% url 'user_story_type_list' object.pk %}"style="background-color:#067D17">Tipos de User Story</a>
             </li>
             {% endif %}
             {% if 'Asignar Roles' in permisos %}
             <li>
-                <a href="{% url 'update_roles_proyecto' object.pk %}">Asignacion de Roles</a>
+                <a href="{% url 'update_roles_proyecto' object.pk %}"style="background-color:#067D17">Asignacion de Roles</a>
             </li>
             {% endif %}
         </div>

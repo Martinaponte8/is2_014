@@ -1,6 +1,6 @@
 {% load socialaccount %}
 {% load static %}
-<html>
+<html >
 <!--{% if user.is_authenticated %}-->
 <!--<head>-->
 <!--    <title>Gestor de Proyectos</title>-->
@@ -31,9 +31,9 @@
 <!--Funcion de python para autenticar el Inicio de sesion de un usuario -->
 
 {% if user.is_authenticated %}
-<html lang="es">
+<html lang="es" >
 <!--este body abria que meter en cada una de las otras paginas asi tienen tambien la barra de arriba-->
-<body>
+<body >
 {%include 'base.html'%}
 <!--<nav class="navbar navbar-polip">-->
 <!--  <div class="container-fluid">-->
@@ -60,7 +60,7 @@
 <!--  </div>-->
 <!--</nav>-->
 
-<div class="container">
+<div class="container" >
     <center><div class="h1">Gestor de proyectos</div></center>
     <!--aca va la foto-->
     <br> <center><img alt="My image"src="{% static 'imagenes/logo.png' %}"></center>
