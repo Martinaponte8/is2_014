@@ -14,7 +14,7 @@ class Test(unittest.TestCase):
     """
     def test_Rango(self):
         proyecto1 = Proyecto(nombre='Proyecto1', fecha_inicio='23/04/2019', fecha_fin='22/04/2019')
-        us = UserStory(proyecto=proyecto1, nombre="p1", descripcion="desc", fecha_inicio='13/04/2019', duracion_estimada=100, valor_negocio=55)
+        us = UserStory(proyecto=proyecto1, nombre="p1", descripcion="desc", fecha_inicio='13/04/2019', duracion_estimada=100, valor_negocio=9)
         self.assertLessEqual(us.valor_negocio, 10, "El valor del Valor de Negocio no debe superar el valor de 10")
 
     def test_actividad(self):

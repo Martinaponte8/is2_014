@@ -16,7 +16,9 @@
                         {% endif %}
                     {% endfor %}
                 </div>
+                {% if 'Ver Control de Calidad' in permisos %}
                 <button type="button" class="btn btn-dark fases-btn" id="cc-btn">Control de Calidad</button>
+                {% endif %}
                 <button type="button" class="btn btn-dark fases-btn" id="finalizados-btn">Finalizados</button>
             </div>
             <div class="container tablero" id="tablero_actual">
@@ -239,25 +241,32 @@
                 <form method="POST">
                     {% csrf_token %}
                     {% if us.fase != fases.0 %}
-                    <button type="submit" class="btn btn-danger change-status">
-                        <i class="fas fa-arrow-left"></i>
-                        Mover a estado anterior
-                    </button>
-                    {% elif  us.fase == fases.0 and us.estado_fase != 'To Do'%}
+                    {% if 'Modificar Tablero' in permisos %}
                     <button type="submit" class="btn btn-danger change-status">
                         <i class="fas fa-arrow-left"></i>
                         Mover a estado anterior
                     </button>
                     {% endif %}
+                    {% elif  us.fase == fases.0 and us.estado_fase != 'To Do'%}
+                    {% if 'Modificar Tablero' in permisos %}
+                    <button type="submit" class="btn btn-danger change-status">
+                        <i class="fas fa-arrow-left"></i>
+                        Mover a estado anterior
+                    </button>
+
+                    {% endif %}
                     <input type="hidden" name="anterior" value="{{ us.pk }}">
+                    {% endif %}
                 </form>
                 <form method="POST">
                     {% csrf_token %}
+                    {% if 'Modificar Tablero' in permisos %}
                     <button type="submit" class="btn btn-success change-status">
                         Mover a estado siguiente
                         <i class="fas fa-arrow-right"></i>
                     </button>
                     <input type="hidden" name="siguiente" value="{{ us.pk }}">
+                    {% endif %}
                 </form>
             </div>
         </div>
