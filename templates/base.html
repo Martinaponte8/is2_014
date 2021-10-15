@@ -69,6 +69,7 @@
     <link rel="stylesheet" type="text/css" href="{% static '/css/registro.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static '/css/tablero.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static '/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static '/css/style.css' %}">
     <!-- js-->
     <script src="{% static '/js/classie.js' %}"></script>
     <script src="{% static '/js/gnmenu.js' %}"></script>
@@ -78,6 +79,7 @@
     <script src="{% static '/js/solid.js' %}"></script>
     <script src="{% static '/js/regular.js' %}"></script>
     <script src="{% static '/js/bootstrap.min.js' %}"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -112,8 +114,16 @@
                 </nav>
             </li>
             <li id="polip"><a href="/">Gestor de Proyectos</a></li>
+<!--            <li class="gn-menu-usuario"> Usuario: {{ user }}</li>-->
             <li id="log-out"><a href="/accounts/logout/"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
         </ul>
+<!--        <ul class="gn-menu-main gn-menu-second" style="z-index: 1!important;;">-->
+<!--            Direccion actual: <a href="/">Inicio</a>-->
+<!--            {% for key,value in direccion.items %}-->
+<!--                > <a href="{{ value.1 }}">{{ key }}</a>-->
+<!--            {% endfor %}-->
+<!--        </ul>-->
+
     </div><!-- /container -->
     <script>
         new gnMenu( document.getElementById( 'gn-menu' ) );

@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from proyecto.models import Proyecto
 from django.utils import timezone
 from datetime import timedelta
-from userstory.models import UserStory, Actividad
+from userstory.models import UserStory, Actividad, HistorialEstimaciones
 
 """
 Estados posibles del sprint
@@ -163,6 +163,60 @@ class Sprint(models.Model):
         for actividad in actividades:
             horas += actividad.duracion
         return horas
+
+    def get_bdc_line(self):
+        """
+        metodo del modelo Sprint que retorna un JSON que representa la lista de coordenadas
+        para el grafico de su correspondiente burn down chart y el total de horas trabajadas
+        :return: lista de coordenadas para graficar el burn  down chart
+        """
+        if not self.fecha_inicio: return []
+        coordenadas = []
+        estimaciones = HistorialEstimaciones.objects.filter(sprint=self.pk)
+        horas = 0
+        for estimacion in estimaciones:
+            horas += estimacion.duracion_estimada
+        coordenadas.append({
+            'x': 0,
+            'y': horas
+        })
+        inicio = self.fecha_inicio
+        dias_habiles = self.get_dias_habiles()
+        if self.fecha_fin:
+            fin = self.fecha_fin
+        else:
+            fin = timezone.now().date()
+        dia = inicio
+        nro_dia = 1
+        while dia <= fin:
+            if dia.isoweekday() in dias_habiles:
+                actividades = []
+                actividades_query = Actividad.objects.filter(sprint=self.pk).order_by('fecha')
+                for actividad in actividades_query:
+                    if actividad.fecha.date() == dia:
+                        actividades.append(actividad)
+                horas_trabajadas = 0
+                for actividad in actividades:
+                    horas_trabajadas += actividad.duracion
+                coordenadas.append({
+                    'x': nro_dia,
+                    'y': horas - horas_trabajadas
+                })
+                nro_dia += 1
+                horas = horas - horas_trabajadas
+            else:
+                actividades = []
+                actividades_query = Actividad.objects.filter(sprint=self.pk).order_by('fecha')
+                for actividad in actividades_query:
+                    if actividad.fecha.date() == dia:
+                        actividades.append(actividad)
+                horas_trabajadas = 0
+                for actividad in actividades:
+                    horas_trabajadas += actividad.duracion
+                horas = horas - horas_trabajadas
+                fin = fin + timedelta(days=1)
+            dia = dia + timedelta(days=1)
+        return coordenadas
 
 
 class Horas(models.Model):

@@ -440,14 +440,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                     },
                 )
-                # email_msg = EmailMessage(
-                #     subject='Cambio de Estado US',
-                #     body=body,
-                #     from_email=['PoliProyectos-noreply'],
-                #     to=[scrum_mail],
-                # )
-                # email_msg.content_subtype = 'html'
-                # email_msg.send()
+                email_msg = EmailMessage(
+                    subject='Cambio de Estado US',
+                    body=body,
+                    from_email=['PaoliProyectos-noreply'],
+                    to=[scrum_mail],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
             elif us.estado_fase == 'Doing':
                 us.estado_fase = "To Do"
                 us.save()
