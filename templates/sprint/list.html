@@ -14,13 +14,16 @@
                     <th width="34%">Estado</th>
                     <th width="8%">Acciones</th>
                     <th width="3%">
-                        {% if 'Crear Sprint' in permisos %}
+                        {% if 'Crear Sprints' in permisos %}
+                            {% if project.estado == 'Pendiente' or project.estado == 'Activo' %}
                             {% if sprint_pendiente %}
                             <a href="#SprintPendiente" data-toggle="modal"><i class="fas fa-plus-square"></i> </a>
                             {% else %}
                             <a href="./create/"><i class="fas fa-plus-square"></i> </a>
                             {% endif %}
+                            {% endif %}
                         {% endif %}
+
                     </th>
                 </tr>
             </thead>
@@ -32,7 +35,13 @@
                         <td width="34">{{ sprint.estado }}</td>
                         <td id="acciones" width="8%">-
                             <a href="{% url 'ver_sprint' project.pk sprint.pk %}"><i class="fas fa-eye"></i></a>
-                            <a href="{% url 'update_sprint' project.pk sprint.pk %}"><i class="fas fa-edit"></i></a>
+                            {% if 'Modificar Sprints' in permisos %}
+                                {% if project.estado == 'Pendiente' or project.estado == 'Activo' %}
+                                {% if sprint.estado != 'Terminado' %}
+                                <a href="{% url 'update_sprint' project.pk sprint.pk %}"><i class="fas fa-edit"></i></a>
+                                {% endif %}
+                                {% endif %}
+                            {% endif %}
                         </td>
                         <td width="3%"></td>
                     </tr>

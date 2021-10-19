@@ -7,6 +7,10 @@
         <h3 style="text-align: center">Proyecto: {{ project.nombre }}</h3>
     </div>
     <div class="body">
+        <a target="_blank" href="{% url 'reporte_pb' project.pk %}">
+            <button type="button" class="btn btn-success">
+                <i class="fas fa-file-pdf"></i> Exportar a PDF</button>
+        </a>
         <table class="table table-sm scrolltable" width="100%">
             <thead class="thead-light thead">
                 <tr>
@@ -50,6 +54,15 @@
                 <div class="texto">
                     <li>
                         Descripcion: {{ us.descripcion }}
+                    </li>
+                    <li>
+                        Estimacion: {{ us.duracion_estimada }} horas
+                    </li>
+                    <li>
+                        Total de horas trabajadas: {{ us.horas_total }} horas
+                    </li>
+                    <li>
+                        Asignado: {{ us.team_member.username }}
                     </li>
                     <br>
                 </div>

@@ -15,8 +15,10 @@
                     <th width="12%">Priorizacion</th>
                     <th width="8%">Acciones</th>
                     <th width="3%">
+                        {% if project.estado == 'Pendiente' or project.estado == 'Activo' %}
                         {% if 'Crear User Stories' in permisos %}
                             <a href="./create/"><i class="fas fa-plus-square"></i> </a>
+                        {% endif %}
                         {% endif %}
                     </th>
                 </tr>
@@ -32,7 +34,6 @@
                             <a href="{% url 'ver_userstory' project.pk us.pk %}"><i class="fas fa-eye"></i></a>
                             <a href="{% url 'update_userstory' project.pk us.pk %}"><i class="fas fa-edit"></i></a>
                             <a href="{% url 'eliminar4' project.pk us.pk %}"><i class="fas fa-trash-alt"></i></a>
-
                         </td>
                         <td width="3%"></td>
                     </tr>

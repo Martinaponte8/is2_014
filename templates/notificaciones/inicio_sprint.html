@@ -1,3 +1,10 @@
-<h3>Buenas {{ team_member }},
-    El sprint: "{{ sprint }}" en el Proyecto: "{{ proyecto }}" ha iniciado. Usted tiene asignado el US: "{{ nombre_us }}"
-</h3>
+<h3>Buenas {{ team_member }},</h3>
+<h5>
+    El sprint: "{{ sprint }}" en el Proyecto: "{{ proyecto }}" ha iniciado.<br>
+    Usted tiene asignado los US:
+    {% for us in us_asignados %}
+        <ul>
+            <li>{{ us }}: {{ us.descripcion }}</li>
+        </ul>
+    {% endfor %}
+</h5>

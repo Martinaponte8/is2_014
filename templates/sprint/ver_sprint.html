@@ -112,6 +112,18 @@
                     <li>
                         Descripcion: {{ us.descripcion }}
                     </li>
+                    <li>
+                        Estimacion: {{ us.duracion_estimada }} horas
+                    </li>
+                    <li>
+                        Horas trabajadas en el sprint: {{ us.horas_sprint }} horas
+                    </li>
+                    <li>
+                        Total de horas trabajadas: {{ us.horas_total }} horas
+                    </li>
+                    <li>
+                        Asignado: {{ us.team_member.username }}
+                    </li>
                     <br>
                 </div>
                 <form method="POST" enctype="multipart/form-data">
@@ -223,6 +235,144 @@
             document.getElementById('actividades-us-'.concat(this.value)).style.display = "block";
         });
     });
+</script>
+<script>
+$(function(){
+    initChart();
+});
+
+function initChart() {
+	var lineDataActual = {{ bdc_line|safe }};
+
+	var svg = d3.select("#visualisation"),
+		width = 800,
+		height = 600,
+		margins = {
+			top: 80,
+			right: 50,
+			bottom: 80,
+			left: 80
+		},
+		xMin = d3.min(lineDataActual, function (d) {
+			return 0
+		}),
+		yMin = d3.min(lineDataActual, function (d) {
+			if (d.y>0){
+				return 0;
+			}else{
+				return d.y;
+			}
+
+		}),
+		yMax = d3.max(lineDataActual, function (d) {
+			return d.y;
+		}),
+
+    xRange = d3.scale.linear().range([margins.left, width - margins.right]).domain([
+
+		xMin,parseInt({{ xMax }} + 1)
+    ]),
+
+	yRange = d3.scale.linear().range([height - margins.top, margins.bottom]).domain([
+
+		yMin,yMax
+	]),
+
+	xAxis = d3.svg.axis()
+		.scale(xRange)
+		.tickSubdivide(true),
+
+	yAxis = d3.svg.axis()
+		.scale(yRange)
+		.orient("left")
+		.tickSubdivide(true);
+
+	function make_x_axis() {
+		return d3.svg.axis()
+			.scale(xRange)
+			 .orient("bottom")
+			.tickSubdivide(true)
+	}
+
+	function make_y_axis() {
+		return d3.svg.axis()
+			.scale(yRange)
+			.orient("left")
+			.tickSubdivide(true)
+	}
+
+
+	svg.append("g")
+        .attr("class", "grid")
+        .attr("transform", "translate(0," + (height - margins.top) + ")")
+        .call(make_x_axis()
+            .tickSize((-height) + (margins.top + margins.bottom), 0, 0)
+            .tickFormat("")
+        )
+
+    svg.append("g")
+        .attr("class", "grid")
+		.attr("transform", "translate(" + (margins.left) + ",0)")
+        .call(make_y_axis()
+            .tickSize((-width) + (margins.right + margins.left), 0, 0)
+            .tickFormat("")
+        )
+
+	svg.append("svg:g")
+		.attr("class", "x axis")
+		.attr("transform", "translate(0," + (height - (margins.bottom)) + ")")
+		.call(xAxis);
+
+	svg.append("svg:g")
+		.attr("class", "y axis")
+		.attr("transform", "translate(" + (margins.left) + ",0)")
+		.call(yAxis);
+
+
+
+	var lineFunc = d3.svg.line()
+		.x(function (d) {
+			return xRange(d.x);
+		})
+		.y(function (d) {
+			return yRange(d.y);
+		})
+  		.interpolate('basis');
+
+
+	var lineDataIdeal = [{
+		'x': xMin,
+		'y': yMax
+	}, {
+		'x': parseInt({{ object.dias_laborales }}),
+		'y': 0
+	}];
+
+
+	svg.append("svg:path")
+		.attr("d", lineFunc(lineDataIdeal))
+		.attr("class", "ideal");
+
+	svg.append("svg:path")
+		.attr("d", lineFunc(lineDataActual))
+		.attr("class", "actual");
+
+	svg.append("text")
+		.attr("class", "x label")
+		.attr("text-anchor", "end")
+		.attr("x", width - 50)
+		.attr("y", height - 6)
+		.text("Dias de Sprint");
+
+	svg.append("text")
+		.attr("class", "y label")
+		.attr("text-anchor", "end")
+		.attr("y", 6)
+		.attr("x", -80)
+		.attr("dy", ".75em")
+		.attr("transform", "rotate(-90)")
+		.text("Trabajo por hacer (hs)");
+}
 </script>
 </html>
 {% else %}

@@ -6,6 +6,12 @@
         <hr>
     </div>
     <div class="body">
+        {% if 'Ver Ejecucion de Proyecto' in permisos %}
+        <a href="{% url 'update_ejecucion' object.pk %}" style="color: white;margin-left: 50em">
+        <button type="button" class="btn btn-success">
+            Ir a Ejecución
+        </button></a>
+        {% endif %}
         <div class="options" style="color: #007bff">
             {% if 'Ver Flujos' in permisos %}
             <li>

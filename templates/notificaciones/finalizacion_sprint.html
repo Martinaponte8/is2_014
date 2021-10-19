@@ -1,3 +1,14 @@
-<h3>Buenas {{ team_member }},
-    El sprint: "{{ sprint }}" en el Proyecto: "{{ proyecto }}" ha sido finalizado. Usted tenia asignado el US: {{ nombre_us }}.
-</h3>
+<h3>Buenas {{ team_member }},</h3>
+<h5>
+    El sprint: "{{ sprint }}" en el Proyecto: "{{ proyecto }}" ha sido finalizado.
+    Tenía asignado los US:
+    {% for us in us_asignados %}
+        <ul>
+        {% if us.estado != 0 %} <!-- Sin finalizar -->
+            <li><b>No terminado:</b> {{ us }}</li>
+        {% else %}
+            <li><b>Terminado:</b> {{ us }}</li>
+        {% endif %}
+        </ul>
+    {% endfor %}
+</h5>
