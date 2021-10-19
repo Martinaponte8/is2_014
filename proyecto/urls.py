@@ -34,6 +34,8 @@ urlpatterns = [
     path('ejecuciones/<int:pk_proyecto>/userstory/', include('userstory.urls')),
     path(route='ejecuciones/<int:pk_proyecto>/productbacklog/', view=ProductBacklogListView.as_view(), name='product_backlog'),
     path('ejecuciones/<int:pk_proyecto>/sprint/', include('sprint.urls')),
-    path(route='ver/<int:pk>/', view=views.VerProyectoDetailView.as_view(), name='ver_project')
-
+    path(route='ver/<int:pk>/', view=views.VerProyectoDetailView.as_view(), name='ver_project'),
+    path(route='ejecuciones/<int:pk_proyecto>/productbacklogpdf/', view=ProductBacklogPDF.as_view(), name="reporte_pb"),
+    path(route='ejecuciones/<int:pk_proyecto>/horastrabajadas/', view=views.HorasTrabajadasPDF.as_view(),name="horas_trabajadas")
 ]
+

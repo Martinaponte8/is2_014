@@ -429,7 +429,7 @@ MEDIA_URL = '/media/'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'poliproyectos2019@gmail.com'
+EMAIL_HOST_USER = 'gestordeproyectos2021@gmail.com'
 EMAIL_HOST_PASSWORD = 'team08is2'
 EMAIL_PORT = 587
 

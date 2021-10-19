@@ -36,18 +36,22 @@ class Usuario(AbstractUser):
 
     def get_nombres_permisos(self, proyecto=None):
         permisos = []
-        for permiso in self.permisos.all():
-            permisos.append(permiso.nombre)
-        if proyecto:
-            rol_usuario = None
-            try:
-                team_member = TeamMember.objects.get(proyecto=proyecto, usuario=self.pk)
-                rol_usuario = Rol.objects.get(pk=team_member.rol.pk)
-            except:
-                pass
-            if rol_usuario:
-                for rol in rol_usuario.permisos.all():
-                    permisos.append(rol.nombre)
+        if self.is_superuser:
+            for permiso in Permiso.objects.all():
+                permisos.append(permiso.nombre)
+        else:
+            for permiso in self.permisos.all():
+                permisos.append(permiso.nombre)
+            if proyecto:
+                rol_usuario = None
+                try:
+                    team_member = TeamMember.objects.get(proyecto=proyecto, usuario=self.pk)
+                    rol_usuario = Rol.objects.get(pk=team_member.rol.pk)
+                except:
+                    pass
+                if rol_usuario:
+                    for rol in rol_usuario.permisos.all():
+                        permisos.append(rol.nombre)
         return permisos
 
 

@@ -36,6 +36,12 @@ class CreateUserForm(forms.ModelForm):
         p.choices = permisos
 
     def save(self, commit=True):
+        """
+        Metodo para guardar el formulario
+        :param commit: indicador de guardado en la base de datos, True: se debe guardar,
+                                                                  False: No guardar.
+        :return: El objeto creado por el formulario luego de ejecutar el metodo en el formulario
+        """
         user = super(CreateUserForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password"])
         if commit:

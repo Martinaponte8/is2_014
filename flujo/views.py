@@ -25,6 +25,13 @@ class FlujoListView(LoginRequiredMixin, ListView):
     queryset = Flujo.objects.all()
 
     def get(self,request,*args,**kwargs):
+        """
+           Metodo que es ejecutado al darse una consulta GET
+           :param request: consulta recibida
+           :param args: argumentos adicionales
+           :param kwargs: diccionario de datos adicionales
+           :return: la respuesta a la consulta GET
+        """
         self.object = None
         self.object_list = Flujo.objects.filter(proyecto=self.kwargs['pk_proyecto'])
         proyecto = Proyecto.objects.get(pk=self.kwargs['pk_proyecto'])
@@ -33,8 +40,17 @@ class FlujoListView(LoginRequiredMixin, ListView):
         return self.render_to_response(self.get_context_data(permisos=permisos, project=proyecto,object_list=self.object_list))
 
     def get_context_data(self, **kwargs):
+        """
+        Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+        :param kwargs: Diccionario de datos adicionales para el contexto
+        :return: diccionario de contexto necesario para la correcta visualizacion de los datos
+        """
         context = super().get_context_data(**kwargs)
         context['title'] = "Flujos de Proyecto"
+        context['direccion'] = {}
+        context['direccion']['Definiciones'] = (1, '/proyectos/definiciones/')
+        context['direccion'][str(kwargs['project'])] = (2, '/proyectos/definiciones/' + str(kwargs['project'].pk) + '/')
+        context['direccion']['Flujos'] = (3, '/proyectos/definiciones/' + str(kwargs['project'].pk) + '/flujos/')
         return context
 
 
@@ -50,6 +66,13 @@ class UpdateFlujoView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_message = 'Se ha modificado el flujo'
 
     def get(self,request,*args,**kwargs):
+        """
+        Metodo que es ejecutado al darse una consulta GET
+        :param request: consulta recibida
+        :param args: argumentos adicionales
+        :param kwargs: diccionario de datos adicionales
+        :return: la respuesta a la consulta GET
+        """
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
@@ -64,15 +87,37 @@ class UpdateFlujoView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return self.render_to_response(self.get_context_data(permisos=permisos,form=form, fases=fases_orden_formset))
 
     def get_context_data(self, **kwargs):
+        """
+        Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+        :param kwargs: Diccionario de datos adicionales para el contexto
+        :return: diccionario de contexto necesario para la correcta visualizacion de los datos
+        """
         context = super().get_context_data(**kwargs)
         context['project'] = Proyecto.objects.get(pk=self.kwargs['pk_proyecto'])
-        context['title'] = "Modificar Flujo"
+        context['title'] = "Modificar Flujo" + str(self.object.pk)
+        context['direccion'] = {}
+        context['direccion']['Definiciones'] = (1, '/proyectos/definiciones/')
+        context['direccion'][str(context['project'])] = (2, '/proyectos/definiciones/' + str(self.kwargs['pk_proyecto']) + '/')
+        context['direccion']['Flujos'] = (3, '/proyectos/definiciones/' + str(self.kwargs['pk_proyecto']) + '/flujos/')
+        context['direccion']['Modificar:' + self.object.nombre] = (4, '/proyectos/definiciones/' + str(self.kwargs['pk_proyecto']) + '/flujos/modificar/' + str(self.object.pk))
         return context
 
     def get_object(self, queryset=None):
+        """
+        Metodo que retorna el objeto a ser modificado
+        :param queryset:
+        :return: El proyecto a ser modificado
+        """
         return Flujo.objects.get(pk=self.kwargs['pk'])
 
     def post(self,request,*args,**kwargs):
+        """
+        Metodo que es ejecutado al darse una consulta POST
+        :param request: consulta recibida
+        :param args: argumentos adicionales
+        :param kwargs: diccionario de datos adicionales
+        :return: la respuesta a la consulta POST
+        """
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
@@ -83,6 +128,13 @@ class UpdateFlujoView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             return self.form_invalid(form, fases_formset)
 
     def form_valid(self, form, fases_formset):
+        """
+        Metodo que se ejecuta si el formulario recibido en la consulta POST
+        es valido
+        :param form: formulario a ser guardado
+        :param team_member_formset: grupo de team members del proyecto
+        :return: redireccion a la direccion definida en el atributo success_url de la clase
+        """
         self.object = form.save()
         fases_formset.instance = self.object
         Fase.objects.filter(flujo=self.object).delete()
@@ -90,6 +142,13 @@ class UpdateFlujoView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def form_invalid(self, form,fases_formset):
+        """
+        Metodo que se ejecuta si el formulario recibido en la consulta POST
+        es invalido
+        :param form: formulario a ser guardado
+        :param team_member_formset: grupo de team members del proyecto
+        :return: redireccion a la pagina actual con los errores de validacion
+        """
         fs_error = None
         if fases_formset.vacio:
             fs_error = "El flujo debe tener al menos una fase"
@@ -105,17 +164,30 @@ class CreateFlujoView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     """
     template_name = 'flujo/flujo.html'
     model = Flujo
-    success_url = '../'
+    success_url = '../../'
     form_class = CreateFlujoForm
     success_message = 'Se ha creado el flujo'
 
     def get_object(self, queryset=None):
+        """
+        Metodo que retorna el objeto a ser visualizado
+        :param queryset:
+        :return: Retorna el proyecto a ser visualizado
+        """
+
         obj = Flujo()
         proyecto = Proyecto.objects.get(pk=self.kwargs['pk_proyecto'])
         obj.proyecto = proyecto
         return obj
 
     def get(self,request,*args,**kwargs):
+        """
+        Metodo que es ejecutado al darse una consulta GET
+        :param request: consulta recibida
+        :param args: argumentos adicionales
+        :param kwargs: diccionario de datos adicionales
+        :return: la respuesta a la consulta GET
+        """
         self.object = self.get_object()
         form_class = self.get_form_class()
         form = self.get_form(form_class)
@@ -124,12 +196,29 @@ class CreateFlujoView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
         return self.render_to_response(self.get_context_data(permisos=permisos, form=form, fases=fases_orden_formset))
 
     def get_context_data(self, **kwargs):
+        """
+        Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+        :param kwargs: Diccionario de datos adicionales para el contexto
+        :return: diccionario de contexto necesario para la correcta visualizacion de los datos
+        """
         context = super(CreateFlujoView,self).get_context_data(**kwargs)
         context['project'] = Proyecto.objects.get(pk=self.kwargs['pk_proyecto'])
         context['title'] = "Crear Flujo"
+        context['direccion'] = {}
+        context['direccion']['Definiciones'] = (1, '/proyectos/definiciones/')
+        context['direccion'][str(context['project'])] = (2, '/proyectos/definiciones/' + str(self.kwargs['pk_proyecto']) + '/')
+        context['direccion']['Flujos'] = (3, '/proyectos/definiciones/' + str(self.kwargs['pk_proyecto']) + '/flujos/')
+        context['direccion']['Crear'] = (4, '/proyectos/definiciones/' + str(self.kwargs['pk_proyecto']) + '/flujos/create/')
         return context
 
     def post(self,request,*args,**kwargs):
+        """
+        Metodo que es ejecutado al darse una consulta POST
+        :param request: consulta recibida
+        :param args: argumentos adicionales
+        :param kwargs: diccionario de datos adicionales
+        :return: la respuesta a la consulta POST
+        """
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
@@ -140,12 +229,26 @@ class CreateFlujoView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
             return self.form_invalid(form,fases_formset)
 
     def form_valid(self, form, fases_formset):
+        """
+        Metodo que se ejecuta si el formulario recibido en la consulta POST
+        es valido
+        :param form: formulario a ser guardado
+        :param team_member_formset: grupo de team members del proyecto
+        :return: redireccion a la direccion definida en el atributo success_url de la clase
+        """
         self.object = form.save()
         fases_formset.instance = self.object
         fases_formset.save()
         return HttpResponseRedirect(self.success_url)
 
     def form_invalid(self, form,fases_formset):
+        """
+        Metodo que se ejecuta si el formulario recibido en la consulta POST
+        es invalido
+        :param form: formulario a ser guardado
+        :param team_member_formset: grupo de team members del proyecto
+        :return: redireccion a la pagina actual con los errores de validacion
+        """
         fs_error = None
         if fases_formset.vacio:
             fs_error = "El flujo debe tener al menos una fase"
@@ -260,7 +363,7 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         scrum_mail = member.usuario.email
                         scrum_nombre = member.usuario.first_name
                         break
-                body = render_to_string(
+            body = render_to_string(
                     '../templates/notificaciones/cambio_estado.html', {
                         # Poner los parámetros requeridos del correo
                         'nombre_scrum': scrum_nombre,
@@ -274,29 +377,28 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                     },
                 )
-                # email_msg = EmailMessage(
-                #     subject='Cambio de Estado US',
-                #     body=body,
-                #     from_email=['PoliProyectos-noreply'],
-                #     to=[scrum_mail],
-                # )
-                # email_msg.content_subtype = 'html'
-                # email_msg.send()
-
+                email_msg = EmailMessage(
+                    subject='Cambio de Estado US',
+                    body=body,
+                    from_email=settings.EMAIL_HOST_USER,
+                    to=['emanuelayalalml@gmail.com'],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
             elif us.estado_fase == 'Doing':
                 ultima_actividad = list(Actividad.objects.filter(us=us.pk,sprint=us.sprint,
                                                                  fase_us=us.fase).order_by('fecha').reverse())
-                ultimo_cambio = list(CambioEstado.objects.filter(us=us.pk,sprint=us.sprint,
-                                                                 fase=us.fase,estado_fase='To Do').order_by('fecha').reverse())
-                # if ultima_actividad and ultimo_cambio:
-                #     ultima_actividad = ultima_actividad[0]
-                #     ultimo_cambio = ultimo_cambio[0]
-                #     if ultima_actividad.fecha < ultimo_cambio.fecha:
-                #         return self.render_to_response(self.get_context_data(s_fase=us.fase,usuario=usuario,
-                #                                                              permisos=permisos, error='sinactividad'))
-                # elif not ultima_actividad:
-                #     return self.render_to_response(self.get_context_data(s_fase=us.fase, usuario=usuario,
-                #                                                          permisos=permisos, error='sinactividad'))
+                ultimo_cambio = list(CambioEstado.objects.filter(us=us.pk, sprint=us.sprint,
+                                                                 fase=us.fase, estado_fase='To Do').order_by('fecha').reverse())
+                if ultima_actividad and ultimo_cambio:
+                    ultima_actividad = ultima_actividad[0]
+                    ultimo_cambio = ultimo_cambio[0]
+                    if ultima_actividad.fecha < ultimo_cambio.fecha:
+                        return self.render_to_response(self.get_context_data(s_fase=us.fase, usuario=usuario,
+                                                                             permisos=permisos, error='sinactividad'))
+                elif not ultima_actividad:
+                    return self.render_to_response(self.get_context_data(s_fase=us.fase, usuario=usuario,
+                                                                         permisos=permisos, error='sinactividad'))
                 us.estado_fase = "Done"
                 us.save()
                 # Notificación al SCRUM por correo
@@ -319,14 +421,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                     },
                 )
-                # email_msg = EmailMessage(
-                #     subject='Cambio de Estado US',
-                #     body=body,
-                #     from_email=['PoliProyectos-noreply'],
-                #     to=[scrum_mail],
-                # )
-                # email_msg.content_subtype = 'html'
-                # email_msg.send()
+                email_msg = EmailMessage(
+                    subject='Cambio de Estado US',
+                    body=body,
+                    from_email=settings.EMAIL_HOST_USER,
+                    to=['emanuelayalalml@gmail.com'],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
             elif us.estado_fase == 'Done':
                 fases = Fase.objects.filter(flujo=self.kwargs['flujo_pk']).order_by('pk')
                 idx_fase = None
@@ -359,14 +461,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                             'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                         },
                     )
-                    # email_msg = EmailMessage(
-                    #     subject='Cambio de Fase US',
-                    #     body=body,
-                    #     from_email=['PoliProyectos-noreply'],
-                    #     to=[scrum_mail],
-                    # )
-                    # email_msg.content_subtype = 'html'
-                    # email_msg.send()
+                    email_msg = EmailMessage(
+                        subject='Cambio de Fase US',
+                        body=body,
+                        from_email=settings.EMAIL_HOST_USER,
+                        to=['emanuelayalalml@gmail.com'],
+                    )
+                    email_msg.content_subtype = 'html'
+                    email_msg.send()
                 else: #es la ultima fase, pasa a control de calidad
                     us.fase = None
                     us.estado_fase = 'Control de Calidad'
@@ -387,14 +489,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                             'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                         },
                     )
-                #     email_msg = EmailMessage(
-                #         subject='US para Control de Calidad',
-                #         body=body,
-                #         from_email=['PoliProyectos-noreply'],
-                #         to=[scrum_mail],
-                #     )
-                #     email_msg.content_subtype = 'html'
-                #     email_msg.send()
+                    email_msg = EmailMessage(
+                        subject='US para Control de Calidad',
+                        body=body,
+                        from_email=['PoliProyectos-noreply'],
+                        to=[scrum_mail],
+                    )
+                    email_msg.content_subtype = 'html'
+                    email_msg.send()
                 us.save()
             if us.fase:
                 ce = CambioEstado()
@@ -443,8 +545,8 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                 email_msg = EmailMessage(
                     subject='Cambio de Estado US',
                     body=body,
-                    from_email=['PaoliProyectos-noreply'],
-                    to=[scrum_mail],
+                    from_email=settings.EMAIL_HOST_USER,
+                    to=['emanuelayalalml@gmail.com'],
                 )
                 email_msg.content_subtype = 'html'
                 email_msg.send()
@@ -471,14 +573,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
                     },
                 )
-                # email_msg = EmailMessage(
-                #     subject='Cambio de Estado US',
-                #     body=body,
-                #     from_email=['PoliProyectos-noreply'],
-                #     to=[scrum_mail],
-                # )
-                # email_msg.content_subtype = 'html'
-                # email_msg.send()
+                email_msg = EmailMessage(
+                    subject='Cambio de Estado US',
+                    body=body,
+                    from_email=settings.EMAIL_HOST_USER,
+                    to=['emanuelayalalml@gmail.com'],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
             elif us.estado_fase == 'To Do':
                 fases = Fase.objects.filter(flujo=self.kwargs['flujo_pk']).order_by('pk')
                 idx_fase = None
@@ -513,12 +615,11 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                 email_msg = EmailMessage(
                     subject='Cambio de Fase US',
                     body=body,
-                    from_email=['PoliProyectos-noreply'],
-                    to=[scrum_mail],
+                    from_email=settings.EMAIL_HOST_USER,
+                    to=['emanuelayalalml@gmail.com'],
                 )
                 email_msg.content_subtype = 'html'
                 email_msg.send()
-                us.save()
             ce = CambioEstado()
             ce.us = us
             ce.fase = us.fase
@@ -527,9 +628,8 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
             ce.estado_fase = us.estado_fase
             ce.descripcion = "Cambio de estado a " + us.estado_fase + " de la fase " + us.fase.nombre
             ce.save()
-            return render(request, 'flujo/tablero.html',
-                          self.get_context_data(s_fase=us.fase, usuario=usuario, permisos=permisos))
-        if 'finalizar' in request.POST.keys():
+            return render(request, 'flujo/tablero.html', self.get_context_data(s_fase=us.fase, usuario=usuario, permisos=permisos))
+         if 'finalizar' in request.POST.keys():
             #si se comenta este if y elif deja finalizar el sprint
             actividad = GuardarActividadForm(request.POST)
             # if actividad.is_valid():
@@ -562,24 +662,20 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                     'team_member': us.team_member.first_name,
                 },
             )
-            # email_msg = EmailMessage(
-            #     subject='QA: Finalización Aprobada de US',
-            #     body=body,
-            #     from_email=['PoliProyectos-noreply'],
-            #     to=[us.team_member.email],
-            # )
-            # email_msg.content_subtype = 'html'
-            # email_msg.send()
-            us.save()
+            email_msg = EmailMessage(
+                subject='QA: Finalización Aprobada de US',
+                body=body,
+                from_email=settings.EMAIL_HOST_USER,
+                to=['emanuelayalalml@gmail.com'],
+            )
+            email_msg.content_subtype = 'html'
+            email_msg.send()
         if 'fase' in request.POST.keys():
             actividad = GuardarActividadForm(request.POST)
             if actividad.is_valid():
                 actividad = actividad.save()
             else:
-                return self.render_to_response(self.get_context_data(s_fase='Control de Calidad',
-                                                                     permisos=permisos,
-                                                                     error='act_inv'
-                                                                     ))
+                return self.render_to_response(self.get_context_data(s_fase='Control de Calidad',permisos=permisos,error='act_inv'))
             us = UserStory.objects.get(id=request.POST['us'])
             fase = Fase.objects.get(id=request.POST['fase'])
             us.fase = fase
@@ -605,15 +701,14 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                     'motivo': actividad.descripcion,
                 },
             )
-            # email_msg = EmailMessage(
-            #     subject='QA: Se necesitan realizar modificaciones a US',
-            #     body=body,
-            #     from_email=['PoliProyectos-noreply'],
-            #     to=[us.team_member.email],
-            # )
-            # email_msg.content_subtype = 'html'
-            # email_msg.send()
-
+            email_msg = EmailMessage(
+                subject='QA: Se necesitan realizar modificaciones a US',
+                body=body,
+                from_email=settings.EMAIL_HOST_USER,
+                to=['emanuelayalalml@gmail.com'],
+            )
+            email_msg.content_subtype = 'html'
+            email_msg.send()
         return HttpResponseRedirect('./')
 
 @method_decorator(login_required, name='dispatch')

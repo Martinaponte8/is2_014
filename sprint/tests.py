@@ -8,16 +8,15 @@ class SprintModelTest(TestCase):
     """
     Clase de Tests del modelo sprint
     """
-
     def test_creacion(self):
         """
         verifica que los sprints se guarden correctamente en un estado valido
         """
         proyecto = Proyecto(
-            nombre="prueba",
-            estado="Pendiente",
-            descripcion="proyecto de prueba"
-        )
+                nombre="prueba",
+                estado="Pendiente",
+                descripcion="proyecto de prueba"
+                )
         proyecto.save()
         sprint = Sprint(
             nombre="prueba",
@@ -25,7 +24,7 @@ class SprintModelTest(TestCase):
             estado='Pendiente',
             dias_laborales=20,
             dias_habiles='1,2,3,4,5'
-        )
+            )
         self.assertTrue(sprint.validate_test())
 
     def test_validacion_nombre(self):

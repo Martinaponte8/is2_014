@@ -177,9 +177,9 @@ class Sprint(models.Model):
         for estimacion in estimaciones:
             horas += estimacion.duracion_estimada
         coordenadas.append({
-            'x': 0,
-            'y': horas
-        })
+                            'x': 0,
+                            'y': horas
+                            })
         inicio = self.fecha_inicio
         dias_habiles = self.get_dias_habiles()
         if self.fecha_fin:

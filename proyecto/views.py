@@ -593,28 +593,40 @@ class UpdateEjecucionView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                 sprint.save()
                 us_list = UserStory.objects.filter(sprint=sprint.pk)
                 for us in us_list:
+                    us.duracion_estimada = us.duracion_restante
                     us.sprints_asignados.add(sprint)
-                    us.fase = Fase.objects.filter(flujo=us.flujo.pk).order_by('pk')[0]
+                    if not us.fase and us.estado_fase != 'Control de Calidad':
+                us.fase = Fase.objects.filter(flujo=us.flujo)[0]
                     us.estado_fase = 'To Do'
-                    us.save()
-                    # Notificación al Desarrollador por correo
-                    body = render_to_string(
-                        '../templates/notificaciones/inicio_sprint.html', {
-                            # Poner los parámetros requeridos del correo
-                            'nombre_us': us.nombre,
-                            'proyecto': us.proyecto.nombre,
-                            'sprint': us.sprint.nombre,
-                            'team_member': us.team_member,
-                        },
-                    )
-                    # email_msg = EmailMessage(
-                    #     subject='Inicio de Sprint',
-                    #     body=body,
-                    #     from_email=['PoliProyectos-noreply'],
-                    #     to=[us.team_member.email],
-                    # )
-                    # email_msg.content_subtype = 'html'
-                    # email_msg.send()
+                    us.save()he = HistorialEstimaciones()
+                    he.duracion_estimada = us.duracion_estimada
+                    he.us = us
+                    he.sprint = sprint
+                    he.save()
+                """
+                    Notificación por correo al Desarrollador de que arrancó el Sprint y cuales US le han asignado. 
+                """
+                team_members = TeamMember.objects.filter(proyecto=proyecto)
+                for tm in team_members:
+                    us_asignados = UserStory.objects.filter(sprint=sprint.pk,team_member=tm.usuario)
+                    if us_asignados:
+                        body = render_to_string(
+                            '../templates/notificaciones/inicio_sprint.html', {
+                                # Poner los parámetros requeridos del correo
+                                'us_asignados': us_asignados,
+                                'proyecto': proyecto.nombre,
+                                'sprint': sprint,
+                                'team_member': tm.usuario,
+                            },
+                        )
+                        # email_msg = EmailMessage(
+                        #     subject='Inicio de Sprint',
+                        #     body=body,
+                        #     from_email=['PoliProyectos-noreply'],
+                        #     to=[tm.usuario.email],
+                        # )
+                        # email_msg.content_subtype = 'html'
+                        # email_msg.send()
             else:
                 return render(self.get_context_data(error='sinus',permisos=permisos))
         return HttpResponseRedirect('./')
@@ -758,3 +770,234 @@ class UpdateTeamMemberView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             fs_error = "Solo puede existir un "+str(team_member_formset.rol_doble.nombre)
         return self.render_to_response(self.get_context_data(fs_error=fs_error, form=form, team_members=team_member_formset))
 
+@method_decorator(login_required, name='dispatch')
+class HorasTrabajadasPDF(View):
+    """
+    Clase de la vista para creacion de Reporte Horas Trabajadas
+    """
+
+    def get(self, request, *args, **kwargs):
+        """
+        metodo de respuesta a consulta GET
+        :param request: consulta GET
+        :param args: argumentos
+        :param kwargs: diccionario de datos
+        :return: respuesta a la consulta GET
+        """
+        self.proyecto = Proyecto.objects.get(pk=self.kwargs['pk_proyecto'])
+        response = HttpResponse(content_type='application/pdf')
+        # se crea el pdf
+        buffer = BytesIO()
+        pdf = canvas.Canvas(buffer)
+        self.doc = SimpleDocTemplate(buffer)
+        self.doc.title = 'Reporte de Horas Trabajadas del Proyecto: ' + str(self.proyecto.nombre)
+        self.story = []
+        self.encabezado()
+        self.titulo()
+        self.descripcion()
+        self.titulo_sprint()
+        self.por_sprint()
+        self.titulo_us()
+        self.por_us()
+        self.titulo_tm()
+        self.por_tm()
+        self.doc.build(self.story, onFirstPage=self.numeroPagina,
+                       onLaterPages=self.numeroPagina)
+        pdf = buffer.getvalue()
+        # fin
+        buffer.close()
+        response.write(pdf)
+        return response
+
+    def encabezado(self):
+        """
+        agrega el encabezado al documento
+        :return: None
+        """
+        logo = settings.MEDIA_ROOT+"logo2.png"
+        im = Image(logo, inch, inch)
+        im.hAlign = 'LEFT'
+        p = Paragraph("<i>Software Gestor de Proyectos<br/>Asunción-Paraguay<br/>Contacto: 0981-222333</i>",
+                      self.estiloPR())
+        data_tabla = [[im, p]]
+        tabla = Table(data_tabla)
+        self.story.append(tabla)
+
+        d = Drawing(480, 3)
+        d.add(Line(0, 0, 480, 0))
+        self.story.append(d)
+        self.story.append(Spacer(1, 0.3 * inch))
+
+    def titulo(self):
+        """
+        agrega el titulo al documento
+        :return: None
+        """
+        txt = "<b><u>Reporte de Horas Trabajadas</u></b>"
+        p = Paragraph('<font size=20>' + str(txt) + '</font>', self.estiloPC())
+        self.story.append(p)
+        self.story.append(Spacer(1, 0.5 * inch))
+
+    def titulo_sprint(self):
+        """
+        agrega el titulo de horas trabajadas por sprint
+        :return: None
+        """
+        txt = "<b><u>Por Sprint</u></b>"
+        p = Paragraph('<font size=10>' + str(txt) + '</font>', self.estiloPC())
+        self.story.append(p)
+        self.story.append(Spacer(1, 0.2 * inch))
+
+    def titulo_us(self):
+        """
+        agrega el titulo de horas trabajadas por user story
+        :return: None
+        """
+        txt = "<b><u>Por User Story</u></b>"
+        p = Paragraph('<font size=10>' + str(txt) + '</font>', self.estiloPC())
+        self.story.append(p)
+        self.story.append(Spacer(1, 0.2 * inch))
+
+    def titulo_tm(self):
+        """
+        agrega el titulo de horas trabajadas por team member al documento
+        :return: None
+        """
+        txt = "<b><u>Por Usuarios</u></b>"
+        p = Paragraph('<font size=10>' + str(txt) + '</font>', self.estiloPC())
+        self.story.append(p)
+        self.story.append(Spacer(1, 0.2 * inch))
+
+    def descripcion(self):
+        """
+        agrega la descripcion del reporte
+        :return: None
+        """
+        txt = "<b>Proyecto: </b>" + str(self.proyecto)
+        p = Paragraph('<font size=12>' + str(txt) + '</font>', self.estiloPL())
+        self.story.append(p)
+        self.story.append(Spacer(1, 0.3 * inch))
+
+    def por_sprint(self):
+        """
+        agrega al documento pdf la tabla de horas trabajadas por sprint
+        :return: None
+        """
+        sprints = Sprint.objects.filter(proyecto=self.proyecto)
+        for sprint in sprints:
+            estimaciones = HistorialEstimaciones.objects.filter(sprint=sprint.pk)
+            planificacion = 0
+            for estimacion in estimaciones:
+                planificacion += estimacion.duracion_estimada
+            sprint.planificacion = planificacion
+            actividades = Actividad.objects.filter(sprint=sprint.pk)
+            horas_trabajadas = 0
+            for actividad in actividades:
+                horas_trabajadas += actividad.duracion
+            sprint.horas_trabajadas = horas_trabajadas
+            horas_trabajadas = 0
+        nro = 1
+        data = [["N°", "Sprint", "Estado",  "Horas Planificadas","Horas Trabajadas"]]
+        for x in sprints:
+            aux = [nro, x.nombre, x.estado, x.planificacion,x.horas_trabajadas]
+            nro += 1
+            data.append(aux)
+        style = TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')])
+
+        t = Table(data)
+        t.setStyle(style)
+        self.story.append(t)
+        self.story.append(Spacer(1, 0.5 * inch))
+
+    def por_us(self):
+        """
+        agrega al documento la tabla de horas trabajadas por user story
+        :return:
+        """
+        user_stories = UserStory.objects.filter(proyecto=self.proyecto)
+        for us in user_stories:
+            us.horas_trabajadas = us.get_horas_trabajadas()
+        nro = 1
+        data = [["N°", "User Story", "Estado", "Horas Trabajadas"]]
+        estados = ['Terminado', 'En Proceso', 'Pendiente']
+        for x in user_stories:
+            aux = [nro, x.nombre, estados[x.estado], x.horas_trabajadas]
+            nro += 1
+            data.append(aux)
+        style = TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')])
+
+        t = Table(data)
+        t.setStyle(style)
+        self.story.append(t)
+        self.story.append(Spacer(1, 0.5 * inch))
+
+    def por_tm(self):
+        """
+        agrega al documento la tabla de horas trabajadas por team member
+        :return: None
+        """
+        sprints = Sprint.objects.filter(proyecto=self.proyecto)
+        horas = {}
+        for sprint in sprints:
+            actividades = Actividad.objects.filter(sprint=sprint.pk)
+            for actividad in actividades:
+                if actividad.usuario.pk not in horas.keys():
+                    horas[actividad.usuario.pk] = 0
+                horas[actividad.usuario.pk] += actividad.duracion
+        team_members = TeamMember.objects.filter(proyecto=self.proyecto)
+        for tm in team_members:
+            if tm.usuario.pk not in horas.keys():
+                horas[tm.usuario.pk] = 0
+        nro = 1
+        data = [["N°", "Team Member", "Horas Trabajadas"]]
+        estados = ['Terminado', 'En Proceso', 'Pendiente']
+        for usuario_pk in horas.keys():
+            usuario = Usuario.objects.get(pk=usuario_pk)
+            tm = usuario.first_name+" "+usuario.last_name
+            aux = [nro, tm, horas[usuario_pk]]
+            nro += 1
+            data.append(aux)
+        style = TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')])
+
+        t = Table(data)
+        t.setStyle(style)
+        self.story.append(t)
+        self.story.append(Spacer(1, 0.5 * inch))
+
+    def estiloPC(self):
+        """
+        :return: estilo de titulos
+        """
+        return ParagraphStyle(name="centrado", alignment=TA_CENTER)
+
+    def estiloPL(self):
+        """
+        :return: estilo del logo
+        """
+        return ParagraphStyle(name="izquierda", alignment=TA_LEFT)
+
+    def estiloPR(self):
+        """
+        :return: estilo de datos de la empresa
+        """
+        return ParagraphStyle(name="derecha", alignment=TA_RIGHT)
+
+    def numeroPagina(self, canvas, doc):
+        """
+        agrega el numero de pagina al documento
+        :param canvas:
+        :param doc: documento pdf
+        :return: None
+        """
+        num = canvas.getPageNumber()
+        text = "Página %s" % num
+        canvas.drawRightString(190 * mm, 20 * mm, text)

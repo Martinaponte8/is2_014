@@ -11,6 +11,14 @@ class Flujo(models.Model):
     nombre = models.CharField(max_length=20)
     descripcion = models.TextField(blank=True, null=True)
 
+    def __str__(self):
+        """
+        metodo de la clase Flujo que retorna el nombre del flujo
+        :return: nombre del flujo
+        """
+        return self.nombre
+
+
 """
 Definicion del modelo Fase
 """
@@ -20,3 +28,10 @@ class Fase(models.Model):
     """
     flujo = models.ForeignKey(Flujo, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=20)
+
+    def __str__(self):
+        """
+        metodo de la clase Flujo que retorna el nombre de la fase
+        :return: nombre de la fase
+        """
+        return self.nombre

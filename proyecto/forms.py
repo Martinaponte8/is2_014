@@ -71,7 +71,6 @@ class TeamMemberFormSet(BaseTeamMemberFormSet):
                     return False
                 if not form['rol'].value() in roles:
                     roles.append(form['rol'].value())
-
             # un usuario solo puede asignarse una vez
             if form['usuario'].value() and not form['usuario'].value() in usuarios:
                 usuarios.append(form['usuario'].value())

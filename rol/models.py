@@ -15,6 +15,10 @@ class Permiso(models.Model):
     tipo = models.IntegerField()
 
     def __str__(self):
+        """
+        Metodo que retorna el nombre del permiso actual
+        :return: retorna el valor del campo nombre del objeto actual
+        """
         return self.nombre
 
 

@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
+from django.http import HttpResponseRedirect
 
 """
 Funcion eliminar Usuario
@@ -27,9 +28,23 @@ class UserListView(LoginRequiredMixin, ListView):
     model = Usuario
     queryset = Usuario.objects.all()
 
+    def get(self, request, *args, **kwargs):
+        """
+        Metodo que es ejecutado al darse una consulta GET
+        :param request: consulta recibida
+        :param args: argumentos adicionales
+        :param kwargs: diccionario de datos adicionales
+        :return: la respuesta a la consulta GET
+        """
+        self.object_list = Usuario.objects.all()
+        permisos = request.user.get_nombres_permisos()
+        return self.render_to_response(self.get_context_data(permisos=permisos))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Usuarios"
+        context['direccion'] = {}
+        context['direccion']['Usuarios'] = (1, '/usuarios/')
         return context
 
 
@@ -44,10 +59,43 @@ class CreateUserView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
     form_class = CreateUserForm
     success_message = 'Se ha creado el usuario'
 
+    def get(self, request, *args, **kwargs):
+        """
+        Metodo que es ejecutado al darse una consulta GET
+        :param request: consulta recibida
+        :param args: argumentos adicionales
+        :param kwargs: diccionario de datos adicionales
+        :return: la respuesta a la consulta GET
+        """
+        self.object = None
+        permisos = request.user.get_nombres_permisos()
+        return self.render_to_response(self.get_context_data(permisos=permisos))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = "Crear Usuario"
+        context['direccion'] = {}
+        context['direccion']['Usuarios'] = (1, '/usuarios/')
+        context['direccion']['Crear Usuario'] = (2, '/usuarios/create/')
         return context
+
+    def post(self, request, *args, **kwargs):
+        """
+        Metodo que es ejecutado al darse una consulta POST
+        :param request: consulta recibida
+        :param args: argumentos adicionales
+        :param kwargs: diccionario de datos adicionales
+        :return: la respuesta a la consulta POST
+        """
+        self.object = None
+        formclass = self.get_form_class()
+        form = self.get_form(formclass)
+        permisos = request.user.get_nombres_permisos()
+        if form.is_valid():
+            self.object = form.save()
+            return HttpResponseRedirect(self.success_url)
+        else:
+            return self.render_to_response(self.get_context_data(permisos=permisos, form=form))
 
 
 @method_decorator(login_required, name='dispatch')
@@ -61,13 +109,46 @@ class UpdateUserView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     success_url = '/usuarios/'
     success_message = 'Los cambios se guardaron correctamente'
 
+    def get(self, request, *args, **kwargs):
+        """
+        Metodo que es ejecutado al darse una consulta GET
+        :param request: consulta recibida
+        :param args: argumentos adicionales
+        :param kwargs: diccionario de datos adicionales
+        :return: la respuesta a la consulta GET
+        """
+        self.object = self.get_object()
+        permisos = request.user.get_nombres_permisos()
+        return self.render_to_response(self.get_context_data(permisos=permisos))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Modificar Usuario"
+        context['title'] = "Modificar Usuario"+ str(self.object.pk)
+        context['direccion'] = {}
+        context['direccion']['Usuarios'] = (1, '/usuarios/')
+        context['direccion']['Modificar: ' + self.object.username] = (2, '/usuarios/modificar/' + str(self.object.pk) + '/')
         return context
 
     def get_object(self, queryset=None):
         return Usuario.objects.get(pk=self.kwargs['pk'])
+
+    def post(self, request, *args, **kwargs):
+        """
+        Metodo que es ejecutado al darse una consulta POST
+        :param request: consulta recibida
+        :param args: argumentos adicionales
+        :param kwargs: diccionario de datos adicionales
+        :return: la respuesta a la consulta POST
+        """
+        self.object = self.get_object()
+        formclass = self.get_form_class()
+        form = self.get_form(formclass)
+        permisos = request.user.get_nombres_permisos()
+        if form.is_valid():
+            self.object = form.save()
+            return HttpResponseRedirect(self.success_url)
+        else:
+            return self.render_to_response(self.get_context_data(permisos=permisos, form=form))
 
     def get_absolute_url(self):
         return reverse('update_user', kwargs={'pk': self.kwargs['pk']})
@@ -81,9 +162,24 @@ class VerUserDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):
     model = Usuario
     template_name = 'usuarios/ver_user.html'
 
+    def get(self, request, *args, **kwargs):
+        """
+        Metodo que es ejecutado al darse una consulta GET
+        :param request: consulta recibida
+        :param args: argumentos adicionales
+        :param kwargs: diccionario de datos adicionales
+        :return: la respuesta a la consulta GET
+        """
+        self.object = self.get_object()
+        permisos = request.user.get_nombres_permisos()
+        return self.render_to_response(self.get_context_data(permisos=permisos))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = "Ver Usuario"
+        context['title'] = "Ver Usuario" + str(self.object.pk)
+        context['direccion'] = {}
+        context['direccion']['Usuarios'] = (1, '/usuarios/')
+        context['direccion']['Ver: ' + self.object.username] = (2, '/usuarios/ver/' + str(self.object.pk) + '/')
         return context
 
     def get_object(self, queryset=None):

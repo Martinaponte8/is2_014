@@ -1,7 +1,9 @@
+import pickle
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from is2_014 import settings
-
+from django.http import HttpResponse
 
 """
 Definicion de los estados de User Story
@@ -100,10 +102,10 @@ class UserStory(models.Model):
             raise ValidationError('Debe asignar un team member al user story ' + str(self.nombre))
         if not self.has_duracion_estimada():
             raise ValidationError('Se deben estimar las horas de duración del user story ' + str(self.nombre))
-        # if not self.duracion_restante:
-        #     raise ValidationError('Se deben estimar las horas de duración del user story ' + str(self.nombre))
-        # if self.duracion_restante <= 0:
-        #     raise ValidationError('Debe indicar una duracion estimada mayor a 0 al user story ' + str(self.nombre))
+        if not self.duracion_restante:
+            raise ValidationError('Se deben estimar las horas de duración del user story ' + str(self.nombre))
+        if self.duracion_restante <= 0:
+            raise ValidationError('Debe indicar una duracion estimada mayor a 0 al user story ' + str(self.nombre))
         return True
 
     def get_horas_trabajadas(self, sprint=None):
@@ -130,6 +132,7 @@ class Nota(models.Model):
     us = models.ForeignKey('UserStory', on_delete=models.CASCADE, null=True)
     usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT, null=True)
     fecha = models.DateTimeField(auto_now_add=True)
+    sprint = models.ForeignKey('sprint.Sprint', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nota
@@ -142,12 +145,20 @@ class Archivo(models.Model):
     """Campos:"""
     titulo = models.CharField(max_length=255, blank=True)
     archivo = models.FileField(upload_to='')
+    binario = models.BinaryField(null=True, blank=True)
     fecha = models.DateTimeField(auto_now_add=True)
     us = models.ForeignKey('UserStory', on_delete=models.CASCADE, null=True)
     usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT, null=True)
+    sprint = models.ForeignKey('sprint.Sprint', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.titulo
+
+    def set_data(self, data):
+        self.binario = pickle.dumps(data)
+
+    def get_data(self):
+        return pickle.loads(self.binario)
 
 
 class Actividad(models.Model):

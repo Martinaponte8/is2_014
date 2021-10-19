@@ -25,23 +25,22 @@ class Proyecto(models.Model):
     fecha_fin = models.DateField(blank=True, null=True)
     estado = models.CharField(max_length=25, choices=ESTADOS_PROYECTO, default='Pendiente')
     descripcion= models.TextField(blank=True, null=True)
+    cliente = models.ForeignKey('clientes.Cliente', on_delete=models.PROTECT, null=True)
     fecha_ini_estimada = models.DateField('Fecha de Inicio Estimada', blank=False, null=False)
     fecha_fin_estimada = models.DateField('Fecha de Fin Estimada', blank=False, null=False)
 
     def __str__(self):
         """
-                Metodo que retorna el nombre del proyecto actual
-                :return: retorna el valor del campo nombre del objeto actual
-                """
-
+        Metodo que retorna el nombre del proyecto actual
+        :return: retorna el valor del campo nombre del objeto actual
+        """
         return self.nombre
 
 class TeamMember(models.Model):
     """
-        Implementa la clase de Team Member, el cual es una combinacion de un usuario y un rol
-        ligada a un proyecto
-        """
-
+    Implementa la clase de Team Member, el cual es una combinacion de un usuario y un rol
+    ligada a un proyecto
+    """
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE, null=False, blank=False)
     usuario = models.ForeignKey('usuarios.Usuario', on_delete=models.PROTECT, blank=False, null=False)
     rol = models.ForeignKey(Rol, on_delete=models.PROTECT, blank=False, null=False)

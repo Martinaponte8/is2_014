@@ -7,6 +7,10 @@ class CreateRolForm(forms.ModelForm):
     Formulario para crear un Rol
     """
     class Meta:
+        """
+        Clase en la que se definen los datos necesarios y adicionales para inicializacion y
+        visualizacion del formulario
+        """
         model = Rol
         fields = [
             'nombre',
@@ -18,13 +22,17 @@ class CreateRolForm(forms.ModelForm):
             'nombre': 'Nombre del rol',
             'descripcion': 'Descripcion ',
             'permisos': 'Permisos',
-
         }
         widgets = {
             'permisos': forms.CheckboxSelectMultiple(),
         }
 
     def __init__(self, *args, **kwargs):
+        """
+        Constructor del formulario
+        :param args: argumentos para inicializacion
+        :param kwargs: diccionario de datos adicionales para inicializacion
+        """
         super(CreateRolForm, self).__init__(*args, **kwargs)
         permisos_all = Permiso.objects.filter(tipo=2)
         p = self.fields['permisos'].widget
@@ -65,6 +73,11 @@ class UpdateRolForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        """
+        Constructor del formulario
+        :param args: argumentos para inicializacion
+        :param kwargs: diccionario de datos adicionales para inicializacion
+        """
         super(UpdateRolForm, self).__init__(*args, **kwargs)
         permisos_all = Permiso.objects.filter(tipo=2)
         p = self.fields['permisos'].widget

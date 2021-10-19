@@ -31,24 +31,24 @@ from django.forms import inlineformset_factory
 from django.db import transaction
 import json
 from django.template.loader import render_to_string
-# from django.core.mail import EmailMessage
-# from io import BytesIO
-# import locale
-# from django.views.generic import View
-# from reportlab.lib.pagesizes import A4
-# from reportlab.lib.styles import ParagraphStyle, TA_CENTER, TA_LEFT
-# from reportlab.lib.units import inch, mm
-# from reportlab.lib import colors
-# from reportlab.graphics.shapes import Drawing, Line
-# from reportlab.lib.enums import TA_RIGHT
-# from reportlab.platypus import (
-#         Paragraph,
-#         Table,
-#         SimpleDocTemplate,
-#         Spacer,
-#         TableStyle,
-#         Paragraph,
-#         Image)
+from django.core.mail import EmailMessage
+from io import BytesIO
+import locale
+from django.views.generic import View
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import ParagraphStyle, TA_CENTER, TA_LEFT
+from reportlab.lib.units import inch, mm
+from reportlab.lib import colors
+from reportlab.graphics.shapes import Drawing, Line
+from reportlab.lib.enums import TA_RIGHT
+from reportlab.platypus import (
+        Paragraph,
+        Table,
+        SimpleDocTemplate,
+        Spacer,
+        TableStyle,
+        Paragraph,
+        Image)
 
 
 """
@@ -583,6 +583,10 @@ class VerSprintDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):
                 c.tipo = 'cambio'
                 context['actividades'][us.pk].append(c)
             context['actividades'][us.pk].sort(key=lambda x: x.fecha, reverse=True)
+            us.horas_sprint = us.get_horas_trabajadas(sprint=self.object.pk)
+            us.horas_total = us.get_horas_trabajadas()
+            us.duracion_estimada = HistorialEstimaciones.objects.filter(us=us.pk,
+                                                                        sprint=self.object.pk)[0].duracion_estimada
         context['direccion'] = {}
         context['direccion']['Ejecuciones'] = (1, '/proyectos/ejecuciones/')
         context['direccion'][str(context['project'])] = (2, '/proyectos/ejecuciones/' + str(self.kwargs['pk_proyecto']) + '/')
@@ -590,9 +594,26 @@ class VerSprintDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):
         context['direccion']['Ver: ' + self.object.nombre] = (4, '/proyectos/ejecuciones/' + str(self.kwargs['pk_proyecto']) + '/sprints/ver/' + str(self.object.pk) + '/')
         context['dias_habiles'] = self.object.get_nombres_dias_habiles()
         context['team_members'] = Horas.objects.filter(sprint=self.object.pk)
+        context['bdc_line'] = self.object.get_bdc_line()
+        context['horas_trabajadas'] = self.object.get_horas_trabajadas()
+        if len(context['bdc_line']) < self.object.dias_laborales:
+            xMax = self.object.dias_laborales
+        else:
+            xMax = len(context['bdc_line']) + 1
+        context['xMax'] = xMax
+        horas = Horas.objects.filter(sprint=self.object.pk)
+        team_members = []
+        horas_tm = {}
+        capacidad = 0
+        for h in horas:
+            team_member = Usuario.objects.get(pk=h.team_member.pk)
+            team_members.append(team_member)
+            capacidad += h.horas_laborales
+        context['capacidad_sprint'] = capacidad * self.object.dias_laborales
         return context
 
-    def get_object(self, queryset=None):
+
+def get_object(self, queryset=None):
         """
         Metodo que retorna el objeto actual
         :param queryset:
@@ -601,3 +622,278 @@ class VerSprintDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):
         sprint = Sprint.objects.get(pk=self.kwargs['pk'])
         sprint.duracion_real = sprint.get_duracion_real()
         return sprint
+
+@method_decorator(login_required, name='dispatch')
+class SprintBacklogPDF(View):
+    """
+    Clase de la vista para creacion de Reporte Sprint Backlog
+    """
+    def get(self, request, *args, **kwargs):
+        """
+        respuesta a la consulta GET
+        :param request: consulta GET
+        :param args: argumentos
+        :param kwargs: diccionario de datos
+        :return: respuesta a consultas GET
+        """
+        self.sprint = Sprint.objects.get(pk=self.kwargs['sprint_pk'])
+        self.proyecto = Proyecto.objects.get(pk=self.kwargs['pk_proyecto'])
+        response = HttpResponse(content_type='application/pdf')
+        #se crea el pdf
+        buffer = BytesIO()
+        pdf = canvas.Canvas(buffer)
+        self.doc = SimpleDocTemplate(buffer)
+        self.doc.title = 'Reporte de Sprint Backlog del Sprint: ' + str(self.sprint.nombre)
+        self.story = []
+        self.encabezado()
+        self.titulo()
+        self.descripcion()
+        self.crearTabla()
+        self.doc.build(self.story, onFirstPage=self.numeroPagina,
+                       onLaterPages=self.numeroPagina)
+        pdf = buffer.getvalue()
+        #fin
+        buffer.close()
+        response.write(pdf)
+        return response
+
+    def encabezado(self):
+        """
+        agrega el encabezado al documento pdf a imprimir
+        :return: None
+        """
+        logo = settings.MEDIA_ROOT+"logo2.png"
+        im = Image(logo, inch, inch)
+        im.hAlign = 'LEFT'
+        p = Paragraph("<i>Software Gestor de Proyectos<br/>Asunción-Paraguay<br/>Contacto: 0981-222333</i>", self.estiloPR())
+        data_tabla = [[im, p]]
+        tabla = Table(data_tabla)
+        self.story.append(tabla)
+
+        d = Drawing(480, 3)
+        d.add(Line(0, 0, 480, 0))
+        self.story.append(d)
+        self.story.append(Spacer(1, 0.3 * inch))
+
+    def titulo(self):
+        """
+        agrega el titulo al documento pdf a imprimir
+        :return: None
+        """
+        txt = "<b><u>Reporte de Sprint Backlog</u></b>"
+        p = Paragraph('<font size=20>'+str(txt)+'</font>', self.estiloPC())
+        self.story.append(p)
+        self.story.append(Spacer(1, 0.5 * inch))
+
+    def descripcion(self):
+        """
+        agrega la descripcion al documento pdf
+        :return: None
+        """
+        txt = "<b>Proyecto: </b>" + str(self.proyecto) + "<br/><b>Sprint: </b>" + str(self.sprint.nombre)
+        p = Paragraph('<font size=12>' + str(txt) + '</font>', self.estiloPL())
+        self.story.append(p)
+        self.story.append(Spacer(1, 0.3 * inch))
+
+    def crearTabla(self):
+        """
+        agrega el cuerpo del reporte al documento pdf
+        :return: None
+        """
+        user_stories = UserStory.objects.filter(sprints_asignados__id=self.sprint.pk)
+        for us in user_stories:
+            estimacion = HistorialEstimaciones.objects.filter(sprint=self.sprint, us=us.pk)[0]
+            us.duracion_estimada = estimacion.duracion_estimada
+            actividades = Actividad.objects.filter(sprint=self.sprint, us=us.pk)
+            horas = 0.0
+            for actividad in actividades:
+                horas += actividad.duracion
+            us.horas_trabajadas = horas
+        nro = 1
+        data = [["N°","User Story", "Horas Estimadas", "Horas Trabajadas","Priorizacion"]]
+        for x in user_stories:
+            aux = [nro,x.nombre, x.duracion_estimada, x.horas_trabajadas, \
+                locale.format("%0.2f", x.priorizacion, grouping=True)]
+            nro += 1
+            data.append(aux)
+        style = TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')])
+
+        t = Table(data)
+        t.setStyle(style)
+        self.story.append(t)
+
+    def estiloPC(self):
+        """
+        estilo del cuerpo del reporte
+        :return: objeto para estilo del reporte
+        """
+        return ParagraphStyle(name="centrado", alignment=TA_CENTER)
+
+    def estiloPL(self):
+        """
+        estilo de la descripcion del reporte
+        :return: objeto para estilo del reporte
+        """
+        return ParagraphStyle(name="izquierda", alignment=TA_LEFT)
+
+    def estiloPR(self):
+        """
+        estilo el encabezado del reporte
+        :return: objeto para estilo del reporte
+        """
+        return ParagraphStyle(name="derecha", alignment=TA_RIGHT)
+
+    def numeroPagina(self, canvas, doc):
+        """
+        agrega el numero de pagina al documento pdf
+        :param canvas: pdf
+        :param doc: documento pdf
+        :return: None
+        """
+        num = canvas.getPageNumber()
+        text = "Página %s" % num
+        canvas.drawRightString(190 * mm, 20 * mm, text)
+
+@method_decorator(login_required, name='dispatch')
+class PrioridadesPDF(View):
+    """
+    clase de la vista para creacion de Reporte de Prioridades de sprint
+    """
+    def get(self, request, *args, **kwargs):
+        """
+        respuesta a la consulta GET
+        :param request: consulta GET
+        :param args: argumentos
+        :param kwargs: diccionario de datos
+        :return: respuesta a consultas GET
+        """
+        self.proyecto = Proyecto.objects.get(pk=self.kwargs['pk_proyecto'])
+        self.sprint = Sprint.objects.get(proyecto=self.proyecto.pk, estado='En Proceso')
+        response = HttpResponse(content_type='application/pdf')
+        buffer = BytesIO()
+        pdf = canvas.Canvas(buffer)
+        self.doc = SimpleDocTemplate(buffer)
+        self.doc.title = 'Reporte de Prioridades de Sprint: ' + str(self.sprint.nombre)
+        self.story = []
+        self.encabezado()
+        self.titulo()
+        self.descripcion()
+        self.crearTabla()
+        self.doc.build(self.story, onFirstPage=self.numeroPagina,
+                       onLaterPages=self.numeroPagina)
+        pdf = buffer.getvalue()
+        buffer.close()
+        response.write(pdf)
+        return response
+
+    def encabezado(self):
+        """
+        agrega el encabezado al documento pdf
+        :return: None
+        """
+        logo = settings.MEDIA_ROOT+"logo2.png"
+        im = Image(logo, inch, inch)
+        im.hAlign = 'LEFT'
+        p = Paragraph("<i>Software Gestor de Proyectos<br/>Asunción-Paraguay<br/>Contacto: 0981-222333</i>", self.estiloPR())
+        data_tabla = [[im, p]]
+        tabla = Table(data_tabla)
+        self.story.append(tabla)
+
+        d = Drawing(480, 3)
+        d.add(Line(0, 0, 480, 0))
+        self.story.append(d)
+        self.story.append(Spacer(1, 0.3 * inch))
+
+    def titulo(self):
+        """
+        agrega el titulo al documento pdf
+        :return: None
+        """
+        txt = "<b><u>Prioridades del Sprint Actual</u></b>"
+        p = Paragraph('<font size=20>'+str(txt)+'</font>', self.estiloPC())
+        self.story.append(p)
+        self.story.append(Spacer(1, 0.5 * inch))
+
+    def descripcion(self):
+        """
+        agrega la descripcion al documento pdf
+        :return: None
+        """
+        txt = "<b>Proyecto: </b>" + str(self.proyecto) + '<br/><b>Sprint: </b>' + str(self.sprint.nombre)
+        p = Paragraph('<font size=12>' + str(txt) + '</font>', self.estiloPL())
+        self.story.append(p)
+        self.story.append(Spacer(1, 0.3 * inch))
+
+    def crearTabla(self):
+        """
+        agrega el cuerpo del reporte pdf
+        :return: None
+        """
+        user_stories = []
+        us_query = UserStory.objects.filter(proyecto=self.proyecto, sprint=self.kwargs['sprint_pk'])
+        l1 = []
+        l2 = []
+        l3 = []
+        for us in us_query:
+            if us.estado != 0 and us.sprints_asignados.count() >= 2:
+                l1.append(us)
+            elif (us.estado == 1 or us.estado == 0):
+                l2.append(us)
+            else:
+                l3.append(us)
+        l1.sort(key=lambda x: x.priorizacion, reverse=True)
+        l2.sort(key=lambda x: x.priorizacion, reverse=True)
+        l3.sort(key=lambda x: x.priorizacion, reverse=True)
+        for us in l1:
+            user_stories.append(us)
+        for us in l2:
+            user_stories.append(us)
+        for us in l3:
+            user_stories.append(us)
+        nro = 1
+        data = [["N°","Nombre", "Priorizacion", "Trabajado en otro sprint"]]
+        for x in user_stories:
+            aux = [nro,x.nombre, locale.format("%0.2f", x.priorizacion, grouping=True),
+                   "NO" if x.sprints_asignados.count() < 2 else "SI"]
+            nro += 1
+            data.append(aux)
+        style = TableStyle([
+            ('GRID', (0, 0), (-1, -1), 0.25, colors.black),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE')])
+
+        t = Table(data)
+        t.setStyle(style)
+        self.story.append(t)
+
+    def estiloPC(self):
+        """
+        :return: estilo para cuerpo del reporte
+        """
+        return ParagraphStyle(name="centrado", alignment=TA_CENTER)
+
+    def estiloPL(self):
+        """
+        :return: estilo para descripcion del reporte
+        """
+        return ParagraphStyle(name="izquierda", alignment=TA_LEFT)
+
+    def estiloPR(self):
+        """
+        :return: estilo para encabezado del reporte
+        """
+        return ParagraphStyle(name="derecha", alignment=TA_RIGHT)
+
+    def numeroPagina(self, canvas, doc):
+        """
+        agrega el numero de pagina al documento pdf
+        :param canvas: pdf
+        :param doc: documento pdf
+        :return: None
+        """
+        num = canvas.getPageNumber()
+        text = "Página %s" % num
+        canvas.drawRightString(190 * mm, 20 * mm, text)
