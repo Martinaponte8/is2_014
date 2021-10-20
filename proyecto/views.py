@@ -1,6 +1,7 @@
-
-
+from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from reportlab.pdfgen import canvas
+
 from .forms import *
 from proyecto.forms import CreateProjectForm, UpdateProjectForm
 from django.http import HttpResponseRedirect
@@ -14,7 +15,23 @@ from django.utils import timezone
 from userstory.models import *
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from reportlab.lib.styles import ParagraphStyle, TA_CENTER, TA_LEFT
 from django.core.mail import EmailMessage
+from reportlab.lib.units import inch, mm
+from reportlab.lib import colors
+from reportlab.graphics.shapes import Drawing, Line
+from io import BytesIO
+from reportlab.lib.enums import TA_RIGHT
+from reportlab.platypus import (
+        Paragraph,
+        Table,
+        SimpleDocTemplate,
+        Spacer,
+        TableStyle,
+        Paragraph,
+        Image)
+
+
 
 """
 Vistas del Proyecto
@@ -596,9 +613,10 @@ class UpdateEjecucionView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                     us.duracion_estimada = us.duracion_restante
                     us.sprints_asignados.add(sprint)
                     if not us.fase and us.estado_fase != 'Control de Calidad':
-                us.fase = Fase.objects.filter(flujo=us.flujo)[0]
-                    us.estado_fase = 'To Do'
-                    us.save()he = HistorialEstimaciones()
+                        us.fase = Fase.objects.filter(flujo=us.flujo)[0]
+                        us.estado_fase = 'To Do'
+                    us.save()
+                    he = HistorialEstimaciones()
                     he.duracion_estimada = us.duracion_estimada
                     he.us = us
                     he.sprint = sprint

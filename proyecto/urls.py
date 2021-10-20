@@ -1,11 +1,13 @@
 from django.conf.urls import include, url
 from django.urls import path
+# from proyecto import views
 from . import views
+from proyecto.views import eliminar2
 from userstory.views import *
-from .views import eliminar2
+# from .views import eliminar2
 #from tipoUserStory.views import *
 #from userstory.views import *
-#from sprint.views import *
+from sprint.views import *
 
 """
 Definicion de URLs contenidas en proyectos
