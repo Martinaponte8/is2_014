@@ -610,17 +610,17 @@ class UpdateEjecucionView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                 sprint.save()
                 us_list = UserStory.objects.filter(sprint=sprint.pk)
                 for us in us_list:
-                    us.duracion_estimada = us.duracion_restante
+                    # us.duracion_estimada = us.duracion_restante
                     us.sprints_asignados.add(sprint)
-                    if not us.fase and us.estado_fase != 'Control de Calidad':
-                        us.fase = Fase.objects.filter(flujo=us.flujo)[0]
-                        us.estado_fase = 'To Do'
+                    # if not us.fase and us.estado_fase != 'Control de Calidad':
+                    us.fase = Fase.objects.filter(flujo=us.flujo)[0]
+                    us.estado_fase = 'To Do'
                     us.save()
-                    he = HistorialEstimaciones()
-                    he.duracion_estimada = us.duracion_estimada
-                    he.us = us
-                    he.sprint = sprint
-                    he.save()
+                    # he = HistorialEstimaciones()
+                    # he.duracion_estimada = us.duracion_estimada
+                    # he.us = us
+                    # he.sprint = sprint
+                    # he.save()
                 """
                     Notificación por correo al Desarrollador de que arrancó el Sprint y cuales US le han asignado. 
                 """
