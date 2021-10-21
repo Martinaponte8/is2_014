@@ -1,21 +1,20 @@
 from django import forms
 from django.forms import inlineformset_factory
-
-from usuarios.models import Usuario
 from .models import *
+from usuarios.models import Usuario
+
 
 class CreateProjectForm(forms.ModelForm):
     """
     Formulario para la creacion de un nuevo Proyecto
     """
     class Meta:
+        """
+        Clase en la que se definen los datos necesarios y adicionales para inicializacion y
+        visualizacion del formulario
+        """
         model = Proyecto
-        fields = ('nombre', 'fecha_ini_estimada', 'fecha_fin_estimada', 'descripcion')
-
-    # widgets = {
-    #     'fecha_ini_estimada': forms.DateField(),
-    #     'fecha_fin_estimada': forms.DateField()
-    # }
+        fields = ('nombre', 'cliente', 'descripcion')
 
 
 class UpdateProjectForm(forms.ModelForm):
@@ -23,13 +22,12 @@ class UpdateProjectForm(forms.ModelForm):
     Formulario para la modificacion de un Proyecto
     """
     class Meta:
+        """
+        Clase en la que se definen los datos necesarios y adicionales para inicializacion y
+        visualizacion del formulario
+        """
         model = Proyecto
-        fields = ('nombre', 'fecha_ini_estimada', 'fecha_fin_estimada', 'descripcion')
-
-    # widgets = {
-    #     'fecha_ini_estimada': forms.DateField(),
-    #     'fecha_fin_estimada': forms.DateField()
-    # }
+        fields = ('nombre', 'cliente', 'descripcion')
 
 
 class TeamMemberForm(forms.ModelForm):
@@ -37,11 +35,18 @@ class TeamMemberForm(forms.ModelForm):
     Formulario para la creacion del TeamMember
     """
     class Meta:
+        """
+        Clase en la que se definen los datos necesarios y adicionales para inicializacion y
+        visualizacion del formulario
+        """
         model = TeamMember
         exclude = ()
         fields = ('usuario', 'rol')
 
 
+"""
+Se define la base para el grupo de team members
+"""
 BaseTeamMemberFormSet = inlineformset_factory(Proyecto, TeamMember, form=TeamMemberForm, extra=1)
 
 class TeamMemberFormSet(BaseTeamMemberFormSet):
@@ -49,13 +54,17 @@ class TeamMemberFormSet(BaseTeamMemberFormSet):
     Formulario para la validacion de los campos del TeamMember
     """
     def is_valid(self):
-        """Retorna verdadero si existe al menos un formulario dentro del formset y todos los
-        formularios en el formset tienen usuario y rol, en caso contrario retorna falso"""
+        """
+        Retorna verdadero si existe al menos un formulario dentro del formset y todos los
+        formularios en el formset tienen usuario y rol, en caso contrario retorna falso
+        :return: True si el formset es valido; False si el formset no es valido
+        """
         super(TeamMemberFormSet,self).is_valid()
         self.vacio = False
         self.sin_usuario = False
         self.sin_rol = False
         self.doble_usuario = False
+        self.rol_doble = False
         if not self.forms:
             self.vacio = True
             return False
@@ -63,7 +72,7 @@ class TeamMemberFormSet(BaseTeamMemberFormSet):
         usuarios = []
         roles = []
         for form in self.forms:
-            # verificacion de roles unicos
+            #verificacion de roles unicos
             if form['rol'].value():
                 rol = Rol.objects.get(pk=form['rol'].value())
                 if rol.is_unique and form['rol'].value() in roles:
@@ -94,3 +103,4 @@ class TeamMemberFormSet(BaseTeamMemberFormSet):
             self.vacio=True
             return False
         return True
+

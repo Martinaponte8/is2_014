@@ -26,8 +26,7 @@ class Proyecto(models.Model):
     estado = models.CharField(max_length=25, choices=ESTADOS_PROYECTO, default='Pendiente')
     descripcion= models.TextField(blank=True, null=True)
     cliente = models.ForeignKey('clientes.Cliente', on_delete=models.PROTECT, null=True)
-    fecha_ini_estimada = models.DateField('Fecha de Inicio Estimada', blank=False, null=False)
-    fecha_fin_estimada = models.DateField('Fecha de Fin Estimada', blank=False, null=False)
+
 
     def __str__(self):
         """
