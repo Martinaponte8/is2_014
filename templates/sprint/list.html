@@ -16,11 +16,11 @@
                     <th width="3%">
                         {% if 'Crear Sprints' in permisos %}
                             {% if project.estado == 'Pendiente' or project.estado == 'Activo' %}
-                            {% if sprint_pendiente %}
-                            <a href="#SprintPendiente" data-toggle="modal"><i class="fas fa-plus-square"></i> </a>
-                            {% else %}
-                            <a href="./create/"><i class="fas fa-plus-square"></i> </a>
-                            {% endif %}
+                                {% if sprint_pendiente %}
+                                <a href="#SprintPendiente" data-toggle="modal"><i class="fas fa-plus-square"></i> </a>
+                                    {% else %}
+                                    <a href="./create/"><i class="fas fa-plus-square"></i> </a>
+                                {% endif %}
                             {% endif %}
                         {% endif %}
 
