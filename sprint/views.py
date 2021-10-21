@@ -1,5 +1,7 @@
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from django.http import HttpResponseRedirect
+from reportlab.pdfgen import canvas
+
 from .forms import *
 from proyecto.models import *
 from sprint.forms import CreateSprintForm, UpdateSprintForm
