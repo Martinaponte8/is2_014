@@ -1,6 +1,5 @@
 from django import forms
 from .models import *
-from .models import Nota
 
 class CreateUserStoryForm(forms.ModelForm):
     """
@@ -83,8 +82,7 @@ class GuardarNotaForm(forms.ModelForm):
     class Meta:
         model = Nota
         """Campos a ingresar"""
-        fields = ('us', 'usuario', 'nota',)
-        # 'sprint'
+        fields = ('us', 'usuario', 'nota','sprint')
 
 
 class GuardarArchivoForm(forms.ModelForm):
@@ -94,8 +92,7 @@ class GuardarArchivoForm(forms.ModelForm):
     class Meta:
         model = Archivo
         """Campos a ingresar"""
-        fields = ('titulo', 'archivo','us','usuario',)
-                  #'sprint'
+        fields = ('titulo', 'archivo','us','usuario','sprint')
 
 
 class GuardarActividadForm(forms.ModelForm):
@@ -105,17 +102,5 @@ class GuardarActividadForm(forms.ModelForm):
     class Meta:
         model = Actividad
         """Campos a ingresar"""
-        fields = ('nombre',
-                  'descripcion',
-                  'duracion',
-                  'us',
-                  'usuario',
-                  'sprint',
-                  'estado_fase'
-                  )
-
-
-        # 'sprint',
-        # 'fase',
-        # 'estado_fase'
+        fields = ('nombre','descripcion','duracion','us','usuario','sprint','fase_us','estado_fase')
 

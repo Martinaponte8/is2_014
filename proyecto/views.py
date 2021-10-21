@@ -588,14 +588,14 @@ class UpdateEjecucionView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                         'team_member': us.team_member,
                     },
                 )
-                email_msg = EmailMessage(
-                    subject='Finalización de Sprint',
-                    body=body,
-                    from_email=['PoliProyectos-noreply'],
-                    to=[us.team_member.email],
-                )
-                email_msg.content_subtype = 'html'
-                email_msg.send()
+                # email_msg = EmailMessage(
+                #     subject='Finalización de Sprint',
+                #     body=body,
+                #     from_email=['PoliProyectos-noreply'],
+                #     to=[us.team_member.email],
+                # )
+                # email_msg.content_subtype = 'html'
+                # email_msg.send()
                 # Desasignacion de US no finalizados
                 if us.estado != 0: #terminado
                     us.estado = 2 #pendiente

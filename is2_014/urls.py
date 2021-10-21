@@ -39,4 +39,7 @@ urlpatterns = [
     url(r'^usuarios/', include('usuarios.urls')),
     url(r'^clientes/',include('clientes.urls')),
     path(route='media/<int:archivo_id>/', view=ver_archivo, name='ver_archivo')
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
