@@ -382,7 +382,9 @@
                 <div class="botones-historial">
                     <button type="button" value="{{ us.pk }}" class="btn btn-dark add-nota">Agregar Nota</button>
                     <button type="button" value="{{ us.pk }}" class="btn btn-dark add-archivo">Agregar Archivo</button>
-                    <button type="button" value="{{ us.pk }}" class="btn btn-dark add-actividad">Agregar Actividad</button>
+                    {% if us.estado_fase == 'Doing' %}
+                        <button type="button" value="{{ us.pk }}" class="btn btn-dark add-actividad">Agregar Actividad</button>
+                    {% endif %}
                 </div>
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
