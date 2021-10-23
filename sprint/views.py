@@ -44,7 +44,6 @@ from reportlab.lib import colors
 from reportlab.graphics.shapes import Drawing, Line
 from reportlab.lib.enums import TA_RIGHT
 from reportlab.platypus import (
-        Paragraph,
         Table,
         SimpleDocTemplate,
         Spacer,
