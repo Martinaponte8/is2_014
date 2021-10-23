@@ -40,10 +40,10 @@ body {
 .explanation {
   padding: 20px;
 /*}*/
-
+}
   p {
     max-width: 600px;
     color: #fff;
     font-size: 0.8rem;
   }
-}
+
