@@ -1,5 +1,5 @@
 .chart {
-	font-family: 'Arial';
+	font-family: 'Arial', serif;
 	font-size: 15px;
 	color: #fff;
 }
@@ -39,11 +39,10 @@ body {
 }
 .explanation {
   padding: 20px;
-/*}*/
-}
-  p {
+
+  	p {
     max-width: 600px;
     color: #fff;
     font-size: 0.8rem;
-  }
-
+ 	 }
+}
