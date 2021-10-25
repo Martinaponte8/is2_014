@@ -45,7 +45,7 @@ Formulario para darle valor a una fase
     def is_valid(self):
         super(FaseFormSet,self).is_valid()
 """
-Retorna verdadero si existe al menos un formulario dentro del formset ytodos los formularios en el formset tienen nombre, en caso contrario retorna falso
+Retorna verdadero si existe al menos un formulario dentro del formset y todos los formularios en el formset tienen nombre, en caso contrario retorna falso
 """
         self.vacio = False
         self.sin_nombre = False
@@ -54,7 +54,6 @@ Retorna verdadero si existe al menos un formulario dentro del formset ytodos los
             return False
         for form in self.forms:
             if not str(form['nombre'].value()).strip():
-                self.sin_nombre = True
                 return False
         if not self.is_bound:
             return False

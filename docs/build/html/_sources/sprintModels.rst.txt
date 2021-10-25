@@ -183,6 +183,25 @@ caso de que exista por lo menos un dia habil durante el sprint
 """
         return UserStory.objects.filter(sprint=self.pk)
 
+    def get_horas_trabajadas(self):
+"""
+        metodo de la clase Sprint que retorna el total de horas trabajadas en el sprint
+        :return: total de horas trabajadas en el sprint
+"""
+        actividades = Actividad.objects.filter(sprint=self.pk)
+        horas = 0
+        return horas
+
+     def get_bdc_line(self):
+"""
+        metodo del modelo Sprint que retorna un JSON que representa la lista de coordenadas
+        para el grafico de su correspondiente burn down chart y el total de horas trabajadas
+        :return: lista de coordenadas para graficar el burn  down chart
+"""
+        if not self.fecha_inicio: return []
+        while dia <= fin:
+            if dia.isoweekday() in dias_habiles:
+        return coordenadas
 
 
 class Horas(models.Model):

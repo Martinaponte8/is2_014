@@ -22,3 +22,11 @@ Se definen los campos necesarios del modelo Fase
 """
     flujo = models.ForeignKey(Flujo, on_delete=models.CASCADE)
     nombre = models.CharField(max_length=20)
+
+    def __str__(self):
+"""
+metodo de la clase Flujo que retorna el nombre de la fase
+"""
+:return: nombre de la fase
+"""
+        return self.nombre

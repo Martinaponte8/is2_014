@@ -18,6 +18,7 @@ Bienvenido a la documentacion de Gestor de Proyectos!
    tipoUserStory
    userStory
    usuarios
+   clientes
 
 
 

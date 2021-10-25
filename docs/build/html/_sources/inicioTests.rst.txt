@@ -49,13 +49,9 @@ class MockedResponse(object):
         def _init_(self, *responses):
             self.responses = list(responses)
 
-        def _enter_(self):
-
 
             def mockable_request(f):
                 return new_f
-
-        def _exit_(self, type, value, traceback):
 
 
             class BasicTests(TestCase):
@@ -65,3 +61,5 @@ class MockedResponse(object):
                 def test_email_validation(self):
 
                 def test_serializer(self):
+                    class SomeValue:
+                        pass

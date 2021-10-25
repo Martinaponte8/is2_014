@@ -47,23 +47,30 @@ formularios en el formset tienen usuario y rol, en caso contrario retorna falso
         super(TeamMemberFormSet,self).is_valid()
 
         for form in self.forms:
-            # verificacion de roles unicos
+"           verificacion de roles unicos
+"
 
-            # un usuario solo puede asignarse una vez
+"           un usuario solo puede asignarse una vez
+"
             if form['usuario'].value() and not form['usuario'].value() in usuarios:
                 usuarios.append(form['usuario'].value())
             elif form['usuario'].value() and form['usuario'].value() in usuarios:
                     self.doble_usuario = Usuario.objects.get(pk=form['usuario'].value()).username
                     return False
-            #existe al menos un form que no se elimina, por lo tanto el formset no esta vacio
+"           existe al menos un form que no se elimina, por lo tanto el formset no esta vacio
+"
             if not form['DELETE'].value():
-            #todos los forms deben tener usuario
+"
+todos los forms deben tener usuario
+"
             if not form['usuario'].value() and not form['DELETE'].value():
                 return False
-            # todos los forms deben tener rol
-            if not form['rol'].value() and not form['DELETE'].value():
+"           todos los forms deben tener rol
+"
+if not form['rol'].value() and not form['DELETE'].value():
                 return False
-        #si todos los forms se van a eliminar
+"           si todos los forms se van a eliminar
+"
         if all_delete:
             return False
         return True

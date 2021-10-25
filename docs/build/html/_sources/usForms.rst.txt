@@ -22,7 +22,9 @@ class CreateUserStoryForm(forms.ModelForm):
                   'tipo_us',
                   'flujo',
                   )
-
+        widgets = {
+                'proyecto': forms.HiddenInput,
+            }
 
 
 class UpdateUserStoryForm(forms.ModelForm):
@@ -87,7 +89,6 @@ class GuardarNotaForm(forms.ModelForm):
         model = Nota
         """Campos a ingresar"""
         fields = ('us', 'usuario', 'nota',)
-        # 'sprint'
 
 
 class GuardarArchivoForm(forms.ModelForm):
@@ -117,7 +118,7 @@ Campos a ingresar
                   'descripcion',
                   'duracion',
                   'us',
-                  'usuario',)
-                  # 'sprint',
-                  # 'fase',
-                  # 'estado_fase'
+                  'usuario',
+                  'sprint',
+                  'fase',
+                  'estado_fase')

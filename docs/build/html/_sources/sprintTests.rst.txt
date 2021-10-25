@@ -8,7 +8,6 @@ from proyecto.models import *
 
 
 class SprintModelTest(TestCase):
-
 """
     Clase de Tests del modelo sprint
 """
