@@ -5,7 +5,7 @@ mkdir -p static
 echo "¡Bienvenido a SistemaGestor!"
 echo "Seleccione uno de los siguientes entornos de despliegue:"
 PS3='Por favor, ingrese una opción:'
-options=("Desarrollo" "Producción" "Generar Documentacion" "Pruebas Unitarias" "Salir")
+options=("Desarrollo" "Producción" "Salir")
 select opt in "${options[@]}"
 do
     case $opt in
