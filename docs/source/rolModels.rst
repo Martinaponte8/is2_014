@@ -1,0 +1,60 @@
+Comentarios
+============
+
+from django.db import models
+
+"""
+Definicion de los modelos de Permiso y Rol
+"""
+
+class Permiso(models.Model):
+
+"""
+    Se definen los campos necesarios para el modelo Permiso
+"""
+    nombre = models.CharField(max_length=70, blank=False, null=False)
+    ''' tipo 1 = Permisos de administracion
+        tipo 2 = Permisos de Proyecto'''
+    tipo = models.IntegerField()
+
+    def __str__(self):
+        return self.nombre
+
+
+class Rol(models.Model):
+"""
+    Se definen los campos necesarios para el modelo Rol
+"""
+    is_unique = models.BooleanField(verbose_name='Es único en el proyecto', default=False)
+    nombre = models.CharField(max_length=50, unique=True, blank=False, null=False)
+    descripcion = models.TextField(blank=True, null=True)
+    permisos = models.ManyToManyField('Permiso', blank=False)
+
+    def __str__(self):
+        return self.nombre
+
+    def get_id(self):
+        return self.id
+
+    def set_nombre(self,nom):
+        self.nombre = nom
+
+    def set_descripcion(self, desc):
+        self.descripcion = desc
+
+    def get_descripcion(self):
+        return self.descripcion
+
+    def set_permiso(self, permisos):
+        self.permisos = permisos
+
+    def get_permiso(self):
+        return self.permisos
+
+    def list_permisos(self):
+        permisos = self.permiso.filter()
+        lista = list(permisos)
+        return lista
+
+    def agregar_permiso(self, permiso):
+        self.permisos.append(permiso)

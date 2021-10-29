@@ -1,0 +1,604 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Comentarios &#8212; Gestor de Proyectos  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Comentarios" href="clientesUrls.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="comentarios">
+<h1>Comentarios<a class="headerlink" href="#comentarios" title="Permalink to this headline">¶</a></h1>
+<p>from django.views.generic import ListView, CreateView, UpdateView, DetailView
+from reportlab.graphics.shapes import Drawing, Line
+from reportlab.lib.enums import TA_RIGHT
+from .models import Cliente
+from proyecto.models import Proyecto, TeamMember
+from clientes.forms import CreateClientForm, UpdateClientForm
+from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.contrib.auth.mixins import LoginRequiredMixin
+from io import BytesIO
+from reportlab.pdfgen import canvas
+import locale
+from django.views.generic import View
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import ParagraphStyle, TA_CENTER, TA_LEFT
+from reportlab.lib.units import inch, mm
+from reportlab.lib import colors
+from reportlab.platypus import (Paragraph,</p>
+<blockquote>
+<div><p>Table,
+SimpleDocTemplate,
+Spacer,
+TableStyle,
+Image, KeepTogether)</p>
+</div></blockquote>
+<p>from userstory.models import UserStory
+from is2_014 import settings</p>
+<p>“””
+Vistas necesarias para la administracion de Cliente
+“””</p>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class ClientListView(LoginRequiredMixin, ListView):
+“””
+Clase de la vista de lista de Clientes
+“””</p>
+<blockquote>
+<div><p>template_name = ‘clientes/list.html’
+model = Cliente
+queryset = Cliente.objects.all()</p>
+<p>def get(self, request, <a href="#id1"><span class="problematic" id="id2">*</span></a>args, <a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs):</p>
+</div></blockquote>
+<p>“””
+Metodo que es ejecutado al darse una consulta GET
+“””
+:param request: consulta recibida
+“””
+:param args: argumentos adicionales
+“””
+:param kwargs: diccionario de datos adicionales
+“””
+:return: la respuesta a la consulta GET
+“””</p>
+<blockquote>
+<div><blockquote>
+<div><p>self.object_list = Cliente.objects.all()
+permisos = request.user.get_nombres_permisos()
+return self.render_to_response(self.get_context_data(object_list=self.object_list, permisos=permisos))</p>
+</div></blockquote>
+<dl class="simple">
+<dt>def get_context_data(self, <a href="#id5"><span class="problematic" id="id6">**</span></a>kwargs):</dt><dd><p>“””
+Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+:param kwargs: Diccionario de datos adicionales para el contexto
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos
+“””
+context = super().get_context_data(<a href="#id7"><span class="problematic" id="id8">**</span></a>kwargs)
+context[‘title’] = “Clientes”
+context[‘direccion’] = {}
+context[‘direccion’][‘Clientes’] = (1, ‘/clientes/’)
+return context</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class CreateClientView(SuccessMessageMixin, LoginRequiredMixin, CreateView):
+“””</p>
+<blockquote>
+<div><p>Clase de la vista de Creacion de Cliente</p>
+</div></blockquote>
+<dl>
+<dt>“””</dt><dd><p>template_name = ‘clientes/cliente.html’
+model = Cliente
+success_url = ‘../’
+form_class = CreateClientForm
+success_message = ‘Se ha creado el cliente’</p>
+<p>def get(self, request, <a href="#id9"><span class="problematic" id="id10">*</span></a>args, <a href="#id11"><span class="problematic" id="id12">**</span></a>kwargs):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>Metodo que es ejecutado al darse una consulta GET
+:param request: consulta recibida
+:param args: argumentos adicionales
+:param kwargs: diccionario de datos adicionales
+:return: la respuesta a la consulta GET</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>self.object = None
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+permisos = request.user.get_nombres_permisos()
+return self.render_to_response(self.get_context_data(permisos=permisos, form=form))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id13"><span class="problematic" id="id14">**</span></a>kwargs):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+:param kwargs: Diccionario de datos adicionales para el contexto
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>context = super().get_context_data(<a href="#id15"><span class="problematic" id="id16">**</span></a>kwargs)
+context[‘title’] = “Crear Cliente”
+context[‘direccion’] = {}
+context[‘direccion’][‘Clientes’] = (1, ‘/clientes/’)
+context[‘direccion’][‘Crear Cliente’] = (2, ‘/clientes/create/’)
+return context</p>
+</div></blockquote>
+<p>def post(self, request, <a href="#id17"><span class="problematic" id="id18">*</span></a>args, <a href="#id19"><span class="problematic" id="id20">**</span></a>kwargs):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>Metodo que es ejecutado al darse una consulta POST
+:param request: consulta recibida
+:param args: argumentos adicionales
+:param kwargs: diccionario de datos adicionales
+:return: la respuesta a la consulta POST</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><p>self.object = None
+formclass = self.get_form_class()
+form = self.get_form(formclass)
+permisos = request.user.get_nombres_permisos()
+if form.is_valid():</p>
+<blockquote>
+<div><p>return HttpResponseRedirect(self.success_url)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>return self.render_to_response(self.get_context_data(permisos=permisos, form=form))</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class UpdateClientView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+“””
+Clase de la vista de Modificacion de Cliente
+“””</p>
+<blockquote>
+<div><p>template_name = ‘clientes/cliente.html’
+model = Cliente
+form_class = UpdateClientForm
+success_url = ‘./’
+success_message = ‘Los cambios se guardaron correctamente’</p>
+<p>def get(self, request, <a href="#id21"><span class="problematic" id="id22">*</span></a>args, <a href="#id23"><span class="problematic" id="id24">**</span></a>kwargs):</p>
+</div></blockquote>
+<dl class="simple">
+<dt>“””</dt><dd><p>Metodo que es ejecutado al darse una consulta GET
+:param request: consulta recibida
+:param args: argumentos adicionales
+:param kwargs: diccionario de datos adicionales
+:return: la respuesta a la consulta GET</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>self.object = self.get_object()
+form_class = self.get_form_class()
+form = self.get_form(form_class)
+permisos = request.user.get_nombres_permisos()
+return self.render_to_response(self.get_context_data(permisos=permisos, form=form))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id25"><span class="problematic" id="id26">**</span></a>kwargs):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+:param kwargs: Diccionario de datos adicionales para el contexto
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>context = super().get_context_data(<a href="#id27"><span class="problematic" id="id28">**</span></a>kwargs)
+context[‘title’] = “Modificar Cliente”
+context[‘direccion’] = {}
+context[‘direccion’][‘Clientes’] = (1, ‘/clientes/’)
+context[‘direccion’][‘Modificar: ‘ + self.object.nombre] = (2, ‘/clientes/modificar/’ + str(self.object.pk) + ‘/’)
+return context</p>
+</div></blockquote>
+<p>def get_object(self, queryset=None):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>Metodo que retorna el objeto a ser modificado
+:param queryset:
+:return: Retorna el cliente a ser modificado</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>return Cliente.objects.get(pk=self.kwargs[‘pk’])</p>
+</div></blockquote>
+<p>def post(self, request, <a href="#id29"><span class="problematic" id="id30">*</span></a>args, <a href="#id31"><span class="problematic" id="id32">**</span></a>kwargs):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>Metodo que es ejecutado al darse una consulta POST
+:param request: consulta recibida
+:param args: argumentos adicionales
+:param kwargs: diccionario de datos adicionales
+:return: la respuesta a la consulta POST</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><p>self.object = None
+formclass = self.get_form_class()
+form = self.get_form(formclass)
+permisos = request.user.get_nombres_permisos()
+if form.is_valid():</p>
+<blockquote>
+<div><p>return HttpResponseRedirect(self.success_url)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>else:</dt><dd><p>return self.render_to_response(self.get_context_data(permisos=permisos, form=form))</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class VerClientDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):
+“””</p>
+<blockquote>
+<div><p>Clase de la vista para ver clientes</p>
+</div></blockquote>
+<dl>
+<dt>“””</dt><dd><p>model = Cliente
+template_name = ‘clientes/ver_cliente.html’</p>
+<p>def get(self, request, <a href="#id33"><span class="problematic" id="id34">*</span></a>args, <a href="#id35"><span class="problematic" id="id36">**</span></a>kwargs):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>Metodo que es ejecutado al darse una consulta GET
+:param request: consulta recibida
+:param args: argumentos adicionales
+:param kwargs: diccionario de datos adicionales
+:return: la respuesta a la consulta GET</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>self.object = self.get_object()
+permisos = request.user.get_nombres_permisos()
+return self.render_to_response(self.get_context_data(permisos=permisos))</p>
+</div></blockquote>
+<p>def get_context_data(self, <a href="#id37"><span class="problematic" id="id38">**</span></a>kwargs):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>Metodo que retorna un diccionario utilizado para pasar datos a las vistas
+:param kwargs: Diccionario de datos adicionales para el contexto
+:return: diccionario de contexto necesario para la correcta visualizacion de los datos</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>context = super().get_context_data(<a href="#id39"><span class="problematic" id="id40">**</span></a>kwargs)
+context[‘title’] = “Ver Cliente”
+context[‘direccion’] = {}
+context[‘direccion’][‘Clientes’] = (1, ‘/clientes/’)
+context[‘direccion’][‘Ver: ‘ + self.object.nombre] = (2, ‘/clientes/ver/’ + str(self.object.pk) + ‘/’)
+context[‘proyectos’] = Proyecto.objects.filter(cliente=self.get_object())
+context[‘cliente’] = self.object
+return context</p>
+</div></blockquote>
+<p>def get_object(self, queryset=None):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>Metodo que retorna el objeto a ser visualizado
+:param queryset:
+:return: Retorna el cliente a ser visualizado</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>return Cliente.objects.get(pk=self.kwargs[‘pk’])</p>
+</dd>
+</dl>
+<p>&#64;method_decorator(login_required, name=’dispatch’)
+class ProyectosClientePDF(View):
+“””</p>
+<blockquote>
+<div><p>clase de la vista para creacion de reporte de Proyectos del cliente</p>
+</div></blockquote>
+<p>“””</p>
+<blockquote>
+<div><p>def get(self, request, <a href="#id41"><span class="problematic" id="id42">*</span></a>args, <a href="#id43"><span class="problematic" id="id44">**</span></a>kwargs):</p>
+</div></blockquote>
+<dl class="simple">
+<dt>“””</dt><dd><p>metodo de respuesta a la consulta GET
+:param request: consulta GET
+:param args: argumentos
+:param kwargs: diccionario de datos
+:return: respuesta a la consulta GET</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>self.cliente = Cliente.objects.get(pk=self.kwargs[‘pk’])
+response = HttpResponse(content_type=’application/pdf’)
+# se crea el pdf
+buffer = BytesIO()
+pdf = canvas.Canvas(buffer)
+self.doc = SimpleDocTemplate(buffer)
+self.doc.title = ‘Reporte de Proyectos del Cliente: ‘ + str(self.cliente.nombre)
+self.story = []
+self.encabezado()
+self.titulo()
+self.descripcion()
+self.crearTabla()
+self.doc.build(self.story, onFirstPage=self.numeroPagina,onLaterPages=self.numeroPagina)
+pdf = buffer.getvalue()
+# fin
+buffer.close()
+response.write(pdf)
+return response</p>
+</div></blockquote>
+<p>def encabezado(self):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>agrega el encabezado al reporte
+:return: None</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>logo = settings.MEDIA_ROOT+”logo2.png”
+im = Image(logo, inch, inch)
+im.hAlign = ‘LEFT’
+p = Paragraph(“&lt;i&gt;Software Gestor de Proyectos&lt;br/&gt;Asunción-Paraguay&lt;br/&gt;Contacto: 0981-222333&lt;/i&gt;”, self.estiloPR())
+data_tabla = [[im, p]]
+tabla = Table(data_tabla)
+self.story.append(tabla)</p>
+<p>d = Drawing(480, 3)
+d.add(Line(0, 0, 480, 0))
+self.story.append(d)
+self.story.append(Spacer(1, 0.3 * inch))</p>
+</div></blockquote>
+<p>def titulo(self):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>agrega el titulo al reporte
+:return: None</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>txt = “&lt;b&gt;&lt;u&gt;Reporte de Proyectos de Cliente&lt;/u&gt;&lt;/b&gt;”
+p = Paragraph(‘&lt;font size=20&gt;’+str(txt)+’&lt;/font&gt;’, self.estiloPC())
+self.story.append(p)
+self.story.append(Spacer(1, 0.5 * inch))</p>
+</div></blockquote>
+<p>def descripcion(self):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>agrega la cabecera del reporte
+:return: None</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>txt = “&lt;b&gt;Cliente: &lt;/b&gt;”+self.cliente.nombre+”&lt;br/&gt;&lt;b&gt;Descripción: &lt;/b&gt;” + self.cliente.descripcion+”&lt;br/&gt;&lt;b&gt;Teléfono: &lt;/b&gt;”+ self.cliente.telefono
+p = Paragraph(‘&lt;font size=12&gt;’ + str(txt) + ‘&lt;/font&gt;’, self.estiloPL())
+self.story.append(p)
+self.story.append(Spacer(1, 0.5 * inch))</p>
+</div></blockquote>
+<p>def crearTabla(self):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>agrega la tabla del reporte
+:return: None</p>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>proyectos = Proyecto.objects.filter(cliente=self.cliente.pk)
+nro = 1
+data = [[“N°”, “Proyectos”, “Estado”, “Usuarios Asignados” , “US Terminados”, “US Asignados”, “US Pendientes”]]
+for x in proyectos:</p>
+<blockquote>
+<div><p># Hallar numero de US terminados y no finalizados
+us_total = UserStory.objects.filter(proyecto=x.pk)
+ut = us_total.filter(estado=0).count() ## US FINALIZADO
+ua = us_total.filter(estado=1).count()  ## US ASIGNADO
+up = us_total.filter(estado=2).count()  ## US PENDIENTE
+usuarios_asig = TeamMember.objects.filter(proyecto=x.pk).count() #Usuarios Asignados al Proyecto
+aux = [nro, x.nombre, x.estado, usuarios_asig, ut, ua, up]
+nro += 1
+data.append(aux)</p>
+</div></blockquote>
+<dl class="simple">
+<dt>style = TableStyle([</dt><dd><p>(‘GRID’, (0, 0), (-1, -1), 0.25, colors.black),
+(‘ALIGN’, (0, 0), (-1, -1), ‘CENTER’),
+(‘VALIGN’, (0, 0), (-1, -1), ‘MIDDLE’)])</p>
+</dd>
+</dl>
+<p># Altura variable dependiendo de la cantidad de datos
+t = Table(data)
+t.setStyle(style)
+self.story.append(t)</p>
+</div></blockquote>
+<p>def estiloPC(self):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><dl class="field-list simple">
+<dt class="field-odd">return</dt>
+<dd class="field-odd"><p>estilo del cuerpo del reporte</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>return ParagraphStyle(name=”centrado”, alignment=TA_CENTER)</p>
+</div></blockquote>
+<p>def estiloPL(self):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><dl class="field-list simple">
+<dt class="field-odd">return</dt>
+<dd class="field-odd"><p>estilo de la descripcion del reporte</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>return ParagraphStyle(name=”izquierda”, alignment=TA_LEFT)</p>
+</div></blockquote>
+<p>def estiloPR(self):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><dl class="field-list simple">
+<dt class="field-odd">return</dt>
+<dd class="field-odd"><p>estilo del encabezado</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl>
+<dt>“””</dt><dd><blockquote>
+<div><p>return ParagraphStyle(name=”derecha”, alignment=TA_RIGHT)</p>
+</div></blockquote>
+<p>def numeroPagina(self, canvas, doc):</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>agrega el numero de pagina al documento
+:param canvas:
+:param doc:documento pdf
+:return: None</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>“””</dt><dd><p>num = canvas.getPageNumber()
+text = “Página %s” % num
+canvas.drawRightString(190 * mm, 20 * mm, text)</p>
+</dd>
+</dl>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Gestor de Proyectos</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="flujo.html">Flujo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="inicio.html">Inicio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="proyecto.html">Proyecto</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rol.html">Rol</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sprint.html">Sprint</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tipoUserStory.html">Tipo de User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="userStory.html">User Story</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usuarios.html">Usuarios</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="clientes.html">Clientes</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="glosarioclientes.html">Glosario Clientes</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="clientes.html">Clientes</a><ul>
+  <li><a href="glosarioclientes.html">Glosario Clientes</a><ul>
+      <li>Previous: <a href="clientesUrls.html" title="previous chapter">Comentarios</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2021, Grupo 14.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.1.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/clientesViews.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

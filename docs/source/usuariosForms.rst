@@ -1,0 +1,139 @@
+Comentarios
+============
+
+from django import forms
+from .models import Usuario
+from rol.models import Permiso
+
+class CreateUserForm(forms.ModelForm):
+
+"""
+    Formulario para la creacion de un  Usuario
+"""
+    class Meta:
+        model = Usuario
+        fields = ('username',
+                  'email',
+                  'first_name',
+                  'last_name',
+                  'estado',
+                  'ci',
+                  'telefono',
+                  'direccion',
+                  'descripcion',
+                  'password',
+                  'permisos'
+                  )
+        widgets = {
+            'permisos': forms.CheckboxSelectMultiple(),
+            'password': forms.PasswordInput()
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CreateUserForm, self).__init__(*args, **kwargs)
+        for permiso in permisos_all:
+            permisos.append((permiso.id, permiso.nombre))
+
+    def save(self, commit=True):
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+            self.save_m2m()
+        return user
+
+
+class UpdateUserForm(forms.ModelForm):
+"""
+Formulario de la modificacion de User Story
+"""
+    class Meta:
+        model = UserStory
+        fields = ('proyecto',
+                  'nombre',
+                  'descripcion',
+                  'duracion_estimada',
+                  'valor_negocio',
+                  'prioridad',
+                  'valor_tecnico',
+                  'tipo_us',
+                  'flujo',
+                  'team_member',
+                  )
+
+        widgets ={
+            'proyecto': forms.HiddenInput,
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(CreateUserForm, self).__init__(*args, **kwargs)
+        for permiso in permisos_all:
+            permisos.append((permiso.id, permiso.nombre))
+        p.choices = permisos
+
+class ArchivoForm(forms.ModelForm):
+"""
+Formulario para subir archivos al User Story
+"""
+    class Meta:
+        model = Archivo
+        """Campos a ingresar"""
+        fields = ('titulo', 'archivo', )
+
+
+class NotaForm(forms.ModelForm):
+"""
+Formulario para subir notas al User Story
+"""
+    class Meta:
+        model = Nota
+        """Campos a ingresar"""
+        fields = ('nota',)
+
+
+class ActividadForm(forms.ModelForm):
+"""
+Formulario para agregar actividades al User Story
+"""
+    class Meta:
+        model = Actividad
+        """Campos a ingresar"""
+        fields = ('nombre','descripcion','duracion')
+
+
+class GuardarNotaForm(forms.ModelForm):
+"""
+Formulario para guardar notas en el user story
+"""
+    class Meta:
+        model = Nota
+        """Campos a ingresar"""
+        fields = ('us', 'usuario', 'nota',)
+
+
+
+class GuardarArchivoForm(forms.ModelForm):
+"""
+Formulario para guardar archivos en el User Story
+"""
+    class Meta:
+        model = Archivo
+        """Campos a ingresar"""
+        fields = ('titulo', 'archivo','us','usuario',)
+
+
+
+class GuardarActividadForm(forms.ModelForm):
+"""
+Formulario para guardar actividades en el User Story
+"""
+    class Meta:
+        model = Actividad
+        """Campos a ingresar"""
+        fields = ('nombre',
+                  'descripcion',
+                  'duracion',
+                  'us',
+                  'usuario',
+                  'sprint',
+                  'estado_fase'
+                  )
