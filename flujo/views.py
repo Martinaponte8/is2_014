@@ -287,28 +287,28 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         scrum_mail = member.usuario.email
                         scrum_nombre = member.usuario.first_name
                         break
-                # body = render_to_string(
-                #     '../templates/notificaciones/cambio_estado.html', {
-                #         # Poner los parámetros requeridos del correo
-                #         'nombre_scrum': scrum_nombre,
-                #         'nombre_us': us.nombre,
-                #         'proyecto': us.proyecto.nombre,
-                #         'sprint': us.sprint.nombre,
-                #         'estado_actual': 'To Do',
-                #         'estado_nuevo': us.estado_fase,
-                #         'team_member': us.team_member,
-                #         'fase': us.fase.nombre,
-                #         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
-                #     },
-                # )
-                # email_msg = EmailMessage(
-                #     subject='Cambio de Estado US',
-                #     body=body,
-                #     from_email=['PoliProyectos-noreply'],
-                #     to=[scrum_mail],
-                # )
-                # email_msg.content_subtype = 'html'
-                # email_msg.send()
+                body = render_to_string(
+                    '../templates/notificaciones/cambio_estado.html', {
+                        # Poner los parámetros requeridos del correo
+                        # 'nombre_scrum': scrum_nombre,
+                        'nombre_us': us.nombre,
+                        'proyecto': us.proyecto.nombre,
+                        'sprint': us.sprint.nombre,
+                        'estado_actual': 'To Do',
+                        'estado_nuevo': us.estado_fase,
+                        'team_member': us.team_member,
+                        'fase': us.fase.nombre,
+                        'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                    },
+                )
+                email_msg = EmailMessage(
+                    subject='Cambio de Estado US',
+                    body=body,
+                    from_email='gestordeproyectos2021@gmail.com',
+                    to=['jorgemi1uno@gmail.com'],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
 
             elif us.estado_fase == 'Doing':
                 ultima_actividad = list(Actividad.objects.filter(us=us.pk,sprint=us.sprint,
@@ -332,28 +332,28 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         scrum_mail = member.usuario.email
                         scrum_nombre = member.usuario.first_name
                         break
-                # body = render_to_string(
-                #     '../templates/notificaciones/cambio_estado.html', {
-                #         # Poner los parámetros requeridos del correo
-                #         'nombre_scrum': scrum_nombre,
-                #         'nombre_us': us.nombre,
-                #         'proyecto': us.proyecto.nombre,
-                #         'sprint': us.sprint.nombre,
-                #         'fase': us.fase.nombre,
-                #         'estado_actual': 'Doing',
-                #         'estado_nuevo': us.estado_fase,
-                #         'team_member': us.team_member,
-                #         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
-                #     },
-                # )
-                # email_msg = EmailMessage(
-                #     subject='Cambio de Estado US',
-                #     body=body,
-                #     from_email=['PoliProyectos-noreply'],
-                #     to=[scrum_mail],
-                # )
-                # email_msg.content_subtype = 'html'
-                # email_msg.send()
+                body = render_to_string(
+                    '../templates/notificaciones/cambio_estado.html', {
+                        # Poner los parámetros requeridos del correo
+                        # 'nombre_scrum': scrum_nombre,
+                        'nombre_us': us.nombre,
+                        'proyecto': us.proyecto.nombre,
+                        'sprint': us.sprint.nombre,
+                        'fase': us.fase.nombre,
+                        'estado_actual': 'Doing',
+                        'estado_nuevo': us.estado_fase,
+                        'team_member': us.team_member,
+                        'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                    },
+                )
+                email_msg = EmailMessage(
+                    subject='Cambio de Estado US',
+                    body=body,
+                    from_email='gestordeproyectos2021@gmail.com',
+                    to=['jorgemi1uno@gmail.com'],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
             elif us.estado_fase == 'Done':
                 fases = Fase.objects.filter(flujo=self.kwargs['flujo_pk']).order_by('pk')
                 idx_fase = None
@@ -373,27 +373,27 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                             scrum_mail = member.usuario.email
                             scrum_nombre = member.usuario.first_name
                             break
-                    # body = render_to_string(
-                    #     '../templates/notificaciones/cambio_fase.html', {
-                    #         # Poner los parámetros requeridos del correo
-                    #         'nombre_scrum': scrum_nombre,
-                    #         'nombre_us': us.nombre,
-                    #         'proyecto': us.proyecto.nombre,
-                    #         'sprint': us.sprint.nombre,
-                    #         'team_member': us.team_member,
-                    #         'fase_actual': fases[idx_fase].nombre,
-                    #         'fase_nueva': us.fase.nombre,
-                    #         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
-                    #     },
-                    # )
-                    # email_msg = EmailMessage(
-                    #     subject='Cambio de Fase US',
-                    #     body=body,
-                    #     from_email=['PoliProyectos-noreply'],
-                    #     to=[scrum_mail],
-                    # )
-                    # email_msg.content_subtype = 'html'
-                    # email_msg.send()
+                    body = render_to_string(
+                        '../templates/notificaciones/cambio_fase.html', {
+                            # Poner los parámetros requeridos del correo
+                            # 'nombre_scrum': scrum_nombre,
+                            'nombre_us': us.nombre,
+                            'proyecto': us.proyecto.nombre,
+                            'sprint': us.sprint.nombre,
+                            'team_member': us.team_member,
+                            'fase_actual': fases[idx_fase].nombre,
+                            'fase_nueva': us.fase.nombre,
+                            'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                        },
+                    )
+                    email_msg = EmailMessage(
+                        subject='Cambio de Estado US',
+                        body=body,
+                        from_email='gestordeproyectos2021@gmail.com',
+                        to=['jorgemi1uno@gmail.com'],
+                    )
+                    email_msg.content_subtype = 'html'
+                    email_msg.send()
                 else: #es la ultima fase, pasa a control de calidad
                     us.fase = None
                     us.estado_fase = 'Control de Calidad'
@@ -403,25 +403,25 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                             scrum_mail = member.usuario.email
                             scrum_nombre = member.usuario.first_name
                             break
-                    # body = render_to_string(
-                    #     '../templates/notificaciones/control_de_calidad.html', {
-                    #         # Poner los parámetros requeridos del correo
-                    #         'nombre_scrum': scrum_nombre,
-                    #         'nombre_us': us.nombre,
-                    #         'proyecto': us.proyecto.nombre,
-                    #         'sprint': us.sprint.nombre,
-                    #         'team_member': us.team_member,
-                    #         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
-                    #     },
-                    # )
-                    # email_msg = EmailMessage(
-                    #     subject='US para Control de Calidad',
-                    #     body=body,
-                    #     from_email=['PoliProyectos-noreply'],
-                    #     to=[scrum_mail],
-                    # )
-                    # email_msg.content_subtype = 'html'
-                    # email_msg.send()
+                    body = render_to_string(
+                        '../templates/notificaciones/control_de_calidad.html', {
+                            # Poner los parámetros requeridos del correo
+                            # 'nombre_scrum': scrum_nombre,
+                            'nombre_us': us.nombre,
+                            'proyecto': us.proyecto.nombre,
+                            'sprint': us.sprint.nombre,
+                            'team_member': us.team_member,
+                            'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                        },
+                    )
+                    email_msg = EmailMessage(
+                        subject='Cambio de Estado US',
+                        body=body,
+                        from_email='gestordeproyectos2021@gmail.com',
+                        to=['jorgemi1uno@gmail.com'],
+                    )
+                    email_msg.content_subtype = 'html'
+                    email_msg.send()
                 us.save()
             if us.fase:
                 ce = CambioEstado()
@@ -453,28 +453,28 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         scrum_mail = member.usuario.email
                         scrum_nombre = member.usuario.first_name
                         break
-                # body = render_to_string(
-                #     '../templates/notificaciones/cambio_estado.html', {
-                #         # Poner los parámetros requeridos del correo
-                #         'nombre_scrum': scrum_nombre,
-                #         'nombre_us': us.nombre,
-                #         'proyecto': us.proyecto.nombre,
-                #         'sprint': us.sprint.nombre,
-                #         'estado_actual': 'Done',
-                #         'estado_nuevo': us.estado_fase,
-                #         'team_member': us.team_member,
-                #         'fase': us.fase.nombre,
-                #         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
-                #     },
-                # )
-                # email_msg = EmailMessage(
-                #     subject='Cambio de Estado US',
-                #     body=body,
-                #     from_email=['PaoliProyectos-noreply'],
-                #     to=[scrum_mail],
-                # )
-                # email_msg.content_subtype = 'html'
-                # email_msg.send()
+                body = render_to_string(
+                    '../templates/notificaciones/cambio_estado.html', {
+                        # Poner los parámetros requeridos del correo
+                        # 'nombre_scrum': scrum_nombre,
+                        'nombre_us': us.nombre,
+                        'proyecto': us.proyecto.nombre,
+                        'sprint': us.sprint.nombre,
+                        'estado_actual': 'Done',
+                        'estado_nuevo': us.estado_fase,
+                        'team_member': us.team_member,
+                        'fase': us.fase.nombre,
+                        'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                    },
+                )
+                email_msg = EmailMessage(
+                    subject='Cambio de Estado US',
+                    body=body,
+                    from_email='gestordeproyectos2021@gmail.com',
+                    to=['jorgemi1uno@gmail.com'],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
             elif us.estado_fase == 'Doing':
                 us.estado_fase = "To Do"
                 us.save()
@@ -484,28 +484,28 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         scrum_mail = member.usuario.email
                         scrum_nombre = member.usuario.first_name
                         break
-                # body = render_to_string(
-                #     '../templates/notificaciones/cambio_estado.html', {
-                #         # Poner los parámetros requeridos del correo
-                #         'nombre_scrum': scrum_nombre,
-                #         'nombre_us': us.nombre,
-                #         'proyecto': us.proyecto.nombre,
-                #         'sprint': us.sprint.nombre,
-                #         'estado_actual': 'Doing',
-                #         'estado_nuevo': us.estado_fase,
-                #         'team_member': us.team_member,
-                #         'fase': us.fase.nombre,
-                #         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
-                #     },
-                # )
-                # email_msg = EmailMessage(
-                #     subject='Cambio de Estado US',
-                #     body=body,
-                #     from_email=['PoliProyectos-noreply'],
-                #     to=[scrum_mail],
-                # )
-                # email_msg.content_subtype = 'html'
-                # email_msg.send()
+                body = render_to_string(
+                    '../templates/notificaciones/cambio_estado.html', {
+                        # Poner los parámetros requeridos del correo
+                        # 'nombre_scrum': scrum_nombre,
+                        'nombre_us': us.nombre,
+                        'proyecto': us.proyecto.nombre,
+                        'sprint': us.sprint.nombre,
+                        'estado_actual': 'Doing',
+                        'estado_nuevo': us.estado_fase,
+                        'team_member': us.team_member,
+                        'fase': us.fase.nombre,
+                        'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                    },
+                )
+                email_msg = EmailMessage(
+                    subject='Cambio de Estado US',
+                    body=body,
+                    from_email='gestordeproyectos2021@gmail.com',
+                    to=['jorgemi1uno@gmail.com'],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
             elif us.estado_fase == 'To Do':
                 fases = Fase.objects.filter(flujo=self.kwargs['flujo_pk']).order_by('pk')
                 idx_fase = None
@@ -524,27 +524,27 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
                         scrum_mail = member.usuario.email
                         scrum_nombre = member.usuario.first_name
                         break
-                # body = render_to_string(
-                #     '../templates/notificaciones/cambio_fase.html', {
-                #         # Poner los parámetros requeridos del correo
-                #         'nombre_scrum': scrum_nombre,
-                #         'nombre_us': us.nombre,
-                #         'proyecto': us.proyecto.nombre,
-                #         'sprint': us.sprint.nombre,
-                #         'team_member': us.team_member,
-                #         'fase_actual': fases[idx_fase].nombre,
-                #         'fase_nueva': us.fase.nombre,
-                #         'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
-                #     },
-                # )
-                # email_msg = EmailMessage(
-                #     subject='Cambio de Fase US',
-                #     body=body,
-                #     from_email=['PoliProyectos-noreply'],
-                #     to=[scrum_mail],
-                # )
-                # email_msg.content_subtype = 'html'
-                # email_msg.send()
+                body = render_to_string(
+                    '../templates/notificaciones/cambio_fase.html', {
+                        # Poner los parámetros requeridos del correo
+                        # 'nombre_scrum': scrum_nombre,
+                        'nombre_us': us.nombre,
+                        'proyecto': us.proyecto.nombre,
+                        'sprint': us.sprint.nombre,
+                        'team_member': us.team_member,
+                        'fase_actual': fases[idx_fase].nombre,
+                        'fase_nueva': us.fase.nombre,
+                        'horas_restantes': us.duracion_estimada,  # ESTE DEBE SER LA DURACIÓN REAL
+                    },
+                )
+                email_msg = EmailMessage(
+                    subject='Cambio de Estado US',
+                    body=body,
+                    from_email='gestordeproyectos2021@gmail.com',
+                    to=['jorgemi1uno@gmail.com'],
+                )
+                email_msg.content_subtype = 'html'
+                email_msg.send()
                 us.save()
             ce = CambioEstado()
             ce.us = us
@@ -579,24 +579,24 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
             ce.estado_fase = us.estado_fase
             ce.descripcion = "Se finaliza el User Story"
             ce.save()
-            # # Notificación al Desarrollador por correo
-            # body = render_to_string(
-            #     '../templates/notificaciones/control_calidad_aceptado.html', {
-            #         # Poner los parámetros requeridos del correo
-            #         'nombre_us': us.nombre,
-            #         'proyecto': us.proyecto.nombre,
-            #         'sprint': us.sprint.nombre,
-            #         'team_member': us.team_member.first_name,
-            #     },
-            # )
-            # email_msg = EmailMessage(
-            #     subject='QA: Finalización Aprobada de US',
-            #     body=body,
-            #     from_email=['PoliProyectos-noreply'],
-            #     to=[us.team_member.email],
-            # )
-            # email_msg.content_subtype = 'html'
-            # email_msg.send()
+            # Notificación al Desarrollador por correo
+            body = render_to_string(
+                '../templates/notificaciones/control_calidad_aceptado.html', {
+                    # Poner los parámetros requeridos del correo
+                    'nombre_us': us.nombre,
+                    'proyecto': us.proyecto.nombre,
+                    'sprint': us.sprint.nombre,
+                    'team_member': us.team_member.first_name,
+                },
+            )
+            email_msg = EmailMessage(
+                subject='Cambio de Estado US',
+                body=body,
+                from_email='gestordeproyectos2021@gmail.com',
+                to=['jorgemi1uno@gmail.com'],
+            )
+            email_msg.content_subtype = 'html'
+            email_msg.send()
             us.save()
         if 'fase' in request.POST.keys():
             actividad = GuardarActividadForm(request.POST)
@@ -620,26 +620,26 @@ class TableroTemplateView(LoginRequiredMixin, SuccessMessageMixin, TemplateView)
             ce.estado_fase = us.estado_fase
             ce.descripcion = "Cambio de estado a " + us.estado_fase + " de la fase " + us.fase.nombre
             ce.save()
-            # Notificación al Desarrollador por correo
-            # body = render_to_string(
-            #     '../templates/notificaciones/control_calidad_rechazado.html', {
-            #         # Poner los parámetros requeridos del correo
-            #         'nombre_us': us.nombre,
-            #         'proyecto': us.proyecto.nombre,
-            #         'sprint': us.sprint.nombre,
-            #         'team_member': us.team_member.first_name,
-            #         'fase_nueva': us.fase.nombre,
-            #         'motivo': actividad.descripcion,
-            #     },
-            # )
-            # email_msg = EmailMessage(
-            #     subject='QA: Se necesitan realizar modificaciones a US',
-            #     body=body,
-            #     from_email=['PoliProyectos-noreply'],
-            #     to=[us.team_member.email],
-            # )
-            # email_msg.content_subtype = 'html'
-            # email_msg.send()
+            #Notificación al Desarrollador por correo
+            body = render_to_string(
+                '../templates/notificaciones/control_calidad_rechazado.html', {
+                    # Poner los parámetros requeridos del correo
+                    'nombre_us': us.nombre,
+                    'proyecto': us.proyecto.nombre,
+                    'sprint': us.sprint.nombre,
+                    'team_member': us.team_member.first_name,
+                    'fase_nueva': us.fase.nombre,
+                    'motivo': actividad.descripcion,
+                },
+            )
+            email_msg = EmailMessage(
+                subject='Cambio de Estado US',
+                body=body,
+                from_email='gestordeproyectos2021@gmail.com',
+                to=['jorgemi1uno@gmail.com'],
+            )
+            email_msg.content_subtype = 'html'
+            email_msg.send()
 
         return HttpResponseRedirect('./')
 
