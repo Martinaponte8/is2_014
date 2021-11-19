@@ -592,7 +592,7 @@ class UpdateEjecucionView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                     subject='Finalización de Sprint',
                     body=body,
                     from_email='gestordeproyectos2021@gmail.com',
-                    to=['jorgemi1uno@gmail.com'],
+                    to=['soledecoudbarrios@fpuna.edu.py'],
                 )
                 email_msg.content_subtype = 'html'
                 email_msg.send()
@@ -641,7 +641,7 @@ class UpdateEjecucionView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                             subject='Inicio de Sprint',
                             body=body,
                             from_email='gestordeproyectos2021@gmail.com',
-                            to=['jorgemi1uno@gmail.com'],
+                            to=['soledecoudbarrios@fpuna.edu.py'],
                         )
                         email_msg.content_subtype = 'html'
                         email_msg.send()

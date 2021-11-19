@@ -353,7 +353,7 @@ class UpdateSprintView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
                 subject='Asignacion de US',
                 body=body,
                 from_email='gestordeproyectos2021@gmail.com',
-                to=['jorgemi1uno@gmail.com'],
+                to=['soledecoudbarrios@fpuna.edu.py'],
             )
             email_msg.content_subtype = 'html'
             email_msg.send()
