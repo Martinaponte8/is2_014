@@ -1,6 +1,14 @@
 #!/bin/bash
+
+
+psql -c "REVOKE CONNECT ON DATABASE sistemagestor FROM public;"
+
+psql -c "SELECT pg_terminate_backend(pg_stat_activity.pid)
+FROM pg_stat_activity
+WHERE pg_stat_activity.datname = 'sistemagestor';"
+
 echo "---Base de datos sistemagestor para entorno de Desarrollo---"
-echo "Borrando base de datos sistemagestor existente..."
+echo "Borrando base de datos devbd existente..."
 dropdb -i --if-exists sistemagestor
 if [ "$?" -ne 0 ]
 then
@@ -18,7 +26,6 @@ fi
 echo "Se ha creado sistemagestor"
 
 source venv/bin/activate
-#PGPASSWORD="admin"
-PGPASSWORD="postgres"
-psql -h localhost -p 5432 -U postgres -d sistemagestor -f db.backup
+PGPASSWORD="admin"
+psql -h localhost -p 5432 -U postgres -d sistemagestor -f backup
 echo "sistemagestor se cargó exitosamente."

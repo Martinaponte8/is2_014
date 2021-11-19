@@ -586,8 +586,8 @@ class VerSprintDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView):
             context['actividades'][us.pk].sort(key=lambda x: x.fecha, reverse=True)
             us.horas_sprint = us.get_horas_trabajadas(sprint=self.object.pk)
             us.horas_total = us.get_horas_trabajadas()
-            us.duracion_estimada = HistorialEstimaciones.objects.filter(us=us.pk,
-                                                                        sprint=self.object.pk)[0].duracion_estimada
+            us.duracion_estimada = HistorialEstimaciones.objects.filter(us=us.pk,sprint=self.object.pk)[0].duracion_estimada
+
         context['direccion'] = {}
         context['direccion']['Ejecuciones'] = (1, '/proyectos/ejecuciones/')
         context['direccion'][str(context['project'])] = (2, '/proyectos/ejecuciones/' + str(self.kwargs['pk_proyecto']) + '/')

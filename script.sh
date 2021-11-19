@@ -1,77 +1,86 @@
 #!/bin/bash
-mkdir -p media
-chmod 777 media
-mkdir -p static
-echo "¡Bienvenido a SistemaGestor!"
-echo "Seleccione uno de los siguientes entornos de despliegue:"
-PS3='Por favor, ingrese una opción:'
+
+REPO="git@github.com:Martinaponte8/is2_014.git"
+FOLDER="is2_014"
+PYTHONPATH="/usr/bin/python3"
+
+
+#clonar proyecto grupo 14
+echo "Clonancion de Proyecto en proceso..."
+cd
+cd /home/sole/PycharmProjects
+
+#git clone "${REPO}"
+echo "Proyecto Clonado"
+
+cd $FOLDER
+
+#virtualenv -q -p "$PYTHONPATH" venv
+virtualenv venv -p /usr/bin/python3
+echo "Entorno virtual creado"
+
+source venv/bin/activate
+echo "Entorno virtual activado"
+
+pip install -r requirements.txt
+echo "Requerimientos instalados"
+
+deactivate
+
+cd
+cd /home/sole/PycharmProjects/is2_014
+
+echo "Montaje de entornos "
+echo "Seleccionar una opción: "
 options=("Desarrollo" "Producción" "Salir")
 select opt in "${options[@]}"
 do
     case $opt in
         "Desarrollo")
-            echo "Elegió desplegar desarrollo..."
-            echo
-            #echo "Elija uno de los siguientes tags:"
-            #git tag
-            #echo "Ingrese en nombre del tag:"
-            #read tg
-            #git checkout $tg
-            #while [ "$?" -ne 0 ]; do
-            #     echo
-            #     echo "No existe tag con el nombre proveído. Vuelva a intentar..."
-            #     echo
-            #     echo "Elija uno de los siguientes tags:"
-            #     git tag
-            #     read -p "Ingrese en nombre del tag: " tg
-            #     git checkout $tg
-            #done
-            echo
-            pip install virtualenv
-            virtualenv venv --python=python3
+            echo "---¿Esta seguro que desea montar el ambiente de desarrollo?---"
+            echo "Presione Enter para continuar, Ctrl+C para finalizar la instalacion"
+	    read -r
+
+            echo "Montando ambiente de desarrollo..."
+
+            chmod +x /home/sole/PycharmProjects/is2_014/dev.sh
+            sudo -u postgres /home/sole/PycharmProjects/is2_014/dev.sh
+
+            echo "Activando entorno virtual..."
             source venv/bin/activate
-            pip install -r requeriments.txt
-            echo
-            chmod +x devbdconf.sh
-            -u postgres ./devbdconf.sh
+            echo "Ejecutando makemigrations..."
+            python manage.py makemigrations
+            echo "Ejecutando migrate..."
+            python manage.py migrate
+            echo "Crear super usuario..."
+            python manage.py createsuperuser
+            echo "Ejecutando runserver..."
+            python manage.py runserver
+
+
             break
             ;;
         "Producción")
-            echo "Eligió desplegar producción..."
-            echo
-            virtualenv venv --python=python3
+            echo "---¿Esta seguro que desea montar el ambiente de produccion?---"
+            echo "Presione Enter para continuar, Ctrl+C para finalizar la instalacion"
+	    read -r
+
+            echo "Montando ambiente de producción..."
+
+            chmod +x /home/sole/PycharmProjects/is2_014/prod.sh
+            sudo -u postgres /home/sole/PycharmProjects/is2_014/prod.sh
+
+            echo "Activando entorno virtual..."
             source venv/bin/activate
-            pip install -r requeriments.txt
-            echo
-            chmod +x prodbdconf.sh
-            -u postgres ./prodbdconf.sh
-            cd ..
-            path=$(pwd)
-            cd poliproyectos
-            echo "Configurando servidor httpd..."
-            echo "<VirtualHost *:80>
-                    ServerName localhost
-                    WSGIDaemonProcess poliproyectos python-home=$path/poliproyectos/venv python-path=$path/poliproyectos
-                    WSGIProcessGroup poliproyectos
-                    WSGIScriptAlias / $path/poliproyectos/poliproyecto/wsgi.py
+            echo "Ejecutando makemigrations..."
+            python manage.py makemigrations
+            echo "Ejecutando migrate..."
+            python manage.py migrate
+            echo "Crear super usuario..."
+            python manage.py createsuperuser
 
-                    Alias /static/ $path/poliproyectos/static/
-                    <Directory $path/poliproyectos/static/ >
-                        Require all granted
-                        Allow from all
-                    </Directory>
+            #path=$(pwd)
 
-                    <Directory $path/poliproyectos/poliproyecto >
-                        <Files wsgi.py>
-                            Require all granted
-                        </Files>
-                    </Directory>
-                </VirtualHost>
-
-                # vim: syntax=apache ts=4 sw=4 sts=4 sr noet"> /etc/apache2/sites-available/prueba.conf
-            service apache2 restart
-            sudo a2dissite 000-default.conf
-            sudo a2ensite prueba.conf
             break
             ;;
         "Salir")
@@ -82,3 +91,12 @@ do
 done
 
 
+
+
+
+#chmod +x dev.sh
+#sudo -u postgres ./dev.sh
+
+
+#chmod +x prod.sh
+#sudo -u postgres ./prod.sh
